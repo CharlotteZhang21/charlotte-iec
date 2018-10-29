@@ -1,3 +1,5 @@
+import * as ContainerUtil from '../utils/container-util';
+
 export function onLoop(sprite, animation) {
 	if (animation.loopCount != 0 && animation.loopCount === sprite.numberOfLoops){
 		if (!sprite.persistent) {
@@ -14,33 +16,26 @@ export function playAnimation (game, sprite, delay, speed) {
 	});
 }
 
-export function playAnimations(spritesheet, xPositions, yPositions, delays, loops, anchor, speed, scale, persistent, container, game, layer) {
-	var containerWidth = container.offsetWidth * window.devicePixelRatio;
-	var containerHeight = container.offsetHeight * window.devicePixelRatio;
-	var containerX = container.offsetLeft * window.devicePixelRatio;
-	var containerY = container.offsetTop * window.devicePixelRatio;
-
-	var hUnit = containerWidth/100;
-	var vUnit = containerHeight/100;
+export function playAnimations(spritesheet, delays, loops, speed, persistent, containerName, game, layer) {
 
 	var animations = [];
 
-	for (var i = 0; i < xPositions.length; i++) {
-		var sprite = game.add.sprite( containerX + xPositions[i] * hUnit, containerY + yPositions[i] * vUnit, spritesheet);
-		layer.add(sprite);
-		sprite.anchor.set(anchor);
-		sprite.animations.add('animation');
-		sprite.alpha = 0;
-		sprite.persistent = persistent;
-		playAnimation(game, sprite, delays[i], speed);
-		sprite.scale.x = (containerWidth * scale[i] / 100) / sprite.width;
-		sprite.scale.y = sprite.scale.x;
-		animations.push(sprite);
-		if (loops != null) {
-			sprite.numberOfLoops = loops[i];
-			sprite.animations.currentAnim.onLoop.add(onLoop, this);
-		}
+	
+	var sprite = game.add.sprite( 0, 0, spritesheet);
+	layer.add(sprite);
+	
+	sprite.animations.add('animation');
+	
+	sprite.persistent = persistent;
+	playAnimation(game, sprite, delays, speed);
+	ContainerUtil.fitInContainer(sprite, containerName, 0.5, 0.5);
+
+	animations.push(sprite);
+	if (loops != null) {
+		sprite.numberOfLoops = loops;
+		sprite.animations.currentAnim.onLoop.add(onLoop, this);
 	}
+
 
 	return animations;
 }

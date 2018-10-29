@@ -126,48 +126,48 @@ export function numberWithCommas(x) {
 }
 
 
-export function fitInContainer(object, containerName, anchorX = 0, anchorY = 0) {
-    var container = document.getElementById(containerName);
-    var containerWidth = container.offsetWidth * window.devicePixelRatio;
-    var containerHeight = container.offsetHeight * window.devicePixelRatio;
-    var containerX = container.getBoundingClientRect().left * window.devicePixelRatio;
-    var containerY = container.getBoundingClientRect().top * window.devicePixelRatio;
+// export function fitInContainer(object, containerName, anchorX = 0, anchorY = 0) {
+//     var container = document.getElementById(containerName);
+//     var containerWidth = container.offsetWidth * window.devicePixelRatio;
+//     var containerHeight = container.offsetHeight * window.devicePixelRatio;
+//     var containerX = container.getBoundingClientRect().left * window.devicePixelRatio;
+//     var containerY = container.getBoundingClientRect().top * window.devicePixelRatio;
 
-    object.anchor.set(anchorX, anchorY);
+//     object.anchor.set(anchorX, anchorY);
 
-    object.x = containerX + containerWidth * anchorX;
-    object.y = containerY + containerHeight * anchorY;
-    object.scale.x = containerWidth / object.width;
-    object.scale.y = object.scale.x;
-}
+//     object.x = containerX + containerWidth * anchorX;
+//     object.y = containerY + containerHeight * anchorY;
+//     object.scale.x = containerWidth / object.width;
+//     object.scale.y = object.scale.x;
+// }
 
-export function getContainerY(containerName) {
-    var container = document.getElementById(containerName);
-    return container.getBoundingClientRect().top * window.devicePixelRatio;
-}
+// export function getContainerY(containerName) {
+//     var container = document.getElementById(containerName);
+//     return container.getBoundingClientRect().top * window.devicePixelRatio;
+// }
 
-export function getContainerX(containerName) {
-    var container = document.getElementById(containerName);
-    return container.getBoundingClientRect().left * window.devicePixelRatio;
-}
+// export function getContainerX(containerName) {
+//     var container = document.getElementById(containerName);
+//     return container.getBoundingClientRect().left * window.devicePixelRatio;
+// }
 
-export function getContainerWidth(containerName) {
-    var container = document.getElementById(containerName);
-    return container.offsetWidth * window.devicePixelRatio;
-}
+// export function getContainerWidth(containerName) {
+//     var container = document.getElementById(containerName);
+//     return container.offsetWidth * window.devicePixelRatio;
+// }
 
-export function getContainerHeight(containerName) {
-    var container = document.getElementById(containerName);
-    return container.offsetHeight * window.devicePixelRatio;
-}
+// export function getContainerHeight(containerName) {
+//     var container = document.getElementById(containerName);
+//     return container.offsetHeight * window.devicePixelRatio;
+// }
 
-export function resizeToSizeOfContainer(object, containerName) {
-    var container = document.getElementById(containerName);
-    var containerWidth = container.offsetWidth * window.devicePixelRatio;
-    var containerHeight = container.offsetHeight * window.devicePixelRatio;
-    object.scale.x = containerWidth / object.width;
-    object.scale.y = object.scale.x;
-}
+// export function resizeToSizeOfContainer(object, containerName) {
+//     var container = document.getElementById(containerName);
+//     var containerWidth = container.offsetWidth * window.devicePixelRatio;
+//     var containerHeight = container.offsetHeight * window.devicePixelRatio;
+//     object.scale.x = containerWidth / object.width;
+//     object.scale.y = object.scale.x;
+// }
 
 export function display(game, el, duration) {
 

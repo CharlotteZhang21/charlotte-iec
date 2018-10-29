@@ -185,10 +185,6 @@ body {
   height: 100%;
   margin: 0;
   overflow: hidden;
-  background-repeat: no-repeat;
-  background-position: center 5%;
-  background-size: auto 120%;
-  background-image: url(../assets/bg.jpg);
   background-color: #333; }
 
 canvas {
@@ -280,24 +276,32 @@ a {
   width: 79%; }
 
 #character {
-  width: 100%;
+  width: 60%;
   height: 30%;
+  left: -10%;
   bottom: 0; }
 
 #chair {
   transform: translate(-50%);
   height: 20%;
-  width: 66%;
-  left: 55%;
-  top: 45%; }
+  width: 73%;
+  left: 49%;
+  top: 41%; }
 
 #dialog {
   width: 90%;
   height: 15%;
   left: 0;
   right: 0;
-  top: 17%;
+  top: 10%;
   display: inline-flex; }
+
+#dialog-text {
+  width: 80%;
+  height: 15%;
+  left: 0;
+  right: 0;
+  top: 13%; }
 
 .options {
   width: 30%;
@@ -325,7 +329,7 @@ a {
     left: 0;
     right: 0; }
   #character {
-    width: 52%;
+    width: 32%;
     height: 42%;
     left: 10%; }
   #cta-container, #cta-container-final {

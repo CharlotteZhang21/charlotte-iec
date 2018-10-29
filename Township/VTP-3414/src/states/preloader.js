@@ -29,33 +29,36 @@
 
      loadResources() {
 
-         this.game.load.image('logo', PiecSettings.assetsDir + 'logo.png');
+        this.game.load.image('logo', PiecSettings.assetsDir + 'logo.png');
 
+        this.game.load.image('background', PiecSettings.assetsDir + 'bg.jpg');
 
-         this.game.load.image('cta', PiecSettings.assetsDir + 'cta.png');
+        this.game.load.image('cta', PiecSettings.assetsDir + 'cta.png');
 
-         this.game.load.image('character', PiecSettings.assetsDir + 'character.png');
+        // this.game.load.image('character', PiecSettings.assetsDir + 'character.png');
 
-         this.game.load.image('armchair_old', PiecSettings.assetsDir + 'armchair_old.png');
-         this.game.load.image('armchair_blue', PiecSettings.assetsDir + 'armchair_blue.png');
-         this.game.load.image('armchair_orange', PiecSettings.assetsDir + 'armchair_orange.png');
-         this.game.load.image('armchair_yellow', PiecSettings.assetsDir + 'armchair_yellow.png');
+        this.game.load.image('empty-space', PiecSettings.assetsDir + 'empty-space.png');
 
-         this.game.load.image('dialogBg', PiecSettings.assetsDir + 'box_bg.png');
-
-         this.game.load.image('hand', PiecSettings.assetsDir + 'hand.png');
-
-         this.game.load.image('spark-particle', PiecSettings.assetsDir + 'spark-particle.png');
-         this.game.load.image('star-particle', PiecSettings.assetsDir + 'star-particle.png');
-
-         this.game.global.animations = {};
+        for (var i = 0; i < PiecSettings.options.length; i++) {
          
-         PiecSettings.animation = PiecSettings.animation || {};
+        this.game.load.image(PiecSettings.options[i], PiecSettings.assetsDir + PiecSettings.options[i] + '.png');
+        }
 
-         var defaultAnimation = {
-            frameRate: 60,
-            scale: 1
-         };
+        this.game.load.image('dialogBg', PiecSettings.assetsDir + 'box_bg.png');
+
+        this.game.load.image('hand', PiecSettings.assetsDir + 'hand.png');
+
+        this.game.load.image('spark-particle', PiecSettings.assetsDir + 'spark-particle.png');
+        this.game.load.image('star-particle', PiecSettings.assetsDir + 'star-particle.png');
+
+        this.game.global.animations = {};
+
+        PiecSettings.animation = PiecSettings.animation || {};
+
+        var defaultAnimation = {
+        frameRate: 60,
+        scale: 1
+        };
 
          for (var key in Atlas.default) {
             if (Atlas.default.hasOwnProperty(key)) {

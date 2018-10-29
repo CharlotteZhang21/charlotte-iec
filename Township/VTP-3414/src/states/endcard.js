@@ -3,6 +3,7 @@ import CtaButton from '../prefabs/cta-button';
 import Character from '../prefabs/character';
 import DialogBox from '../prefabs/dialog';
 import Chair from '../prefabs/chair';
+import Background from '../prefabs/background';
 import * as FxRenderer from '../utils/fx-renderer.js';
 
  class Endcard extends Phaser.State {
@@ -16,16 +17,21 @@ import * as FxRenderer from '../utils/fx-renderer.js';
         this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
         this.game.scale.setUserScale((1 / window.devicePixelRatio), (1 / window.devicePixelRatio), 0, 0);
 
+        this.game.global.windowWidth = document.body.clientWidth;
+        this.game.global.windowHeight = document.body.clientHeight;
+
         // this.tooltip = new Tooltip(this.game, this.darkOverlay, this.spinOverlay.spinButton);
         // this.game.add.existing(this.tooltip);
 
+        this.background = new Background(this.game);
+        this.game.add.existing(this.background);
 
         this.dialogBox = new DialogBox(this.game);
         this.game.add.existing(this.dialogBox);
 
 
        
-        this.currentChair = new Chair(this.game, 'armchair_old', "chair");
+        this.currentChair = new Chair(this.game, 'empty-space', "chair");
         this.game.add.existing(this.currentChair);
 
 
@@ -43,6 +49,11 @@ import * as FxRenderer from '../utils/fx-renderer.js';
         
         this.logo = new Logo(this.game);
         this.game.add.existing(this.logo);
+
+        if(this.game.global.windowWidth < this.game.global.windowHeight) {
+            //hide logo when it's portrait
+            this.logo.alpha = 0;
+        }
 
 
         this.fxEffectsLayer = this.game.add.group();
@@ -101,6 +112,7 @@ import * as FxRenderer from '../utils/fx-renderer.js';
 
         this.game.add.tween(this.dialogBox).to({y: -100, alpha: 0}, 500, Phaser.Easing.Back.In, true, 800);
             this.game.time.events.add(1000, function() {
+                this.logo.alpha = 1;
                 this.logo.animate();
                 this.cta.animate();
 

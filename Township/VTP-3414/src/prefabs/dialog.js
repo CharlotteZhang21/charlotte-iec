@@ -1,5 +1,6 @@
 import * as FxRenderer from '../utils/fx-renderer.js';
 import * as Utils from '../utils/util';
+import * as ContainerUtils from '../utils/container-util';
 import Chair from '../prefabs/chair';
 import Tooltip from '../prefabs/tooltip';
 
@@ -8,6 +9,7 @@ class Dialog extends Phaser.Group {
 		super(game);
 
 		this.container = "dialog";
+		this.textContainer = 'dialog-text';
 
 		this.createDialogBg();
 
@@ -20,7 +22,7 @@ class Dialog extends Phaser.Group {
 		this.add(this.dialogBg);
 		Utils.display(this.game, this.dialogBg, 100);
 		
-		Utils.fitInContainer(this.dialogBg, this.container);
+		ContainerUtils.fitInContainer(this.dialogBg, this.container);
 		this.createText("Is that my chair?!");
 		Utils.display(this.game, this.textField, 100);
 
@@ -30,10 +32,7 @@ class Dialog extends Phaser.Group {
 	}
 
 	createText(text) {
-		var containerWidth = Utils.getContainerWidth(this.container);
-		var containerHeight = Utils.getContainerHeight(this.container);
-		var containerX = Utils.getContainerX(this.container);
-		var containerY = Utils.getContainerY(this.container);
+		var containerHeight = ContainerUtils.getContainerHeight(this.container);
 		this.fontSize = containerHeight * .3;
 
 		var style = {
@@ -42,12 +41,9 @@ class Dialog extends Phaser.Group {
 
 		this.textField = new Phaser.Text(this.game, 0, 0, text, style);
 		this.add(this.textField);
-		this.textField.anchor.set(0.5, 0.5);
 		this.textField.align = 'center';
 		this.textField.padding.set(this.fontSize/2, 0);
-		this.textField.x = containerX + containerWidth / 2 ;
-		this.textField.y = containerY + containerHeight / 2;
-		// this.textField.y += this.fontSize/2;
+		ContainerUtils.fitInContainer(this.textField, this.textContainer, 0.5, 0.5);
 
 		if (PiecSettings.fontColor != null) {
 			this.textField.fill = PiecSettings.fontColor;
@@ -80,7 +76,7 @@ class Dialog extends Phaser.Group {
 
         for(var i = 0; i < PiecSettings.options.length; i++){
         	var divName = "option" + (i+1);
-            var option = new Chair(this.game, PiecSettings.options[i], divName);
+            var option = new Chair(this.game, PiecSettings.options[i], divName, PiecSettings.optionsText);
 
 
 			option.setOption(i);

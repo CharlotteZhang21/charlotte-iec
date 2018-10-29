@@ -15,5 +15,30 @@ PiecSettings.fontFamily = "Poetsenone"; //Make sure that this font is on the css
 
 
 PiecSettings.options = [
-	"armchair_yellow", "armchair_blue", "armchair_orange"
+	"cake_factory", "dolphinarium", "nursery_school"
 ] 
+
+
+PiecSettings.optionsText = true; // if it shows the text
+
+PiecSettings.animation = {
+	"happy": {
+		width: 2000 / 8,
+		height: 1356 / 3,
+		totalNum: 22,
+		delay: 0,
+		loop: 0,
+		speed: 10,
+		persistent: false,
+
+	},
+	"sad": {
+		width: 2000 / 8,
+		height: 1356 / 3,
+		totalNum: 20,
+		delay: 0,
+		loop: 0,
+		speed: 10,
+		persistent: false,
+	}
+};

@@ -1,11 +1,13 @@
 import * as Utils from '../utils/util';
+import * as ContainerUtils from '../utils/container-util';
 
 
 class Chair extends Phaser.Group {
-	constructor(game, chairName, containerName) {
+	constructor(game, chairName, containerName, hasTag = false) {
 		super(game);
 
-		this.container = document.getElementById("chair");
+		this.containerName = containerName || 'chair';
+		this.container = document.getElementById(this.containerName);
 		this.chair = this.game.add.sprite(0,0, chairName);
 		this.add(this.chair);
 		this.chair.alpha = 0;
@@ -13,20 +15,54 @@ class Chair extends Phaser.Group {
 		this.stars = [];
 
 
-		Utils.fitInContainer(this.chair, containerName, 0.5, 0.5);
+		ContainerUtils.fitInContainer(this.chair, containerName, 0.5, 0.5);
 
 		this.initialScale = this.chair.scale.x;
 		this.initialYPos = this.chair.y;
 		this.initialWidth = this.chair.width;
 		this.initialHeight = this.chair.height;
 
+		if(hasTag){
+			var text = chairName.replace('_', " ");
+			this.createTag(text);
+		}
+
 		Utils.display(game, this.chair, 100);
 
+	}
+
+	createTag(text){
+		var containerY = ContainerUtils.getContainerY(this.containerName);
+		var containerHeight = ContainerUtils.getContainerHeight(this.containerName);
+		this.fontSize = this.chair.height * 0.4;
+
+		var style = {
+			font: "bold " + this.fontSize + "px " + PiecSettings.fontFamily,
+		};
+
+		this.textField = new Phaser.Text(this.game, 0, 0, text, style);
+		this.add(this.textField);
+		this.textField.align = 'center';
+		this.textField.padding.set(this.fontSize/2, 0);
+		ContainerUtils.fitInContainer(this.textField, this.containerName, 0.5, 0.5);
+
+		this.textField.y = (this.chair.y + this.chair.height );
+		
+		
+
+		if (PiecSettings.fontColor != null) {
+			this.textField.fill = PiecSettings.fontColor;
+			// this.textField.setShadow(2,3,'rgb(0,0,0)', 0);
+		} else {
+			this.textField.stroke = "#ff9d1b";
+		}
 	}
 
 	hide(delay, duration){
 		var initScale = this.chair.scale.x;
 		var scaleTween = this.game.add.tween(this.chair.scale).to({x: [initScale * 1.2, 0], y: [initScale * 1.2, 0]}, duration, Phaser.Easing.Quadratic.In, true, delay);
+		if(this.textField!==undefined)
+			this.game.add.tween(this.textField.scale).to({x: [initScale * 1.05, 0], y: [initScale * 1.05, 0]}, duration, Phaser.Easing.Quadratic.In, true, delay);
 	
 		scaleTween.onComplete.add(function(){
 			this.chair.alpha  = 0;
