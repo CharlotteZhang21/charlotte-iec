@@ -24,15 +24,16 @@ class Background extends Phaser.Group {
             this.x = this.game.global.windowWidth * window.devicePixelRatio / 2 - this.width / 2;
             this.y = this.game.global.windowHeight * window.devicePixelRatio / 2 - this.height / 2;
         } else {
-            this.scale.x = (this.game.global.windowWidth * window.devicePixelRatio) / this.width * 1.05;
+            this.scale.x = (this.game.global.windowWidth * window.devicePixelRatio) / this.width * 1.1;
             this.scale.y = this.scale.x;
             if (this.height < this.game.global.windowHeight * window.devicePixelRatio) {
                 //Stretch it through the other side
                 this.scale.y = (this.game.global.windowHeight * window.devicePixelRatio) / this.width * 1.05;
                 this.scale.x = this.scale.y;
             }
-            this.x = (this.game.global.windowWidth * window.devicePixelRatio  - this.width )/ 2 * 1.5;
-            this.y = (this.game.global.windowHeight * window.devicePixelRatio - this.height) / 2 * 0.8;
+            this.x = (this.game.global.windowWidth * window.devicePixelRatio  - this.width )/ 2 * 0.4;
+
+            this.y = (this.game.global.windowHeight * window.devicePixelRatio - this.height) / 2 * 0.5;
         }
 
         background.alpha = 0;

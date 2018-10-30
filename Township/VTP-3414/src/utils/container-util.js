@@ -55,7 +55,7 @@ export function fitInContainerHeight(object, containerName, anchorX = 0, anchorY
 
     if (object.anchor != undefined)
         object.anchor.set(anchorX, anchorY);
-
+    
     object.x = containerX + containerWidth * anchorX;
     object.y = containerY + containerHeight * anchorY;
     object.scale.y = containerHeight / object.height;

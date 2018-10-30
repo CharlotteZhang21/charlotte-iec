@@ -5,7 +5,7 @@ import Chair from '../prefabs/chair';
 import Tooltip from '../prefabs/tooltip';
 
 class Dialog extends Phaser.Group {
-	constructor(game, fxEffectsLayer) {
+	constructor(game) {
 		super(game);
 
 		this.container = "dialog";
@@ -14,6 +14,16 @@ class Dialog extends Phaser.Group {
 		this.createDialogBg();
 
 
+		
+
+	}
+
+	init(){
+		this.initialWidth = this.dialogBg.width;
+		this.initialHeight = this.dialogBg.height;
+		this.centerX = this.dialogBg.x + this.dialogBg.width /2;
+		this.centerY = this.dialogBg.y + this.dialogBg.height /2;
+	
 	}
 
 	createDialogBg(){
@@ -23,17 +33,22 @@ class Dialog extends Phaser.Group {
 		Utils.display(this.game, this.dialogBg, 100);
 		
 		ContainerUtils.fitInContainer(this.dialogBg, this.container);
-		this.createText("Is that my chair?!");
+		if(!Utils.isPortrait()){
+			this.dialogBg.scale.y *= 0.8;
+		}
+
+		this.init();
+		this.createText(PiecSettings.characterText[0]);
 		Utils.display(this.game, this.textField, 100);
 
 		this.game.time.events.add(2000, function(){
-			this.changeTextTo("Please help me\n choose a new one!", 2000);
+			this.changeTextTo(PiecSettings.characterText[1], 2000);
 		},this)
 	}
 
 	createText(text) {
 		var containerHeight = ContainerUtils.getContainerHeight(this.container);
-		this.fontSize = containerHeight * .3;
+		this.fontSize = this.initialHeight * .25;
 
 		var style = {
 			font: "bold " + this.fontSize + "px " + PiecSettings.fontFamily,
@@ -42,12 +57,23 @@ class Dialog extends Phaser.Group {
 		this.textField = new Phaser.Text(this.game, 0, 0, text, style);
 		this.add(this.textField);
 		this.textField.align = 'center';
-		this.textField.padding.set(this.fontSize/2, 0);
-		ContainerUtils.fitInContainer(this.textField, this.textContainer, 0.5, 0.5);
+		
+		ContainerUtils.bestFit(this.textField, this.textContainer, 0.5, 0.5);
+
+		if(!Utils.isPortrait()){
+
+			this.textField.x = this.centerX;
+			this.textField.y = this.centerY;
+
+			this.textField.scale.x *= 1.2;
+			this.textField.scale.y = this.textField.scale.x;
+		}
 
 		if (PiecSettings.fontColor != null) {
 			this.textField.fill = PiecSettings.fontColor;
-			// this.textField.setShadow(2,3,'rgb(0,0,0)', 0);
+			// this.textField.stroke = "#1e5183";
+			// this.textField.strokeThickness = 2;
+			// this.textField.setShadow(1,0,'#1e5183', 0);
 		} else {
 			this.textField.stroke = "#ff9d1b";
 		}
@@ -79,6 +105,7 @@ class Dialog extends Phaser.Group {
             var option = new Chair(this.game, PiecSettings.options[i], divName, PiecSettings.optionsText);
 
 
+
 			option.setOption(i);
 
             this.add(option);
@@ -91,12 +118,17 @@ class Dialog extends Phaser.Group {
 
         }
 
+        this.createTooltip();
+
+
 	}
 
 	hideOptions(customDelay) {
-
+		if(this.tooltip !== undefined){
+			this.tooltip.hide();
+		}
 		var delay = 300;
-		var duration = 500;
+		var duration = 300;
 		var totalDelay = 0;
 		for(var i = 0; i < this.options.length; i++){
         	
@@ -113,11 +145,12 @@ class Dialog extends Phaser.Group {
 	createTooltip() {
 		this.tooltip = new Tooltip(this.game);
         this.add(this.tooltip);
-        this.tooltip.x = this.options[1].x;
-        this.tooltip.y = this.options[1].y;
-        this.tooltip.moveHandToItem(this.options[1]);
-        // this.tooltip.moveHandToManyItems(this.options);
+        // this.tooltip.x = this.options[1].x;
+        // this.tooltip.y = this.options[1].y;
+        // this.tooltip.moveHandToItem(this.options[1]);
+        this.tooltip.moveHandToManyItems(this.options);
 	}
+
 
 }
 

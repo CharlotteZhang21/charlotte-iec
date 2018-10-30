@@ -125,76 +125,56 @@ export function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-
-// export function fitInContainer(object, containerName, anchorX = 0, anchorY = 0) {
-//     var container = document.getElementById(containerName);
-//     var containerWidth = container.offsetWidth * window.devicePixelRatio;
-//     var containerHeight = container.offsetHeight * window.devicePixelRatio;
-//     var containerX = container.getBoundingClientRect().left * window.devicePixelRatio;
-//     var containerY = container.getBoundingClientRect().top * window.devicePixelRatio;
-
-//     object.anchor.set(anchorX, anchorY);
-
-//     object.x = containerX + containerWidth * anchorX;
-//     object.y = containerY + containerHeight * anchorY;
-//     object.scale.x = containerWidth / object.width;
-//     object.scale.y = object.scale.x;
-// }
-
-// export function getContainerY(containerName) {
-//     var container = document.getElementById(containerName);
-//     return container.getBoundingClientRect().top * window.devicePixelRatio;
-// }
-
-// export function getContainerX(containerName) {
-//     var container = document.getElementById(containerName);
-//     return container.getBoundingClientRect().left * window.devicePixelRatio;
-// }
-
-// export function getContainerWidth(containerName) {
-//     var container = document.getElementById(containerName);
-//     return container.offsetWidth * window.devicePixelRatio;
-// }
-
-// export function getContainerHeight(containerName) {
-//     var container = document.getElementById(containerName);
-//     return container.offsetHeight * window.devicePixelRatio;
-// }
-
-// export function resizeToSizeOfContainer(object, containerName) {
-//     var container = document.getElementById(containerName);
-//     var containerWidth = container.offsetWidth * window.devicePixelRatio;
-//     var containerHeight = container.offsetHeight * window.devicePixelRatio;
-//     object.scale.x = containerWidth / object.width;
-//     object.scale.y = object.scale.x;
-// }
-
 export function display(game, el, duration) {
 
     el.alpha = 0;
     game.add.tween(el).to({alpha: 1}, duration, Phaser.Easing.Linear.None, true, 50);
 }
 export function starFloatWithDelayCustom2(game, star, finalX, finalY, finalScale, duration, delay, ease) {
-        game.time.events.add(delay, function() {
-            star.alpha = 1;
-            game.add.tween(star).to({
-                // alpha: 0,
-                y: finalY,
-                x: finalX,
-            }, duration, ease, true, 0);
-            game.add.tween(star.scale).to({
-                x: finalScale,
-                y: finalScale
-            }, duration, ease, true, 0);
-        }, this);
+    game.time.events.add(delay, function() {
+        star.alpha = 1;
+        game.add.tween(star).to({
+            // alpha: 0,
+            y: finalY,
+            x: finalX,
+        }, duration, ease, true, 0);
+        game.add.tween(star.scale).to({
+            x: finalScale,
+            y: finalScale
+        }, duration, ease, true, 0);
+    }, this);
 
-        game.time.events.add(delay + 1000, function() {
-            game.add.tween(star).to({
-                alpha: 0,
-            }, 1000, Phaser.Easing.Quadratic.InOut, true, 0);
-            game.time.events.add(1000, function() {
-                star.destroy();
-            }, this);
+    game.time.events.add(delay + 1000, function() {
+        game.add.tween(star).to({
+            alpha: 0,
+        }, 1000, Phaser.Easing.Quadratic.InOut, true, 0);
+        game.time.events.add(1000, function() {
+            star.destroy();
         }, this);
-    }
+    }, this);
+}
+export function balloonFloatWithDelayCustom(game, star, finalX, finalY, finalScale, duration, delay, ease) {
+    star.scale.x = 0;
+    star.scale.y = 0;
+    game.time.events.add(delay, function() {
+        star.alpha = 1;
+        game.add.tween(star).to({
+            // alpha: 0,
+            y: finalY,
+            x: finalX,
+        }, duration, ease, true, 0);
+        game.add.tween(star.scale).to({
+            x: finalScale,
+            y: finalScale
+        }, duration, ease, true, 0);
+    }, this);
 
+    game.time.events.add(delay + 1000, function() {
+        game.add.tween(star).to({
+            alpha: 0,
+        }, 1000, Phaser.Easing.Quadratic.InOut, true, 0);
+        game.time.events.add(1000, function() {
+            star.destroy();
+        }, this);
+    }, this);
+}

@@ -20,7 +20,7 @@ class Character extends Phaser.Group {
 	//happy character
 
 	changeToHappy(){
-		console.log("happy yo");
+		
 		this.sadAni[0].visible = false;
 
 		 var happyAni = FxRenderer.playFx(this.game, this.fxEffectsLayer, "congrats");
@@ -31,7 +31,6 @@ class Character extends Phaser.Group {
 		this.dialogBg = this.game.add.sprite(0, 0, 'dialogBg');
 		this.add(this.dialogBg);
 		this.fitInContainer(this.dialogBg, 'dialog');
-		this.createText("Is that my chair?!");
 
 	}
 

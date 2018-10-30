@@ -35,9 +35,16 @@
 
         this.game.load.image('cta', PiecSettings.assetsDir + 'cta.png');
 
-        // this.game.load.image('character', PiecSettings.assetsDir + 'character.png');
+        this.game.load.image('win-message', PiecSettings.assetsDir + 'win-message.png');
 
         this.game.load.image('empty-space', PiecSettings.assetsDir + 'empty-space.png');
+
+        this.game.load.image('construction', PiecSettings.assetsDir + 'construction.png');
+
+        this.game.load.image('balloon-yellow', PiecSettings.assetsDir + 'balloon-yellow.png');
+        this.game.load.image('balloon-red', PiecSettings.assetsDir + 'balloon-red.png');
+        this.game.load.image('balloon-blue', PiecSettings.assetsDir + 'balloon-blue.png');
+        this.game.load.image('balloon-green', PiecSettings.assetsDir + 'balloon-green.png');
 
         for (var i = 0; i < PiecSettings.options.length; i++) {
          

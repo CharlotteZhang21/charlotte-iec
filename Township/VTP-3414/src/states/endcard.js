@@ -1,10 +1,12 @@
 import Logo from '../prefabs/logo';
 import CtaButton from '../prefabs/cta-button';
 import Character from '../prefabs/character';
+
 import DialogBox from '../prefabs/dialog';
 import Chair from '../prefabs/chair';
 import Background from '../prefabs/background';
-import * as FxRenderer from '../utils/fx-renderer.js';
+import * as FxRenderer from '../utils/fx-renderer';
+import * as ContainerUtil from '../utils/container-util';
 
  class Endcard extends Phaser.State {
 
@@ -20,9 +22,6 @@ import * as FxRenderer from '../utils/fx-renderer.js';
         this.game.global.windowWidth = document.body.clientWidth;
         this.game.global.windowHeight = document.body.clientHeight;
 
-        // this.tooltip = new Tooltip(this.game, this.darkOverlay, this.spinOverlay.spinButton);
-        // this.game.add.existing(this.tooltip);
-
         this.background = new Background(this.game);
         this.game.add.existing(this.background);
 
@@ -33,6 +32,7 @@ import * as FxRenderer from '../utils/fx-renderer.js';
        
         this.currentChair = new Chair(this.game, 'empty-space', "chair");
         this.game.add.existing(this.currentChair);
+        this.currentChair.showChair();
 
 
         //this furniture in the house
@@ -42,7 +42,7 @@ import * as FxRenderer from '../utils/fx-renderer.js';
             var option = new Chair(this.game, PiecSettings.options[i], "chair");
             this.game.add.existing(option);
             this.options.push(option);
-            option.alpha = 0;
+            // option.alpha=0;
             // this.options[i].alpha = 0;
         }
 
@@ -60,6 +60,11 @@ import * as FxRenderer from '../utils/fx-renderer.js';
 
         this.character = new Character(this.game, this.fxEffectsLayer);
         this.game.add.existing(this.character);
+
+        this.winMessage = this.game.add.sprite(0, 0, 'win-message');
+        ContainerUtil.fitInContainer(this.winMessage, 'win-message', 0.5, 0.5);
+        this.winMessage.initialScale = this.winMessage.scale.x;
+        this.winMessage.scale.x = 0;
 
         this.cta = new CtaButton(this.game);
         this.game.add.existing(this.cta);
@@ -89,17 +94,27 @@ import * as FxRenderer from '../utils/fx-renderer.js';
         }
 
         var selectedItem = this.options[this.game.global.selection];
-        selectedItem.alpha = 1;
+        
         var hideDelay = 0, hideDuration = 300;
         this.currentChair.hide(hideDelay, hideDuration);
-        var popUpDelay = 300, popUpDuration = 500;
-        selectedItem.popUp(popUpDelay, popUpDuration);
+
+
+        var popUpDelay = 500, popUpDuration = 500;
+        selectedItem.preAni(popUpDelay, popUpDuration);
+        selectedItem.alpha = 1;
         this.dialogBox.hideOptions(popUpDelay);
 
+        this.game.time.events.add(2000, function(){
+            this.game.add.tween(this.winMessage.scale).to({
+                x: [this.winMessage.initialScale * 1.05, this.winMessage.initialScale]
+            }, 500, Phaser.Easing.Quadratic.InOut, true, 1000);        
+            this.character.changeToHappy();
+        }, this);
 
-        this.character.changeToHappy();
-
-
+        this.game.time.events.add(1000, function(){
+            this.game.add.tween(this.dialogBox).to({y: -100, alpha: 0}, 500, Phaser.Easing.Back.In, true, 800); 
+        }, this);
+        
         this.game.time.events.add(2000, function(){
             this.game.onGameComplete.dispatch();
         }, this);
@@ -110,7 +125,6 @@ import * as FxRenderer from '../utils/fx-renderer.js';
 
      onChangeComplete() {
 
-        this.game.add.tween(this.dialogBox).to({y: -100, alpha: 0}, 500, Phaser.Easing.Back.In, true, 800);
             this.game.time.events.add(1000, function() {
                 this.logo.alpha = 1;
                 this.logo.animate();
