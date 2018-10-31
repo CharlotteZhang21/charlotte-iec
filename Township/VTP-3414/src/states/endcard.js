@@ -133,7 +133,7 @@ import * as ContainerUtil from '../utils/container-util';
                 if(PiecSettings.ASOI){
                     setTimeout(function(){
                         doSomething('download');
-                    }, 2000);
+                    }, 3000);
                 }
 
             }, this);

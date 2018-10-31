@@ -116,6 +116,20 @@ a {
 
 }
 
+
+#cta-container-text, #cta-container-text-final{
+    width: 60%;
+    height: 10%;
+    left: 0;
+    right: 0;
+    bottom: 3%;
+}
+
+
+#cta-container-text-final{
+    width: 70%;
+}
+
 #cta-container-final {
     width: 79%;
     // bottom: 13%;
@@ -275,6 +289,22 @@ a {
     }
     #cta-container-final {
         width: 38%;
+    }
+
+    
+
+    #cta-container-text, #cta-container-text-final{
+        width: 28%;
+        height: 10%;
+        
+        left: auto;
+        right: 4%;
+        bottom: 8%;
+    }
+
+
+    #cta-container-text-final{
+        width: 35%;
     }
 
     #win-message {

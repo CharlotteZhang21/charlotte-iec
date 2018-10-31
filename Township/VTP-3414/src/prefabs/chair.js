@@ -311,7 +311,7 @@ class Chair extends Phaser.Group {
             this.balloons.push(balloon);
             balloon.anchor.set(0.5);
             if (this.game.global.windowWidth > this.game.global.windowHeight) {
-                balloon.scale.x = this.initialWidth / balloon.width * (Math.random() * .18) * scaleMultiplier;
+                balloon.scale.x = this.initialWidth / balloon.width * (Math.random() * .3) * scaleMultiplier;
                 balloon.scale.y = balloon.scale.x;
             } else {
                 balloon.scale.x = this.initialWidth / balloon.width * (Math.random() * .3) * scaleMultiplier;

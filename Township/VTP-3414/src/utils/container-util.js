@@ -131,3 +131,45 @@ export function getYCenterWithinContainer(containerName) {
     var containerY = container.getBoundingClientRect().top * window.devicePixelRatio;
     return containerY + containerHeight / 2;
 }
+
+
+export function moveToContainer(sprite, newContainer, delay, duration, easing, cb, autoStart) {
+
+    if (sprite == null || sprite.game === null)
+        return null;
+
+
+    var container = document.getElementById(newContainer);
+    var finalWith = container.offsetWidth * window.devicePixelRatio;
+
+    var offsetX = finalWith * sprite.anchor.x;
+    var finalX = container.getBoundingClientRect().left * window.devicePixelRatio + offsetX;
+    var finalScale = finalWith / (sprite.width / sprite.scale.x);
+
+    var finalHeight = container.offsetHeight * window.devicePixelRatio;
+    var offsetY = finalHeight * sprite.anchor.y;
+    var finalY = container.getBoundingClientRect().top * window.devicePixelRatio + offsetY;
+
+    var tween = sprite.game.add.tween(sprite).to({
+            x: finalX,
+            y: finalY,
+        },
+        duration,
+        easing,
+        typeof autoStart === 'undefined' ? true : autoStart,
+        delay);
+
+    sprite.game.add.tween(sprite.scale).to({
+            x: finalScale,
+            y: finalScale,
+        },
+        duration,
+        easing,
+        typeof autoStart === 'undefined' ? true : autoStart,
+        delay);
+
+    if (cb)
+        tween.onComplete.add(cb, this);
+
+    return tween;
+}
