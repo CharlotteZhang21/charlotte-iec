@@ -41,8 +41,8 @@ class Dialog extends Phaser.Group {
 		this.createText(PiecSettings.characterText[0]);
 		Utils.display(this.game, this.textField, 100);
 
-		this.game.time.events.add(2000, function(){
-			this.changeTextTo(PiecSettings.characterText[1], 2000);
+		this.game.time.events.add(800, function(){
+			this.changeTextTo(PiecSettings.characterText[1], 1500);
 		},this)
 	}
 

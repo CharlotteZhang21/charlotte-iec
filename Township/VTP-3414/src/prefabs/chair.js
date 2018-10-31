@@ -64,7 +64,7 @@ class Chair extends Phaser.Group {
 
 	hide(delay, duration){
 		var initScale = this.chair.scale.x;
-		var scaleTween = this.game.add.tween(this.chair.scale).to({x: [initScale * 1.2, 0], y: [initScale * 1.2, 0]}, duration, Phaser.Easing.Quadratic.In, true, delay);
+		var scaleTween = this.game.add.tween(this.chair.scale).to({x: [initScale * 1.05, 0], y: [initScale * 1.05, 0]}, duration, Phaser.Easing.Quadratic.In, true, delay);
 		if(this.textField!==undefined)
 			this.game.add.tween(this.textField.scale).to({x: [initScale * 1.05, 0], y: [initScale * 1.05, 0]}, duration, Phaser.Easing.Quadratic.In, true, delay);
 	
