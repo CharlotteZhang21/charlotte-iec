@@ -50,6 +50,7 @@
         margin-top: 2%;
     }
     #dialog-text{
+        width: 70%;
         top: 5%;
     }
     #dialog-tag{
@@ -71,6 +72,15 @@
     #chair {
         width: 80%;
         top: 30%;
+    }
+
+
+    #cta-container-text, #cta-container-text-final{
+        width: 50%;
+    }
+
+    #cta-container-text-final{
+        width: 55%;
     }
 }
 
@@ -113,19 +123,22 @@
 
 @media all and (min-width: 823px ) and (max-height: 415px) and (orientation: landscape) {
 
-    #dialog{
-        width: 28%;
-        height: 15%;
+    #dialog-tag{
+        top: 30%;
     }
 
     #chair {
-        width: 28%;
-        top: 50%;
+        width: 50%;
+        top: 40%;
+    }
+    #worker-2 {
+        top: 80%;
     }
 
-    #character {
-        width: 45%;
-    }
+
+    // #character {
+    //     width: 45%;
+    // }
 }
 
 
