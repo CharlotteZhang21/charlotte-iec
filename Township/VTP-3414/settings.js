@@ -20,7 +20,7 @@ PiecSettings.options = [
 
 PiecSettings.characterText = [
 	"Hey you!",
-	"Please help me \nbuild my town",
+	"Help me \nbuild my town",
 ]
 
 

@@ -2,7 +2,7 @@ var PiecSettings = PiecSettings || {};
 
 PiecSettings.version = "-";
 
-PiecSettings.timer = 0;
+PiecSettings.timer = 6000;
 
 PiecSettings.ASOI = true;
 
@@ -20,7 +20,7 @@ PiecSettings.options = [
 
 PiecSettings.characterText = [
 	"Hey you!",
-	"Please help me \nbuild my town",
+	"Help me \nbuild my town",
 ]
 
 
