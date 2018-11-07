@@ -1,0 +1,668 @@
+/* Vungle IEC skeleton */
+
+
+/*
+ * CUSTOM VPIEC STYLING =======================================================================================
+ * 
+ * Here you should add your styling (width, height, top, left positions) for the containers (<div>s) you created on your intex.html page
+ * 
+ * The way to do that is simple!
+ * 
+ * Write # followed by the ID of your container ("name-of-your-container"), then add your styles!
+ *                                                        Remember to use % for all measurements!
+ * Example:
+ * 
+ * #name-of-your-container{
+ *    width: 50%;
+ *    height: 15%;
+ *    left: 60%;
+ *    top: 10%;
+ * }
+ */
+
+
+
+/*
+ * END OF CUSTOM STYLING ======================================================================================
+ * You shouldn't need to tweak anything below this line =======================================================
+ */
+
+#close-button-replacement, #vungle-close {
+  opacity: 1;
+  -webkit-transition: opacity .35s; }
+
+#close-button-replacement.hide, #vungle-close.hide {
+  opacity: 0;
+  pointer-events: none; }
+
+#close-button-replacement {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.3);
+  font-family: -apple-system, "Segoe UI", "Roboto", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 10px 10px;
+  margin: 0;
+  text-align: center;
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  z-index: -1; 
+}
+
+#vungle-header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent;
+    z-index: 10000000;
+}
+
+#vungle-header.left {
+    right: auto;
+    left: 0;
+}
+
+#vungle-header a {
+    display: block;
+    padding: .8em .8em .5em 1.2em;
+    right: 0;
+}
+
+#vungle-header a svg {
+    right: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: text-bottom;
+    height: 1.1em;
+    width: 1.1em;
+}
+
+#vungle-header a:active {
+    opacity: .55;
+}
+
+#vungle-header .svg-vungle-ad-close-icon {
+    fill: #000;
+    stroke: rgba(255, 255, 255, 0.6);
+    stroke-width: 14;
+    stroke-miterlimit: 10;
+}
+
+body.light #vungle-header .svg-vungle-ad-close-icon {
+    fill: #e8e8e8;
+    stroke: rgba(0, 0, 0, 0.3);
+}
+
+body.dark #vungle-header .svg-vungle-ad-close-icon {
+    fill: #000;
+    stroke: rgba(255, 255, 255, 0.6);
+}
+
+#vungle-replay {
+    width: 30px;
+    height: 30px;
+    padding: 20px;
+    right: 0;
+    position: absolute;
+    text-align: right;
+}
+
+#vungle-footer {
+    position: absolute;
+    display: block;
+    bottom: 0;
+    z-index: 9999;
+    width: 50px;
+    overflow: hidden;
+    pointer-events: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#vungle-footer span.footer {
+    font-size: 40px;
+    line-height: 20px;
+    display: block;
+}
+
+#vungle-footer.portrait-center {
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+}
+
+#vungle-footer.portrait-left {
+    left: 5px;
+    right: auto;
+    text-align: left;
+}
+
+#vungle-footer.portrait-right {
+    left: auto;
+    right: 5px;
+    text-align: right;
+}
+
+#vungle-footer.portrait-light span {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+#vungle-footer.portrait-dark span {
+    color: rgba(126, 126, 126, 0.8);
+}
+
+@font-face {
+    font-family: "vungle-fonticon";
+    src: url("vungle-fonticon.eot");
+    src: url("vungle-fonticon.eot?#iefix") format("embedded-opentype"), url("vungle-fonticon.woff") format("woff"), url("vungle-fonticon.ttf") format("truetype"), url("vungle-fonticon.svg#vungle-fonticon") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+[data-icon]:before {
+    font-family: "vungle-fonticon" !important;
+    content: attr(data-icon);
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-variant: normal !important;
+    text-transform: none !important;
+    speak: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="vungicon-"]:before,
+[class*=" vungicon-"]:before {
+    font-family: "vungle-fonticon" !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-variant: normal !important;
+    text-transform: none !important;
+    speak: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.vungicon-arrow-back:before {
+    content: "a";
+}
+
+.vungicon-arrow-down:before {
+    content: "b";
+}
+
+.vungicon-arrow-forward:before {
+    content: "c";
+}
+
+.vungicon-arrow-up:before {
+    content: "d";
+}
+
+.vungicon-chevron-down:before {
+    content: "e";
+}
+
+.vungicon-chevron-left:before {
+    content: "f";
+}
+
+.vungicon-chevron-right:before {
+    content: "g";
+}
+
+.vungicon-chevron-up:before {
+    content: "h";
+}
+
+.vungicon-close:before {
+    content: "i";
+}
+
+.vungicon-download:before {
+    content: "j";
+}
+
+.vungicon-info:before {
+    content: "k";
+}
+
+.vungicon-replay:before {
+    content: "l";
+}
+
+.vungicon-security:before {
+    content: "m";
+}
+
+.vungicon-star-full:before {
+    content: "n";
+}
+
+.vungicon-star-half:before {
+    content: "o";
+}
+
+.vungicon-vungle-creative-labs:before {
+    content: "p";
+}
+
+.vungicon-vungle:before {
+    content: "q";
+}
+
+.vungicon-vungle-powered:before {
+    content: "r";
+}
+
+.vungicon-zoom-in:before {
+    content: "s";
+}
+
+.vungicon-zoom-out:before {
+    content: "t";
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-width: 100% auto;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-color: black;
+    /*background-image: url(bg.jpg);*/
+}
+
+canvas {
+    display: block;
+    cursor: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+.preload-font {
+    position: absolute;
+    bottom: -1000%;
+}
+
+
+
+
+/*
+ * ==========================================================================================================
+ * Basic Elements
+ */
+
+#wrap {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    background-color: #061628;
+}
+
+.layout-item {
+    position: absolute;
+    margin: auto;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.layout-item img {
+    width: 100%;
+}
+
+
+.hide {
+    display: none;
+    opacity: 0;
+    z-index: -1000;
+    pointer-events: none;    
+}
+
+/*
+ *==========================================================================================================
+ *Customised
+ */
+
+ #loading {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 10vh;
+    height: 10vh;
+ }
+
+ #loading.preloadAni {
+    animation: loadingAni 1s infinite;
+ }
+
+.decoration{
+    position: absolute;
+    top: 5%;
+    animation: rotate 1s infinite;
+}
+
+#app-logo {
+    width: 47%;
+    height: auto;
+    left: 0;
+    right: 0;
+    top: 5%;
+}
+
+#static-endcard{
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    opacity: 1;
+
+    background: url(portrait.jpg) no-repeat;
+    background-size:  auto 100%;
+    background-position: center center;
+    transition: all 1s ease-in-out;
+    
+}
+
+#static-endcard.hideBottom{
+    top: 120%;
+    opacity: 0;
+    transition: all 0.35s ease-in-out;
+}
+
+#app-icon {
+    width: 18vh;
+    height: 18vh;
+    position: absolute;
+    left: 20%;
+    bottom: 3%;
+    -webkit-transform: translate(-50%);
+    transform: translate(-50%);
+    border-radius: 30%;
+    box-shadow: 0px 12px 22px -8px rgba(0, 0, 0, 0.41); 
+}
+#app-title {
+    position: absolute;
+    margin-bottom: 2vw;
+    
+    left: 50%;
+    bottom: 10%;
+    text-align: center;
+    -webkit-transform: translate(-50%);
+    transform: translate(-50%);
+    color: #707070;
+    font-size: 4vh;
+    font-family: -apple-system, "Segoe UI", "Roboto", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; 
+}
+
+/*#cta {
+    width: calc(10.5vw + 10.5vh);
+    height: calc(10.5vw + 10.5vh);
+    background: #5de468;
+    position: absolute;
+    z-index: 3;
+    border-radius: 50%;
+    pointer-events: all;
+    transition: bottom 0.8s ease-in-out, right 0.8s ease-in-out, width 0.8s ease-in-out, height 0.8s ease-in-out; 
+
+}*/
+#cta {
+    background: #5de468;
+    position: absolute;
+    z-index: 3;
+    pointer-events: all;
+
+    width: 60%;
+    height: 10%;
+    bottom: 5%;
+    left: 20%;
+    border-radius: 10px;
+    animation: pulse 1s infinite;
+
+}
+
+#downloadIcon {
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+/*#cta.landscape #downloadText{
+    font-size: 8vh;
+}*/
+
+/*#cta.landscape #downloadIcon, #cta.portrait #downloadText {
+    display: none;
+}
+
+#cta.portrait #downloadIcon, #cta.landscape #downloadText {
+    display: block;
+}
+*/
+
+#downloadText {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    color: #fff;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-family: -apple-system, "Segoe UI", "Roboto", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; 
+    font-size: 6vh;
+}
+
+/* iphone X */
+
+@media all and (orientation: landscape) {
+    .decoration{
+        top: 0%;
+        width: 85%;
+        left: 0;
+        right: 0;
+    }
+
+
+
+    #app-logo {
+        width: 20%;
+        top: 2%;
+    }
+    #app-icon {
+        width: 18vw;
+        height: 18vw;
+    }
+
+    #static-endcard {
+        /*background: url(landscape.jpg) no-repeat;*/
+        background-size: 110% auto;
+        background-position: center;
+    }
+
+
+
+    #cta {
+        width: 30%;
+        height: 20%;
+        bottom: 2%;
+        left: 35%;
+        border-radius: 20px;
+        /*animation: pulse 1s infinite;*/
+    }
+
+    #downloadText {
+        font-size: 8vh;
+    }
+
+
+    #vungle-header.landscape-light a {
+        color: #ffffff;
+        text-shadow: rgba(0, 0, 0, 0.37) 0 1px 2px;
+    }
+    #vungle-header.landscape-light a:active {
+        color: #b4b4b4;
+    }
+    #vungle-header.landscape-dark a {
+        color: #7e7e7e;
+        text-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px;
+    }
+    #vungle-header.landscape-dark a:active {
+        color: #363636;
+    }
+    #vungle-footer.landscape-center {
+        left: 0;
+        right: 0;
+        margin: auto;
+        text-align: center;
+    }
+    #vungle-footer.landscape-left {
+        left: 5px;
+        right: auto;
+        text-align: left;
+    }
+    #vungle-footer.landscape-right {
+        left: auto;
+        right: 5px;
+        text-align: right;
+    }
+    #vungle-footer.landscape-light span {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    #vungle-footer.landscape-dark span {
+        color: rgba(126, 126, 126, 0.8);
+    }
+}
+
+@-webkit-keyframes loadingAni {
+    0% { 
+       -webkit-transform: rotate3d(1, 0, 0, 0deg);
+       transform: rotate3d(0, 1 , 0, 0deg);
+    }
+    50% { 
+       -webkit-transform: rotate3d(1, 0, 0, 180deg);
+       transform: rotate3d(0, 1 , 0, 180deg);
+    }
+    100% { 
+        -webkit-transform: rotate3d(1, 0, 0, 360deg);
+       transform: rotate3d(0, 1 , 0, 360deg);
+    }
+}
+
+@-webkit-keyframes push {
+    50% {
+      -webkit-transform: scale(1.4, 0.8) translate(-19%, -50%);
+      transform: scale(1.4, 0.8) translate(-19%, -50%); }
+    100% {
+      -webkit-transform: scale(1.2, 0.8) translate(-19%, -50%);
+      transform: scale(1.2, 0.8) translate(-19%, -50%); } 
+} 
+@-webkit-keyframes rotate {
+    0% {
+        -webkit-transform: rotate(5deg);
+    }
+    50% {
+        -webkit-transform: rotate(-5deg);
+    }
+    100% {
+        -webkit-transform: rotate(5deg);
+    }
+}
+
+@-webkit-keyframes pulse {
+    0% {
+    -webkit-transform: scale(1);
+    transform: scale(1); }
+  50% {
+    -webkit-transform: scale(1.07);
+    transform: scale(1.07); }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1); }
+}
+
+
+@-webkit-keyframes tada {
+    from {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+    5%,
+    10% {
+        -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+        transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+    }
+    15%,
+    25%,
+    35%,
+    45% {
+        -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+        transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    }
+    20%,
+    30%,
+    40% {
+        -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+        transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    }
+    50% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+    to {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+@-webkit-keyframes fall {
+    from {
+        -webkit-transform: translate(-50%, -50%);
+        -webkit-animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        opacity: 0;
+        /* easeOutQuad */
+    }
+    35% {
+        -webkit-transform: translate(-50%, 8%);
+        -webkit-animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        opacity: 1;
+        /* easeOutQuad */
+    }
+    85% {
+        -webkit-transform: translate(-50%, 8%);
+        -webkit-animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+        opacity: 1;
+        /* easeInQuad */
+    }
+    to {
+        -webkit-transform: translate(-50%, 100%);
+        -webkit-animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        opacity: 0;
+        /* easeOutQuad */
+    }
+}
