@@ -364,7 +364,7 @@ a {
 
 .decoration{
     position: absolute;
-    top: 5%;
+    top: 10%;
     animation: rotate 1s infinite;
 }
 
@@ -373,7 +373,15 @@ a {
     height: auto;
     left: 0;
     right: 0;
-    top: 5%;
+    top: 10%;
+}
+
+#fullscreenClick {
+    height: 90%;
+    bottom: 0;
+    width: 100%;
+    pointer-events: all;
+    z-index: 1000;
 }
 
 #static-endcard{
@@ -384,8 +392,8 @@ a {
     right: 0;
     margin: auto;
     opacity: 1;
-
-    background: url(portrait.jpg) no-repeat;
+    pointer-events: all;
+    background: url(endcard.jpg) no-repeat;
     background-size:  auto 100%;
     background-position: center center;
     transition: all 1s ease-in-out;
@@ -423,17 +431,6 @@ a {
     font-family: -apple-system, "Segoe UI", "Roboto", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; 
 }
 
-/*#cta {
-    width: calc(10.5vw + 10.5vh);
-    height: calc(10.5vw + 10.5vh);
-    background: #5de468;
-    position: absolute;
-    z-index: 3;
-    border-radius: 50%;
-    pointer-events: all;
-    transition: bottom 0.8s ease-in-out, right 0.8s ease-in-out, width 0.8s ease-in-out, height 0.8s ease-in-out; 
-
-}*/
 #cta {
     background: #5de468;
     position: absolute;
@@ -454,18 +451,6 @@ a {
     left: 0;
     right: 0;
 }
-/*#cta.landscape #downloadText{
-    font-size: 8vh;
-}*/
-
-/*#cta.landscape #downloadIcon, #cta.portrait #downloadText {
-    display: none;
-}
-
-#cta.portrait #downloadIcon, #cta.landscape #downloadText {
-    display: block;
-}
-*/
 
 #downloadText {
     position: absolute;
@@ -475,10 +460,8 @@ a {
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     font-family: -apple-system, "Segoe UI", "Roboto", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; 
-    font-size: 6vh;
+    font-size: 8vw;
 }
-
-/* iphone X */
 
 @media all and (orientation: landscape) {
     .decoration{
@@ -487,8 +470,6 @@ a {
         left: 0;
         right: 0;
     }
-
-
 
     #app-logo {
         width: 20%;
@@ -501,7 +482,7 @@ a {
 
     #static-endcard {
         /*background: url(landscape.jpg) no-repeat;*/
-        background-size: 110% auto;
+        background-size: 120% auto;
         background-position: center;
     }
 
@@ -509,11 +490,10 @@ a {
 
     #cta {
         width: 30%;
-        height: 20%;
+        height: 15%;
         bottom: 2%;
         left: 35%;
-        border-radius: 20px;
-        /*animation: pulse 1s infinite;*/
+        border-radius: 10px;
     }
 
     #downloadText {
@@ -556,6 +536,12 @@ a {
     }
     #vungle-footer.landscape-dark span {
         color: rgba(126, 126, 126, 0.8);
+    }
+}
+
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+    #downloadText {
+        font-size: 6vh
     }
 }
 

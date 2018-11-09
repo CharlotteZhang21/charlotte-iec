@@ -6,12 +6,11 @@ var embed;
 var player;
 var containerId = 'stream-frame';
 
-var sizeMultiplier = orientationCheck() == 'portrait'? 1 : 1.12;
 
 function initStream(){
 	var options = {
-		width: document.body.clientWidth * sizeMultiplier,
-		height: document.body.clientHeight,
+		// width: Math.max(document.body.clientWidth * sizeMultiplier, minFrameWidth),
+		// height: document.body.clientHeight,
 		channel: "tinny",
 		layout: 'video-with-chat',
 		theme: 'dark',
@@ -27,12 +26,13 @@ function initStream(){
 		player = embed.getPlayer();
 		player.play();
 	});
+	resizeStream();
 }
 
 function resizeStream(){
-	sizeMultiplier = orientationCheck() == 'portrait'? 1 : 1.12;
+	var minFrameWidth = orientationCheck() == 'portrait'? 1 : 680.5;
 	var iframe = document.getElementById(containerId).getElementsByTagName('iframe')[0];
-	iframe.width = document.body.clientWidth * sizeMultiplier;
+	iframe.width =  Math.max(document.body.clientWidth, minFrameWidth);
 	iframe.height = document.body.clientHeight;
 }
 
@@ -134,6 +134,10 @@ function downloadAndMute() {
 function showEndcard(){
 	player.pause();
 	// addClass(document.getElementById(containerId), 'hide');	
+	
+	$('#fullscreenClick').click(function(){
+		downloadAndMute();
+	});
 	$('#'+containerId).addClass('hide');
 	$('#static-endcard').removeClass('hideBottom');
 }
