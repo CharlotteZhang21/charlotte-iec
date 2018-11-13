@@ -2,7 +2,7 @@ var PiecSettings = PiecSettings || {};
 
 PiecSettings.version = "-";
 
-PiecSettings.timer = 6000;
+PiecSettings.timer = 0;
 
 PiecSettings.ASOI = true;
 

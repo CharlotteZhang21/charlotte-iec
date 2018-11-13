@@ -25,9 +25,6 @@ import * as ContainerUtil from '../utils/container-util';
         this.background = new Background(this.game);
         this.game.add.existing(this.background);
 
-        this.dialogBox = new DialogBox(this.game);
-        this.game.add.existing(this.dialogBox);
-
 
        
         this.currentChair = new Chair(this.game, 'empty-space', "chair");
@@ -45,6 +42,11 @@ import * as ContainerUtil from '../utils/container-util';
             // option.alpha=0;
             // this.options[i].alpha = 0;
         }
+
+        
+        this.dialogBox = new DialogBox(this.game);
+        this.game.add.existing(this.dialogBox);
+
 
         
         this.logo = new Logo(this.game);
