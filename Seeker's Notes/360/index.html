@@ -1,0 +1,866 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0, user-scalable=no" />
+    <meta name="author" content="Vungle">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Vungle Endcard</title>
+    <script src="vungle.js"></script>
+    <link rel="stylesheet" href="vungle.css">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- logo strike start -->
+    <style>#vungle-footer {display: none !important; }</style>
+    <!-- logo strike end -->
+     <style>
+        @font-face {
+            font-family: "vungle-fonticon";
+            src: url("vungle-fonticon.eot");
+            src: url("vungle-fonticon.eot?#iefix") format("embedded-opentype"), url("vungle-fonticon.woff") format("woff"), url("vungle-fonticon.ttf") format("truetype"), url("vungle-fonticon.svg#vungle-fonticon") format("svg");
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: "myFont";
+            src: url('font.otf') format('openType');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        
+    </style>
+        <!-- PRIVACY START CSS -->
+<link rel="stylesheet" href="privacy.css">
+<!-- PRIVACY END CSS -->
+</head>
+<body ontouchstart="ontouchstart" class="preload light">
+    <div id="abs-container">
+        <div id="vungle-header" class="">
+            <a id="vungle-close" class="" href="javascript:void(0)" onclick="doSomething('close');">
+                <!-- CLOSE ICON -->
+                <svg version="1.1" id="svg-vungle-ad-close" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 321.2 321" style="enable-background:new 0 0 321.2 321;" xml:space="preserve">
+                    <g>
+                        <g id="svg-vungle-ad-close-icon-layer-1">
+                            <g id="svg-vungle-ad-close-icon-layer-close">
+                                <g>
+                                    <polygon class="svg-vungle-ad-close-icon" points="280.8,309.5 161,189.8 40.4,309.5 11.6,280.8 132.4,160 11.6,40.3 40.4,11.5 161,131.3 280.8,11.5 
+                                        309.5,40.3 189.8,160 309.5,280.8                " />
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+            </a>
+        </div>
+        <div id="vungle-footer" class="portrait-light landscape-light portrait-left landscape-left"><span class="footer" data-icon="q"></span></div>
+
+    <!-- IEC Creative starts here-->
+    <div class="logo-container">
+        <img src="logo.png">
+    </div>
+
+    <div class="cta-container">
+        <div id="vungle-cta-button" class="cta-holder">
+                <img id="cta-img" class="cta" src="button_1.png">
+                <p id="cta-text" class="cta">DOWNLOAD</p>
+            <!-- </a> -->
+        </div>
+    </div>
+
+    <div id="interactive-tooltip-360" class="interactive-tooltip-360">
+        <div id="icon-holder" class="icon-holder show">
+            <div class="pano"></div>
+            <div class="device"></div>
+            <!-- <div class="arrow-left"></div>
+            <div class="arrow-right"></div> -->
+            <div class="finger"></div>
+        </div>
+    </div>
+
+    <!-- <div id="coords">
+    </div> -->
+
+    <script type="text/javascript" src="image.js"></script>
+    <script type="text/javascript" src="image2.js"></script>
+    <script type="text/javascript" src="explode.js"></script>
+    <script type="text/javascript" src="fighting1.js"></script>
+    <script type="text/javascript" src="fighting2.js"></script>
+    <script type="text/javascript" src="dragon.js"></script>
+
+    <script src="three.min.js"></script>
+    <script src="Tween.js"></script>
+    <script type="text/javascript" src="DeviceOrientationController.js"></script>
+    <script>
+    var gyroPresent = false;
+    var orientation = orientationCheck();
+    var lockView = true; // this restricts viewing the bottom of the 360 view with the gyroscope.
+
+    var overlay = document.getElementById('overlay-id');
+    var endOverlay = document.getElementById('end-overlay');
+    var hand = document.getElementById('hand-id');
+
+    // Inserting base64 data to save space.
+    var insertLogo = document.getElementById('insert-logo');
+    var insertSpiral = document.getElementById('insert-spiral');
+
+    var u = navigator.userAgent;
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios check
+
+    var camera, controls;
+    var renderer;
+    var scene;
+    var clock = new THREE.Clock();
+    var annie = [];
+    var runner;
+    var skyBox;
+
+    var reqAnim;
+
+    var coords = {
+        x: 0,
+        y: 0,
+        rotation: 0.5
+    };
+
+    var raycaster;
+    var mouse;
+
+    var objects = [];
+
+    var sizee = 3.5;
+    var horizon = 0;
+
+
+    var dragon1_size = {
+        x: 128/1000 * sizee,
+        y: 77/1000 * sizee,
+        z: 1,
+    };
+
+
+    var dragon1_pos = {
+        x: 5,
+        y: horizon + 1.5,
+        z: 1,
+    };
+
+
+    /*===== images ======*/
+    var imagesToAdd = [
+    {
+        name: 'explode-1',
+        link: explode,
+        position: [-.1,  horizon, .3 + (-1)* 2],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [128/1000 * sizee, 128/1000  *sizee, .5],
+        animation: [5, 1, 5, 200, true],
+    },
+    {
+        name: 'explode-2',
+        link: explode,
+        position: [1.5,  horizon+.3, 0],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [128/1000 * sizee, 128/1000  *sizee, .5],
+        animation: [5, 1, 5, 130, true],
+    },
+    //top
+    {
+        name: 'explode-3',
+        link: explode,
+        position: [1.2,  horizon + 1, -.4],
+        rotation: {
+            x: THREE.Math.degToRad(30),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [128/1000 * sizee, 128/1000  *sizee, .5],
+        animation: [5, 1, 5, 180, true],
+    },
+    //right
+    {
+        name: 'explode-3',
+        link: explode,
+        position: [2.9,  horizon-.3, -.3],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(90),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [128/1000 * sizee, 128/1000  *sizee, .5],
+        animation: [5, 1, 5, 120, true],
+    },//battle field
+    {
+        name: 'fighting1',
+        link: fighting1,
+        position: [1.2,  horizon-.2, -.3],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [91.2/1500 * sizee, 70/1500  *sizee, .5],
+        animation: [5, 1, 5, 128, true]
+    },
+    {
+        name: 'fighting2',
+        link: fighting2,
+        position: [1,  horizon-.1, -.3],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [66.25/1500 * sizee, 67/1500  *sizee, .5],
+        animation: [8, 3, 16, 128, true]
+    },
+    //on top of the castle
+    {
+        name: 'fighting1',
+        link: fighting1,
+        position: [-1.8,  horizon+.3, -.5],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [91.2/1250 * sizee, 70/1250  *sizee, .5],
+        animation: [5, 1, 5, 128, true]
+    },
+    {
+        name: 'fighting2',
+        link: fighting2,
+        position: [-1.5,  horizon+.2, -.1],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [66.25/1200 * sizee, 67/1200  *sizee, .5],
+        animation: [8, 3, 16, 128, true]
+    },
+    {
+        name: 'fighting1',
+        link: fighting1,
+        position: [-2.1,  horizon+.5, -.7],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [91.2/1200 * sizee, 70/1200  *sizee, .5],
+        animation: [5, 1, 5, 128, true]
+    },
+    //village
+    {
+        name: 'fighting1',
+        link: fighting1,
+        position: [1.9,  horizon-.5, 0],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [91.2/1050 * sizee, 70/1050  *sizee, .5],
+        animation: [5, 1, 5, 128, true]
+    },
+    {
+        name: 'fighting2',
+        link: fighting2,
+        position: [1.7,  horizon-.5, 0],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [66.25/1000 * sizee, 67/1000  *sizee, .5],
+        animation: [8, 3, 16, 128, true]
+    },
+    //on the right
+    {
+        name: 'fighting1',
+        link: fighting1,
+        position: [3,  horizon, .4],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(90),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [91.2/1000 * sizee, 70/1000  *sizee, .5],
+        animation: [5, 1, 5, 128, true]
+    },
+    {
+        name: 'fighting2',
+        link: fighting2,
+        position: [3.2,  horizon, .4],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(90),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [66.25/1000 * sizee, 67/1000  *sizee, .5],
+        animation: [8, 3, 16, 128, true]
+    },
+    {
+        name: 'dragon1',
+        link: dragon,
+        position: [dragon1_pos.x,  dragon1_pos.y, dragon1_pos.z],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [dragon1_size.x, dragon1_size.y, dragon1_size.z],
+        animation: [7, 1, 7, 128, true],
+        tween: true,
+    },
+    {
+        name: 'dragon2',
+        link: dragon,
+        position: [dragon1_pos.x,  dragon1_pos.y, dragon1_pos.z],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [dragon1_size.x, dragon1_size.y, dragon1_size.z],
+        animation: [7, 1, 7, 128, true],
+        tween: true,
+    },
+    ];
+    var addedImages = {} // Reference for tweening 
+    var animationInstructions = {};
+    var textureReference = {};
+
+    animationInstructions['dragon1'] = new TWEEN.Tween({
+            xPos: dragon1_pos.x,
+            yPos: dragon1_pos.y,
+            zPos: dragon1_pos.z,
+            rotation: -30  
+        }).to({
+            xPos: -2,
+            yPos: [horizon - 0.2, horizon + .4, horizon + 1.5], 
+            zPos: [-0.5, -.8, -1],
+            rotation: [-10, -20]
+        }, 5000)
+        .onUpdate(function() {
+            addedImages['dragon1'].position.x = this.xPos;
+            addedImages['dragon1'].position.y = this.yPos;
+            addedImages['dragon1'].position.z = this.zPos;
+            addedImages['dragon1'].rotation.y = THREE.Math.degToRad(this.rotation);
+               })
+        .repeat(Infinity);
+        // .yoyo(true);
+
+
+    init();
+    animate();
+
+    function init() {
+
+
+        container = document.createElement('div');
+        document.body.appendChild(container);
+
+        // camera
+
+        var FOV = isiOS ? 60 : 60;
+
+        camera = new THREE.PerspectiveCamera(FOV, document.body.scrollWidth / document.body.scrollHeight, 1, 1000);
+        camera.target = new THREE.Vector3(0,0,0);
+        camera.position.z = 1;
+
+        controls = new DeviceOrientationController(camera);
+        // scene
+
+        scene = new THREE.Scene();
+
+
+        var textureLoader = new THREE.TextureLoader();
+
+        // renderer
+
+        renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: true
+        });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(document.body.scrollWidth, document.body.scrollHeight);
+        container.appendChild(renderer.domElement);
+
+        //
+
+        renderer.gammaInput = true;
+        renderer.gammaOutput = true;
+
+        window.addEventListener('resize', onWindowResize, false);
+
+
+        /************* 
+         * Use 2 background images, animating the background
+         *************/
+        var textures = getTexturesFromAtlasFile(imageSource, 6);
+        var textures2 = getTexturesFromAtlasFile(imageSource2, 6);
+
+        var materials = [], materials2 = [];
+        for (var i = 0; i < 6; i++) {
+            materials.push(new THREE.MeshBasicMaterial({
+                map: textures[i]
+            }));
+        }
+
+        for (var i = 0; i < 6; i++) {
+            materials2.push(new THREE.MeshBasicMaterial({
+                map: textures2[i]
+            }));
+        }
+
+        skyBox = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1), new THREE.MultiMaterial(materials));
+         skyBox.applyMatrix(new THREE.Matrix4().makeScale(800, 800, -800));
+        scene.add(skyBox);
+
+        skyBox2 = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1), new THREE.MultiMaterial(materials2));
+         skyBox2.applyMatrix(new THREE.Matrix4().makeScale(800, 800, -800));
+        scene.add(skyBox2);
+
+        skyBox2.visible = false;
+
+        setInterval(function(){
+            if(skyBox2.visible)
+                skyBox2.visible = false;
+            else 
+                skyBox2.visible = true;
+        }, 1e3);
+
+
+        /************* 
+         * BackgroundEnd
+         *************/
+
+
+        // initCube();
+
+        for (var i = 0; i < imagesToAdd.length; i++) {
+            addedImages[imagesToAdd[i]['name']] = createImage(imagesToAdd[i], i);
+
+        }
+
+
+
+        animationInstructions["dragon1"].start();
+    
+    }
+
+    function lensFlareUpdateCallback(object) {
+
+        var f, fl = object.lensFlares.length;
+        var flare;
+        var vecX = -object.positionScreen.x * 2;
+        var vecY = -object.positionScreen.y * 2;
+
+
+        for (f = 0; f < fl; f++) {
+
+            flare = object.lensFlares[f];
+
+            flare.x = object.positionScreen.x + vecX * flare.distance;
+            flare.y = object.positionScreen.y + vecY * flare.distance;
+
+            flare.rotation = 0;
+
+        }
+
+        object.lensFlares[2].y += 0.025;
+        object.lensFlares[3].rotation = object.positionScreen.x * 0.5 + THREE.Math.degToRad(45);
+
+    }
+
+
+    function getTexturesFromAtlasFile(atlasImgUrl, tilesNum) {
+
+        var textures = [];
+
+        for (var i = 0; i < tilesNum; i++) {
+
+            textures[i] = new THREE.Texture();
+
+        }
+
+        var imageObj = new Image();
+
+
+        imageObj.onload = function() {
+
+            var canvas, context;
+            var tileWidth = imageObj.height;
+
+            for (var i = 0; i < textures.length; i++) {
+
+                canvas = document.createElement('canvas');
+                context = canvas.getContext('2d');
+                canvas.height = tileWidth;
+                canvas.width = tileWidth;
+                context.drawImage(imageObj, tileWidth * i, 0, tileWidth, tileWidth, 0, 0, tileWidth, tileWidth);
+                textures[i].image = canvas
+                textures[i].needsUpdate = true;
+            }
+
+        };
+        imageObj.src = atlasImgUrl;
+        // imageObj.src = imageSource;
+
+        return textures;
+
+    }
+
+    function onWindowResize() {
+        initCta();
+        camera.aspect = document.body.clientWidth / document.body.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(document.body.clientWidth, document.body.clientHeight);
+    }
+
+    function animate(time) {
+
+
+        controls.update();
+
+        renderer.render(scene, camera);
+
+        reqAnim = requestAnimationFrame(animate);
+
+        this.vector = new THREE.Vector3(0, 0, -1);
+        this.vector.applyQuaternion(camera.quaternion);
+
+        for (var i = 0; i < imagesToAdd.length; i++) {
+            if (imagesToAdd[i].hasOwnProperty('animateOnSight')) {
+
+                if (imagesToAdd[i].animateOnSight !== 'done' &&
+                    this.vector.x < imagesToAdd[i].animateOnSight[0] + .05 &&
+                    this.vector.x > imagesToAdd[i].animateOnSight[0] - .05
+                ) {
+                    imagesToAdd[i].animateOnSight = 'ready';
+
+                }     
+               
+            }
+        }
+
+        var delta = clock.getDelta();
+
+        for (var i = 0; i < annie.length; i++) {
+            annie[i].update(1000 * delta);
+        }
+
+        var multiplier = 1;
+        if (this.vector.x < 0) {
+            multiplier = -1;
+        }
+        var angle = Math.acos(this.vector.z/Math.sqrt(this.vector.x * this.vector.x + this.vector.y * this.vector.y + this.vector.z * this.vector.z)) * 180/Math.PI * multiplier + 180;
+
+        if (angle > 180) {
+            angle -= 270;
+        } else {
+            angle += 90;
+        }
+        angle -= 90;
+        angle *= -1;
+
+        TWEEN.update(time);
+
+
+
+    }
+
+
+    function initCube() {
+        var runnerTexture = new THREE.ImageUtils.loadTexture(girl);
+        var pushtoArray = new TextureAnimator(runnerTexture, 9, 1, 9, 85, true); // texture, #horiz, #vert, #total, duration.
+        annie.push(pushtoArray);
+        var runnerMaterial = new THREE.MeshBasicMaterial({
+            transparent: true,
+            map: runnerTexture,
+            side: THREE.DoubleSide
+        });
+        var runnerGeometry = new THREE.PlaneGeometry(.45 * .9, 1 * .7, 1 * 2, 1 * 2);
+        runner = new THREE.Mesh(runnerGeometry, runnerMaterial);
+        runner.position.x = .4;
+        runner.position.z = -.4;
+        runner.position.y = .05;
+        runner.rotation.y = -.7;
+        scene.add(runner);
+
+
+        setTimeout(function() {
+            tween.start();
+        }, 100)
+
+
+    }
+
+    function createImage(obj, arrayInPosition) {
+        var texture = new THREE.ImageUtils.loadTexture(obj.link);
+        var delay = obj.delay || 0;
+        if (obj.hasOwnProperty('spritesheetData')) {
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(obj.spritesheetData[2]/498, obj.spritesheetData[3]/1265);
+            texture.offset.x = (obj.spritesheetData[0])/498;
+            texture.offset.y = (1265 - obj.spritesheetData[1] - obj.spritesheetData[3])/1265;
+        }
+        if (obj.hasOwnProperty('animation')) {
+            // var delay = obj.animationDelay || 0;
+            var pushtoArray = new TextureAnimator(texture, obj.animation[0], obj.animation[1], obj.animation[2], obj.animation[3], arrayInPosition, obj.animation[4], obj.position[0], obj.position[2]); // texture, #horiz, #vert, #total, duration.
+            // pushtoArray.delay = delay;
+            annie.push(pushtoArray);
+        }
+        var material = new THREE.MeshBasicMaterial({
+            transparent: true,
+            map: texture,
+            side: THREE.DoubleSide
+        });
+
+        material.opacity = typeof(obj.opacity) === 'undefined' ? 1 : obj.opacity;
+
+        textureReference[obj.name] = material;
+
+        var geometry = new THREE.PlaneGeometry(obj.size[0], obj.size[1], obj.size[2]);
+        entity = new THREE.Mesh(geometry, material);
+        entity.position.x = obj.position[0];
+        entity.position.y = obj.position[1];
+        entity.position.z = obj.position[2];
+        entity.rotation.x = obj.rotation.x || 0;
+        entity.rotation.y = obj.rotation.y || 0;
+        entity.rotation.z = obj.rotation.z || 0;
+        entity.name = obj.name;
+        entity.clickable = obj.clickable || false;
+        entity.appearRandom = obj.appearRandom || false;
+        scene.add(entity);
+        objects.push(entity);
+       
+
+        // if (obj.hasOwnProperty('tween') && obj.tween === true) {
+        //     setTimeout(function() {
+        //         tween.start();
+        //     }, obj.delay || 100);
+        // }
+
+        return entity;
+    }
+
+
+
+    function TextureAnimator(texture, tilesHoriz, tilesVert, numTiles, tileDispDuration, arrayInPosition, loop, x, z) {
+
+
+        // note: texture passed by reference, will be updated by the update function.
+        this.ready = imagesToAdd[arrayInPosition].animateOnSight || 'ready';
+        this.arrayPos = arrayInPosition;
+        this.tilesHorizontal = tilesHoriz;
+        this.tilesVertical = tilesVert;
+        this.xPos = x;
+        this.zPos = z;
+        // how many images does this spritesheet contain?
+        //  usually equals tilesHoriz * tilesVert, but not necessarily,
+        //  if there at blank tiles at the bottom of the spritesheet. 
+        this.numberOfTiles = numTiles;
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(1 / this.tilesHorizontal, 1 / this.tilesVertical);
+
+        // how long should each image be displayed?
+        this.tileDisplayDuration = tileDispDuration;
+
+        // how long has the current image been displayed?
+        this.currentDisplayTime = 0;
+
+        // which image is currently being displayed?
+        this.currentTile = 0
+
+        this.loop = loop;
+        this.counter = 0;
+
+        texture.offset.x = 0;
+        texture.offset.y = 1/this.tilesVertical;
+
+        this.update = function(milliSec) {
+            this.ready = imagesToAdd[this.arrayPos].animateOnSight || 'ready';
+            if (this.ready === 'ready') {
+                if (this.loop || this.loop == false && this.counter < this.numberOfTiles) {
+                    this.currentDisplayTime += milliSec;
+                    while (this.currentDisplayTime > this.tileDisplayDuration) {
+                        this.currentDisplayTime -= this.tileDisplayDuration;
+                        this.currentTile++;
+                        if (this.currentTile == this.numberOfTiles && loop)
+                            this.currentTile = 0;
+                        if (this.currentTile == this.numberOfTiles && !loop) {
+                            scene.remove(objects[this.arrayPos]);
+                        }
+                        var currentColumn = this.currentTile % this.tilesHorizontal;
+                        texture.offset.x = currentColumn / this.tilesHorizontal;
+                        var currentRow = Math.floor(this.currentTile / this.tilesHorizontal);
+                        texture.offset.y = Math.abs( 1 - currentRow / this.tilesVertical) - 1/this.tilesVertical;
+                        if (!this.loop) {
+                            this.counter++;
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    function onDocumentTouchStart(event) {
+
+
+        event.clientX = event.touches[0].clientX;
+        event.clientY = event.touches[0].clientY;
+        onDocumentMouseDown(event);
+
+    }
+    var jellyBurstCounter = 0;
+
+    function onDocumentMouseDown(event) {
+
+        mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+        mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+
+        var intersects = raycaster.intersectObjects(objects);
+        if (intersects.length > 1) {
+            for (var i = 0; i < intersects.length; i++) {
+                if (intersects[i].object.hasOwnProperty('clickable') && intersects[i].object.clickable === true) {
+
+                    console.log(intersects[i]);
+                    spiralAway(intersects[i].object.name);
+                    intersects[i].object.clickable = false;
+                    console.log(jellyBurstCounter);
+                    if (jellyBurstCounter >= 3) {
+                        setTimeout(function() {
+                            endgame();
+                            addClass(insertSpiral, 'insert-spiral-animation')
+                            cancelAnimationFrame(reqAnim);
+                        }, 1000);
+                    } else {
+                        jellyBurstCounter++;
+                    }
+                }
+            }
+
+        }
+    }
+
+    function spiralAway(obj) {
+        console.log(obj);
+        var coords = {
+            scale: 1,
+            rotation: 10,
+
+        }
+        var spiral = new TWEEN.Tween(coords)
+            .to({
+                scale: 0,
+                rotation: 0,
+            }, 1000)
+            .onUpdate(function() {
+                addedImages[obj].rotation.z = this.rotation;
+                addedImages[obj].scale.set(this.scale, this.scale, 0);
+            })
+        spiral.interpolation(TWEEN.Interpolation.Bezier);
+        spiral.start();
+
+    }
+
+    function endgame() {
+        addClass(endOverlay, 'show');
+    }
+
+
+
+
+    document.ontouchmove = function(e) {
+        e.preventDefault();
+    }
+
+    window.onload = function() {
+        removeClass(document.body, 'preload');
+        document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled visible";
+
+        setTimeout(function() {
+            document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled";
+        }, 2800);
+
+        document.getElementById('vungle-cta-button').addEventListener('click', function(){
+            doSomething("download");
+        })
+        initCta();
+
+    };
+
+    function initCta() {
+        var fontSize = document.getElementById('cta-img').offsetHeight * 0.4;
+        var fontMarginTop = document.getElementById('cta-img').offsetHeight * 0.3;
+        document.getElementById('cta-text').style.fontSize = fontSize + 'px';
+        document.getElementById('cta-text').style.top = fontMarginTop + 'px';
+        document.getElementById('cta-text').style.opacity = 1;
+          
+    }
+    </script>
+      <!-- PRIVACY START HTML -->
+    <div id="privacy-wrapper">
+        <div id="privacy-icon" class="privacy-container">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 390 390" style="enable-background:new 0 0 390 390;" xml:space="preserve">
+                <g>
+                    <path class="st0" d="M338.3,75.4c-59.4,0-104.9-17-143.3-54.4C156.5,58.4,111,75.4,51.7,75.4c0,97.4-20.2,236.9,143.3,293.6
+            C358.5,312.3,338.3,172.8,338.3,75.4z M195.5,269.5L195.5,269.5l-0.9,0h-64.1c0-46.9,41.2-46.8,50.3-59.1l1-5.6
+            c-12.8-6.5-21.9-22.2-21.9-40.5c0-24.2,15.7-43.7,35.1-43.7s35.1,19.6,35.1,43.7c0,18.2-8.9,33.8-21.6,40.4l1.2,6.3
+            c10,11.7,49.8,12.4,49.8,58.5H195.5z" />
+                </g>
+            </svg>
+            <span> Privacy 
+                <svg id="privacy-external" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                     viewBox="0 0 194.818 194.818" style="enable-background:new 0 0 194.818 194.818;" xml:space="preserve">
+                <g>
+                    <path class="privacy-external-path" d="M185.818,2.161h-57.04c-4.971,0-9,4.029-9,9s4.029,9,9,9h35.312l-86.3,86.3c-3.515,3.515-3.515,9.213,0,12.728
+                        c1.758,1.757,4.061,2.636,6.364,2.636s4.606-0.879,6.364-2.636l86.3-86.3v35.313c0,4.971,4.029,9,9,9s9-4.029,9-9v-57.04
+                        C194.818,6.19,190.789,2.161,185.818,2.161z"/>
+                    <path class="privacy-external-path" d="M149,77.201c-4.971,0-9,4.029-9,9v88.456H18v-122h93.778c4.971,0,9-4.029,9-9s-4.029-9-9-9H9c-4.971,0-9,4.029-9,9v140
+                        c0,4.971,4.029,9,9,9h140c4.971,0,9-4.029,9-9V86.201C158,81.23,153.971,77.201,149,77.201z"/>
+                </g>
+                </svg>
+            </span>
+        </div>
+        <div id="privacy-page-wrapper">
+            <div id="privacy-page-loading">
+                <div id="privacy-page-spinner-wrapper">
+                    <svg class="components__spinner" width="60px" height="60px" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg" style="">
+                        <circle class="path" fill="none" stroke-width="1" stroke-linecap="round" cx="17" cy="17" r="15"></circle>
+                    </svg>
+                </div>
+            </div>
+            <iframe id="privacy-page" src=""></iframe>
+        </div>
+        <div id="privacy-back-button-container" class="back-button-container" href="javascript:void(0)">
+            <div class="privacy-back-button-back-button">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 7000 7000" style="enable-background:new 0 0 7000 7000;" xml:space="preserve">
+                    <g>
+                        <path class="privacy-back-arrow" fill="#fff" d="M3590.2,6157.4L1234.8,3802H6927V3198H1234.8L3590.2,842.6l-422.8-422.8L72.2,3500l3080.1,3080.1L3590.2,6157.4z"></path>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <!-- PRIVACY START JS -->
+    <script src="privacy.js"></script>
+    <!-- PRIVACY END JS -->
+</body>
+
+</html>
