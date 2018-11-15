@@ -39,8 +39,8 @@ var DeviceOrientationController = function(object) {
     this.minLatPort = -0;
     this.maxLatPort = 0;
 
-    this.minLatLands = -0;
-    this.maxLatLands = 0;
+    this.minLatLands = -5;
+    this.maxLatLands = 5;
     
     //Portrait
     this.minLonPort = -45;

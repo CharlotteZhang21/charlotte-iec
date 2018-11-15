@@ -56,16 +56,45 @@
             </a>
         </div>
         <div id="vungle-footer" class="portrait-light landscape-light portrait-left landscape-left"><span class="footer" data-icon="q"></span></div>
+    </div>
 
     <!-- IEC Creative starts here-->
     <div class="logo-container">
         <img src="logo.png">
     </div>
 
-    <div class="cta-container">
+    <div id="startOverlay" class="overlay">
+                    
+        <div class="text overlayText" id="findObject">
+            Look for the hidden objects
+        </div>
+        <div class="objectsContainer">
+
+            <img class="object" src="object1.png"/>
+            <img class="object" src="object2.png"/>
+            <img class="object" src="object3.png"/>
+            
+        </div>
+        <div class="text tapAnywhereText">
+            Tap to find
+        </div>
+    </div> 
+
+
+    <div id='objectsDock' class="">
+        <img class="object" id="dock1"  src="object1-white.png"/>
+        <img class="object" id="dock2"  src="object2-white.png"/>
+        <img class="object" id="dock3"  src="object3-white.png"/>
+        <img class="dockBG" src="dockBG.png" />
+    </div>
+
+
+    <div class="cta-container pulse">
         <div id="vungle-cta-button" class="cta-holder">
-                <img id="cta-img" class="cta" src="button_1.png">
-                <p id="cta-text" class="cta">DOWNLOAD</p>
+                
+                <img id="cta-img" class=" button1" src="button_1.png">
+                <img id="cta-img-2" class=" button2" src="button_2.png">
+                <p id="cta-text" >DOWNLOAD</p>
             <!-- </a> -->
         </div>
     </div>
@@ -85,14 +114,14 @@
 
     <script type="text/javascript" src="image.js"></script>
     <script type="text/javascript" src="image2.js"></script>
-    <script type="text/javascript" src="explode.js"></script>
-    <script type="text/javascript" src="fighting1.js"></script>
-    <script type="text/javascript" src="fighting2.js"></script>
-    <script type="text/javascript" src="dragon.js"></script>
+    <script type="text/javascript" src="object1.js"></script>
+    <script type="text/javascript" src="object2.js"></script>
+    <script type="text/javascript" src="object3.js"></script>
 
     <script src="three.min.js"></script>
     <script src="Tween.js"></script>
     <script type="text/javascript" src="DeviceOrientationController.js"></script>
+    <script type="text/javascript" src="main.js"></script>
     <script>
     var gyroPresent = false;
     var orientation = orientationCheck();
@@ -130,7 +159,7 @@
 
     var objects = [];
 
-    var sizee = 3.5;
+    var sizee = 1;
     var horizon = 0;
 
 
@@ -150,221 +179,76 @@
 
     /*===== images ======*/
     var imagesToAdd = [
+    //magic ball
     {
-        name: 'explode-1',
-        link: explode,
-        position: [-.1,  horizon, .3 + (-1)* 2],
+        name: 'object1',
+        link: object1,
+        clickable: true,
+        // audio: "hand-clap",
+        position: [-3.1,  horizon-0.2, .3 + (-1)* 2],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(60),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [267/900 * sizee, 267/900  *sizee, .5],
+        // animation: [5, 1, 5, 200, true],
+    },
+  
+    // photo
+    {
+        name: 'object2',
+        link: object2,
+        clickable: true,
+        position: [-1,  horizon+0.4, .1 + (-1)* 2],
+        rotation: {
+            x: THREE.Math.degToRad(-30),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [267/1000 * sizee, 267/1000  *sizee, .5],
+        // animation: [5, 1, 5, 180, true],
+    },
+    // photo
+    {
+        name: 'object3',
+        link: object3,
+        clickable: true,
+        position: [1,  horizon - 0.2, 1 + (-1)* 2],
         rotation: {
             x: THREE.Math.degToRad(0),
             y: THREE.Math.degToRad(0),
             z: THREE.Math.degToRad(0),
         },
-        size: [128/1000 * sizee, 128/1000  *sizee, .5],
-        animation: [5, 1, 5, 200, true],
-    },
-    {
-        name: 'explode-2',
-        link: explode,
-        position: [1.5,  horizon+.3, 0],
-        rotation: {
-            x: THREE.Math.degToRad(0),
-            y: THREE.Math.degToRad(0),
-            z: THREE.Math.degToRad(0),
-        },
-        size: [128/1000 * sizee, 128/1000  *sizee, .5],
-        animation: [5, 1, 5, 130, true],
-    },
-    //top
-    {
-        name: 'explode-3',
-        link: explode,
-        position: [1.2,  horizon + 1, -.4],
-        rotation: {
-            x: THREE.Math.degToRad(30),
-            y: THREE.Math.degToRad(0),
-            z: THREE.Math.degToRad(0),
-        },
-        size: [128/1000 * sizee, 128/1000  *sizee, .5],
-        animation: [5, 1, 5, 180, true],
-    },
-    //right
-    {
-        name: 'explode-3',
-        link: explode,
-        position: [2.9,  horizon-.3, -.3],
-        rotation: {
-            x: THREE.Math.degToRad(0),
-            y: THREE.Math.degToRad(90),
-            z: THREE.Math.degToRad(0),
-        },
-        size: [128/1000 * sizee, 128/1000  *sizee, .5],
-        animation: [5, 1, 5, 120, true],
-    },//battle field
-    {
-        name: 'fighting1',
-        link: fighting1,
-        position: [1.2,  horizon-.2, -.3],
-        rotation: {
-            x: THREE.Math.degToRad(0),
-            y: THREE.Math.degToRad(0),
-            z: THREE.Math.degToRad(0),
-        },
-        size: [91.2/1500 * sizee, 70/1500  *sizee, .5],
-        animation: [5, 1, 5, 128, true]
-    },
-    {
-        name: 'fighting2',
-        link: fighting2,
-        position: [1,  horizon-.1, -.3],
-        rotation: {
-            x: THREE.Math.degToRad(0),
-            y: THREE.Math.degToRad(0),
-            z: THREE.Math.degToRad(0),
-        },
-        size: [66.25/1500 * sizee, 67/1500  *sizee, .5],
-        animation: [8, 3, 16, 128, true]
-    },
-    //on top of the castle
-    {
-        name: 'fighting1',
-        link: fighting1,
-        position: [-1.8,  horizon+.3, -.5],
-        rotation: {
-            x: THREE.Math.degToRad(0),
-            y: THREE.Math.degToRad(0),
-            z: THREE.Math.degToRad(0),
-        },
-        size: [91.2/1250 * sizee, 70/1250  *sizee, .5],
-        animation: [5, 1, 5, 128, true]
-    },
-    {
-        name: 'fighting2',
-        link: fighting2,
-        position: [-1.5,  horizon+.2, -.1],
-        rotation: {
-            x: THREE.Math.degToRad(0),
-            y: THREE.Math.degToRad(0),
-            z: THREE.Math.degToRad(0),
-        },
-        size: [66.25/1200 * sizee, 67/1200  *sizee, .5],
-        animation: [8, 3, 16, 128, true]
-    },
-    {
-        name: 'fighting1',
-        link: fighting1,
-        position: [-2.1,  horizon+.5, -.7],
-        rotation: {
-            x: THREE.Math.degToRad(0),
-            y: THREE.Math.degToRad(0),
-            z: THREE.Math.degToRad(0),
-        },
-        size: [91.2/1200 * sizee, 70/1200  *sizee, .5],
-        animation: [5, 1, 5, 128, true]
-    },
-    //village
-    {
-        name: 'fighting1',
-        link: fighting1,
-        position: [1.9,  horizon-.5, 0],
-        rotation: {
-            x: THREE.Math.degToRad(0),
-            y: THREE.Math.degToRad(0),
-            z: THREE.Math.degToRad(0),
-        },
-        size: [91.2/1050 * sizee, 70/1050  *sizee, .5],
-        animation: [5, 1, 5, 128, true]
-    },
-    {
-        name: 'fighting2',
-        link: fighting2,
-        position: [1.7,  horizon-.5, 0],
-        rotation: {
-            x: THREE.Math.degToRad(0),
-            y: THREE.Math.degToRad(0),
-            z: THREE.Math.degToRad(0),
-        },
-        size: [66.25/1000 * sizee, 67/1000  *sizee, .5],
-        animation: [8, 3, 16, 128, true]
-    },
-    //on the right
-    {
-        name: 'fighting1',
-        link: fighting1,
-        position: [3,  horizon, .4],
-        rotation: {
-            x: THREE.Math.degToRad(0),
-            y: THREE.Math.degToRad(90),
-            z: THREE.Math.degToRad(0),
-        },
-        size: [91.2/1000 * sizee, 70/1000  *sizee, .5],
-        animation: [5, 1, 5, 128, true]
-    },
-    {
-        name: 'fighting2',
-        link: fighting2,
-        position: [3.2,  horizon, .4],
-        rotation: {
-            x: THREE.Math.degToRad(0),
-            y: THREE.Math.degToRad(90),
-            z: THREE.Math.degToRad(0),
-        },
-        size: [66.25/1000 * sizee, 67/1000  *sizee, .5],
-        animation: [8, 3, 16, 128, true]
-    },
-    {
-        name: 'dragon1',
-        link: dragon,
-        position: [dragon1_pos.x,  dragon1_pos.y, dragon1_pos.z],
-        rotation: {
-            x: THREE.Math.degToRad(0),
-            y: THREE.Math.degToRad(0),
-            z: THREE.Math.degToRad(0),
-        },
-        size: [dragon1_size.x, dragon1_size.y, dragon1_size.z],
-        animation: [7, 1, 7, 128, true],
-        tween: true,
-    },
-    {
-        name: 'dragon2',
-        link: dragon,
-        position: [dragon1_pos.x,  dragon1_pos.y, dragon1_pos.z],
-        rotation: {
-            x: THREE.Math.degToRad(0),
-            y: THREE.Math.degToRad(0),
-            z: THREE.Math.degToRad(0),
-        },
-        size: [dragon1_size.x, dragon1_size.y, dragon1_size.z],
-        animation: [7, 1, 7, 128, true],
-        tween: true,
+        size: [267/1000 * sizee, 267/1000  *sizee, .5],
+        // animation: [5, 1, 5, 180, true],
     },
     ];
     var addedImages = {} // Reference for tweening 
     var animationInstructions = {};
     var textureReference = {};
 
-    animationInstructions['dragon1'] = new TWEEN.Tween({
-            xPos: dragon1_pos.x,
-            yPos: dragon1_pos.y,
-            zPos: dragon1_pos.z,
-            rotation: -30  
-        }).to({
-            xPos: -2,
-            yPos: [horizon - 0.2, horizon + .4, horizon + 1.5], 
-            zPos: [-0.5, -.8, -1],
-            rotation: [-10, -20]
-        }, 5000)
-        .onUpdate(function() {
-            addedImages['dragon1'].position.x = this.xPos;
-            addedImages['dragon1'].position.y = this.yPos;
-            addedImages['dragon1'].position.z = this.zPos;
-            addedImages['dragon1'].rotation.y = THREE.Math.degToRad(this.rotation);
-               })
-        .repeat(Infinity);
+    // animationInstructions['dragon1'] = new TWEEN.Tween({
+    //         xPos: dragon1_pos.x,
+    //         yPos: dragon1_pos.y,
+    //         zPos: dragon1_pos.z,
+    //         rotation: -30  
+    //     }).to({
+    //         xPos: -2,
+    //         yPos: [horizon - 0.2, horizon + .4, horizon + 1.5], 
+    //         zPos: [-0.5, -.8, -1],
+    //         rotation: [-10, -20]
+    //     }, 5000)
+    //     .onUpdate(function() {
+    //         addedImages['dragon1'].position.x = this.xPos;
+    //         addedImages['dragon1'].position.y = this.yPos;
+    //         addedImages['dragon1'].position.z = this.zPos;
+    //         addedImages['dragon1'].rotation.y = THREE.Math.degToRad(this.rotation);
+    //            })
+    //     .repeat(Infinity);
         // .yoyo(true);
 
 
-    init();
-    animate();
 
     function init() {
 
@@ -374,7 +258,7 @@
 
         // camera
 
-        var FOV = isiOS ? 60 : 60;
+        var FOV = orientationCheck()=='portrait' ? 60 : 50;
 
         camera = new THREE.PerspectiveCamera(FOV, document.body.scrollWidth / document.body.scrollHeight, 1, 1000);
         camera.target = new THREE.Vector3(0,0,0);
@@ -403,7 +287,7 @@
         renderer.gammaInput = true;
         renderer.gammaOutput = true;
 
-        window.addEventListener('resize', onWindowResize, false);
+        
 
 
         /************* 
@@ -447,9 +331,6 @@
          * BackgroundEnd
          *************/
 
-
-        // initCube();
-
         for (var i = 0; i < imagesToAdd.length; i++) {
             addedImages[imagesToAdd[i]['name']] = createImage(imagesToAdd[i], i);
 
@@ -457,33 +338,33 @@
 
 
 
-        animationInstructions["dragon1"].start();
+        // animationInstructions["dragon1"].start();
     
     }
 
-    function lensFlareUpdateCallback(object) {
+    // function lensFlareUpdateCallback(object) {
 
-        var f, fl = object.lensFlares.length;
-        var flare;
-        var vecX = -object.positionScreen.x * 2;
-        var vecY = -object.positionScreen.y * 2;
+    //     var f, fl = object.lensFlares.length;
+    //     var flare;
+    //     var vecX = -object.positionScreen.x * 2;
+    //     var vecY = -object.positionScreen.y * 2;
 
 
-        for (f = 0; f < fl; f++) {
+    //     for (f = 0; f < fl; f++) {
 
-            flare = object.lensFlares[f];
+    //         flare = object.lensFlares[f];
 
-            flare.x = object.positionScreen.x + vecX * flare.distance;
-            flare.y = object.positionScreen.y + vecY * flare.distance;
+    //         flare.x = object.positionScreen.x + vecX * flare.distance;
+    //         flare.y = object.positionScreen.y + vecY * flare.distance;
 
-            flare.rotation = 0;
+    //         flare.rotation = 0;
 
-        }
+    //     }
 
-        object.lensFlares[2].y += 0.025;
-        object.lensFlares[3].rotation = object.positionScreen.x * 0.5 + THREE.Math.degToRad(45);
+    //     object.lensFlares[2].y += 0.025;
+    //     object.lensFlares[3].rotation = object.positionScreen.x * 0.5 + THREE.Math.degToRad(45);
 
-    }
+    // }
 
 
     function getTexturesFromAtlasFile(atlasImgUrl, tilesNum) {
@@ -521,13 +402,6 @@
 
         return textures;
 
-    }
-
-    function onWindowResize() {
-        initCta();
-        camera.aspect = document.body.clientWidth / document.body.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(document.body.clientWidth, document.body.clientHeight);
     }
 
     function animate(time) {
@@ -784,35 +658,6 @@
     }
 
 
-
-
-    document.ontouchmove = function(e) {
-        e.preventDefault();
-    }
-
-    window.onload = function() {
-        removeClass(document.body, 'preload');
-        document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled visible";
-
-        setTimeout(function() {
-            document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled";
-        }, 2800);
-
-        document.getElementById('vungle-cta-button').addEventListener('click', function(){
-            doSomething("download");
-        })
-        initCta();
-
-    };
-
-    function initCta() {
-        var fontSize = document.getElementById('cta-img').offsetHeight * 0.4;
-        var fontMarginTop = document.getElementById('cta-img').offsetHeight * 0.3;
-        document.getElementById('cta-text').style.fontSize = fontSize + 'px';
-        document.getElementById('cta-text').style.top = fontMarginTop + 'px';
-        document.getElementById('cta-text').style.opacity = 1;
-          
-    }
     </script>
       <!-- PRIVACY START HTML -->
     <div id="privacy-wrapper">
