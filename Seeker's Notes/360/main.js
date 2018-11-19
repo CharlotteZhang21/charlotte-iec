@@ -1,4 +1,5 @@
 var debug = false;
+var startOverlayTimer = null;
 
 document.ontouchmove = function(e) {
     e.preventDefault();
@@ -10,35 +11,44 @@ window.onload = function() {
     //360 tool tip
     document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled visible";
 
-    setTimeout(function() {
-        document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled";
-    }, 2800);
-
     //cta
     document.getElementById('vungle-cta-button').addEventListener('click', function(){
         doSomething("download");
     })
     initCta();
-
+    $('centerScreen').sakura();
     //start overlay
 
     if(!debug)
-    setTimeout(function(){
-        
-        addClass(document.getElementById('startOverlay'), 'fadeOut');
-        addClass(document.getElementById('objectsDock'), 'moveDockUp');
-
+    startOverlayTimer = setTimeout(function(){
+        hideTooltip();
     }, 3e3);
+
+    document.getElementById('startOverlay').addEventListener('mousedown', function(){
+        hideTooltip();
+    })
 
     window.addEventListener('resize', onWindowResize, false);
 
 
 
     init();
-    
+
     animate();
 
 };
+
+function hideTooltip() {
+    if(startOverlayTimer != null){
+        clearTimeout(startOverlayTimer);
+    }
+    document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled";
+    addClass(document.getElementById('startOverlay'), 'fadeOut');
+    addClass(document.getElementById('objectsDock'), 'moveDockUp');
+
+    window.addEventListener( 'touchstart', onDocumentTouchStart, true );
+
+}
 
 function initCta() {
     var fontSize = document.getElementById('cta-img').offsetHeight * 0.4;
