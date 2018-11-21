@@ -16,7 +16,7 @@
     width: 100%;
 }
 
-#startOverlay {
+.overlay {
     width: 100%;
     height: 100%;
     background-color: rgba(39, 25, 0, 0.8);
@@ -27,7 +27,13 @@
     transition: opacity 0.5s ease-in-out;
 }
 
-#startOverlay.fadeOut {
+.overlay.fadeOut {
+    opacity: 0;
+    pointer-events: none;
+    z-index: -100;
+}
+
+.overlay.hidden {
     opacity: 0;
     pointer-events: none;
     z-index: -100;

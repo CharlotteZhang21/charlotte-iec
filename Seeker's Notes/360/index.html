@@ -164,6 +164,8 @@
     var insertLogo = document.getElementById('insert-logo');
     var insertSpiral = document.getElementById('insert-spiral');
 
+
+
     var u = navigator.userAgent;
     var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios check
 
@@ -626,13 +628,17 @@
                         addClass(nextPoint, 'fadeInTransition')
                         nextPoint.src = obj.name + '.png';
                         //fade in out the dock item 
-                       
+                        checkFinished();
                     }
                  });
             },
         },
         )
 
+    }
+
+    function checkFinished() {
+        if(document.getElementById('dockBG'))
     }
 
     function spiralAway(obj) {
