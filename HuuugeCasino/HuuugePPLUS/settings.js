@@ -83,19 +83,49 @@ PiecSettings.script = {
     "from": 0.2,
     "to": 2.76,
     "loop": false,
+    hud: [
+        { tag: 'dark-overlay', at: 0.3, effect: 'fadeOut', triggerOnce: true},
+    ],
     "autoplay": {
       "script": "slotWaitingForSpin",
       "after": 0,
       "timer": false
     }
   },
+  "chooseGameTransition": {
+    "video": "video.mp4",
+    "from": 0,
+    "to": 0.1,
+    "loop": true,
+    hud: [
+        { tag: 'beginText', at: 0, effect: 'fadeOut', triggerOnce: true},
+        { tag: 'slot-icon', at: 0, effect: 'fadeOut', triggerOnce: true},
+        { tag: 'roulette-icon', at: 0, effect: 'fadeOut', triggerOnce: true},
+        { tag: 'dark-overlay', at: 0, effect: 'fadeIn', triggerOnce: true},
+    ],
+    "autoplay": {
+      "script": "slotAutoPlay",
+      "after": 500,
+      "timer": false
+    }
+  },
   "chooseGame": {
     "video": "video.mp4",
     "from": 0,
-    "to": 0.2,
+    "to": 0.1,
     "loop": true,
+    hud: [
+        { tag: 'cta-button', at: 0.01, show: true, triggerOnce: true},
+        { tag: 'beginText', at: 0.01, show: true, triggerOnce: true},
+        { tag: 'slot-icon', at: 0.01, show: true, triggerOnce: true},
+        { tag: 'roulette-icon', at: 0.01, show: true, triggerOnce: true},
+    ],
+    interactions: [
+        { from: 0, src: '', typeOfInteraction: 'tap', htmlTag: 'slot-icon', onSuccess: 'chooseGameTransition', consequences: 'slotTapped=true' },
+        { from: 0, src: '', typeOfInteraction: 'tap', htmlTag: 'roulette-icon', onSuccess: 'chooseBlackRed', consequences: 'rouletteTapped=true' },
+    ],
     "autoplay": {
-      "script": "slotAutoPlay",
+      "script": "chooseGameTransition",
       "after": 6000,
       "timer": false
     }
@@ -104,6 +134,39 @@ PiecSettings.script = {
 
 //======================================== HUD Elements ========================================
 PiecSettings.hudElements = {
+    'beginText': {
+        text: 'CHOOSE\nYOUR GAME',
+        htmlTag: 'beginText',
+        anchor: { x: 0.5, y: 0.5 },
+        style: {
+            fontWeight: 'bold',
+            color: ['#ffe6bd', '#fff6e6', '#fff6e6',  '#fff6e6', '#ffc665', '#ffc665', '#ffe2b0', '#ffc86c'],
+            fontFamily: PiecSettings.fontFamily,
+            stroke: '#ffae27',
+            strokeThickness: 2,
+            shadow: {
+                x: 10,
+                y: 20,
+                color: 'rgb(92,57,0, 0.5)',
+                blur: 0
+            }, //phaser shadow
+        }
+    },
+    'slot-icon': {
+        src: 'QueenofEgypt.png',
+        htmlTag: 'slot-icon',
+        anchor: { x: 0.5, y: 0.5 },
+    },
+    'roulette-icon': {
+        src: 'roulette.png',
+        htmlTag: 'roulette-icon',
+        anchor: { x: 0.5, y: 0.5 },
+    },
+    'dark-overlay': {
+        src: 'dark-overlay.png',
+        htmlTag: 'dark-overlay',
+        anchor: { x: 0.5, y: 0.5 },
+    },
     'cta': {                            //Fullscreen transparent CTA
         src: "",
         htmlTag: 'cta-container-final',
@@ -163,7 +226,14 @@ PiecSettings.hudElements = {
 };
 
 //============Variables and Flags used within the Video PIEC script to apply conditions and consequences=================
-PiecSettings.variables = {};
+PiecSettings.variables = {
+    'slotTapped': {
+        value: false,
+    },
+    'rouletteTapped': {
+        value: false,
+    }
+};
 
 //=================================== Collectible Component ====================================
 PiecSettings.collectibles = {};
