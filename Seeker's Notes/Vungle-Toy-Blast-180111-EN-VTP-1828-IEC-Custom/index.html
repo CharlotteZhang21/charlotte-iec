@@ -1,0 +1,1153 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0, user-scalable=no" />
+    <meta name="author" content="Vungle">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Vungle Endcard</title>
+    <script src="vungle.js"></script>
+    <link rel="stylesheet" href="vungle.css">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- logo strike start -->
+    <style>#vungle-footer {display: none !important; }</style>
+    <!-- logo strike end -->
+</head>
+
+<body ontouchstart="ontouchstart" class="preload">
+    <div id="vungle-header" class="portrait-light landscape-light"><a id="vungle-close" href="javascript:void(0)" onclick="doSomething('close')"><span class="vungicon-close"></span></a></div>
+    <div id="vungle-footer" class="portrait-light landscape-light portrait-center landscape-left"><span class="footer vungicon-vungle"></span></div>
+    <!-- IEC Creative starts here-->
+    <div class="logo-container">
+        <img src="logo.png">
+    </div>
+    <div id="compass">
+        <div id="compass-needle">
+            <img src="compass_needle.png">
+        </div>
+        <div id="compass-body">
+            <img src="compass_body.png">
+        </div>
+    </div>
+    <div class="cta-container">
+        <div class="cta-holder">
+            <a id="vungle-cta-button" class="cta" href="javascript:void(0)" onClick="doSomething('download')">
+                <div class="button1"><img src="button_1.png"></div>
+                <div class="button2"><img src="button_2.png"></div>
+            </a>
+        </div>
+    </div>
+
+    <div id="interactive-tooltip-360" class="interactive-tooltip-360">
+        <div id="icon-holder" class="icon-holder show">
+            <div class="pano"></div>
+            <div class="device"></div>
+            <!-- <div class="arrow-left"></div>
+            <div class="arrow-right"></div> -->
+            <div class="finger"></div>
+        </div>
+    </div>
+
+    <!-- <div id="coords">
+    </div> -->
+
+    <script type="text/javascript" src="image.js"></script>
+    <script type="text/javascript" src="screenshot.js"></script>
+    <script type="text/javascript" src="screenshot2.js"></script>
+    <script type="text/javascript" src="screenshot3.js"></script>
+    <script type="text/javascript" src="screenshot4.js"></script>
+    <script type="text/javascript" src="candy1.js"></script>
+    <script type="text/javascript" src="candy2.js"></script>
+    <script type="text/javascript" src="candy4.js"></script>
+    <script type="text/javascript" src="candy5.js"></script>
+    <script type="text/javascript" src="candy6.js"></script>
+    <script type="text/javascript" src="toy_idle.js"></script>
+    <script type="text/javascript" src="star_idle.js"></script>
+    <script type="text/javascript" src="char1.js"></script>
+    <script type="text/javascript" src="yeti.js"></script>
+    <script type="text/javascript" src="red.js"></script>
+    <script type="text/javascript" src="blue.js"></script>
+    <script type="text/javascript" src="purple.js"></script>
+    <script type="text/javascript" src="yellow.js"></script>
+    <script type="text/javascript" src="star.js"></script>
+    <script type="text/javascript" src="heart.js"></script>
+
+    <script src="three.min.js"></script>
+    <script src="Tween.js"></script>
+    <script type="text/javascript" src="DeviceOrientationController.js"></script>
+    <script>
+    var gyroPresent = false;
+    var orientation = orientationCheck();
+    var lockView = true; // this restricts viewing the bottom of the 360 view with the gyroscope.
+
+    var overlay = document.getElementById('overlay-id');
+    var endOverlay = document.getElementById('end-overlay');
+    var hand = document.getElementById('hand-id');
+
+    // Inserting base64 data to save space.
+    var insertLogo = document.getElementById('insert-logo');
+    var insertSpiral = document.getElementById('insert-spiral');
+
+    var u = navigator.userAgent;
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios check
+
+    var camera, controls;
+    var renderer;
+    var scene;
+    var clock = new THREE.Clock();
+    var annie = [];
+    var runner;
+    var skyBox;
+
+    var reqAnim;
+
+    var coords = {
+        x: 0,
+        y: 0,
+        rotation: 0.5
+    };
+
+    var raycaster;
+    var mouse;
+
+    var objects = [];
+
+
+    var imagesToAdd = [
+        {
+            name: 'screenshot',
+            link: screenshot,
+            position: [-1.2, 0.3, -3],
+            rotation: {
+                y: Math.PI/180 * 20,
+                // z: -Math.PI/180 * 10
+            },
+            size: [667/300, 770/300, .01],
+            // animation: [8, 3, 21, 100, true], //no of horizontal frames, no of vertical frames, total frames, fps
+        },
+        {
+            name: 'screenshot2',
+            link: screenshot2,
+            position: [-3.5, 0.5, -1.4],
+            rotation: {
+                y: Math.PI/180 * 75,
+            },
+            size: [654/270, 734/270, .01],
+        },
+        {
+            name: 'screenshot3',
+            link: screenshot3,
+            position: [1.4, 0.3, -2.2],
+            rotation: {
+                y: -Math.PI/180 * 25,
+            },
+            size: [606/280, 720/280, .01],
+        },
+        {
+            name: 'screenshot4',
+            link: screenshot4,
+            position: [2.7, 0.3, -0.2],
+            rotation: {
+                y: -Math.PI/180 * 70,
+            },
+            size: [534/250, 720/250, .01],
+        },
+        {
+            name: 'candy1',
+            link: candy1,
+            position: [-2.4, -0.2, -2.5],
+            rotation: {
+                y: Math.PI/180 * 55,
+            },
+            size: [100/170, 100/170, .01],
+        },
+        {
+            name: 'candy2',
+            link: candy2,
+            position: [2.9, 1, -1.5],
+            rotation: {
+                y: -Math.PI/180 * 50,
+            },
+            size: [100/180, 100/180, .01],
+        },
+        {
+            name: 'candy2_2',
+            link: candy2,
+            position: [-3, 2, -1],
+            rotation: {
+                y: Math.PI/180 * 90,
+                x: Math.PI/180 * 80,
+            },
+            size: [100/180, 100/180, .01],
+        },
+        {
+            name: 'candy4',
+            link: candy4,
+            position: [-2.7, 1.6, -2.6],
+            rotation: {
+                y: Math.PI/180 * 25,
+            },
+            size: [100/160, 100/160, .01],
+        },
+        {
+            name: 'candy5',
+            link: candy5,
+            position: [0.3, -0.1, -3],
+            rotation: {
+                y: Math.PI/180 * 0,
+            },
+            size: [100/160, 100/160, .01],
+        },
+        {
+            name: 'candy6',
+            link: candy6,
+            position: [0, 1.5, -3],
+            rotation: {
+                y: Math.PI/180 * 0,
+            },
+            size: [100/220, 100/220, .01],
+        },
+        {
+            name: 'candy6_2',
+            link: candy6,
+            position: [2.5, 2.7, 0],
+            rotation: {
+                x: Math.PI/180 * 50,
+                y: Math.PI/180 * 85,
+                z: Math.PI/180 * 50
+            },
+            size: [100/220, 100/220, .01],
+        },
+        {
+            name: 'red',
+            link: red,
+            position: [0.5, 2.5, -2],
+            rotation: {
+                x: Math.PI/180 * 70,
+                z: Math.PI/180 * 20,
+            },
+            size: [518/1700, 540/1700, .01],
+        },
+        {
+            name: 'red_2',
+            link: red,
+            position: [2, -0.8, 0.4],
+            rotation: {
+                y: Math.PI/180 * 90,
+                z: Math.PI/180 * 10,
+            },
+            size: [518/1700, 540/1700, .01],
+        },
+        {
+            name: 'red_3',
+            link: red,
+            position: [-1, 2.5, -0.1],
+            rotation: {
+                x: Math.PI/180 * 90,
+            },
+            size: [518/1700, 540/1700, .01],
+        },
+        {
+            name: 'yellow',
+            link: yellow,
+            position: [0, 2.8, -0.5],
+            rotation: {
+                x: Math.PI/180 * 90,
+            },
+            size: [200/600, 200/600, .01],
+        },
+        {
+            name: 'blue',
+            link: blue,
+            position: [-2.6, 0.7, 0.2],
+            rotation: {
+                x: Math.PI/180 * 90,
+                y: Math.PI/180 * 90,
+                z: Math.PI/180 * 45,
+            },
+            size: [518/1900, 540/1900, .01],
+        },
+        {
+            name: 'blue2',
+            link: blue,
+            position: [2, 1.8, -1.5],
+            rotation: {
+                x: Math.PI/180 * 60,
+                y: -Math.PI/180 * 60,
+                z: Math.PI/180 * 60,
+            },
+            size: [518/1900, 540/1900, .01],
+        },
+        {
+            name: 'purple',
+            link: purple,
+            position: [-1, 2.2, -2.4],
+            rotation: {
+                x: Math.PI/180 * 70,
+                y: Math.PI/180 * 20,
+                z: -Math.PI/180 * 30,
+            },
+            size: [518/1900, 540/1900, .01],
+        },
+        {
+            name: 'purple2',
+            link: purple,
+            position: [3, 0.3, 0.9],
+            rotation: {
+                y: Math.PI/180 * 85,
+                z: Math.PI/180 * 20,
+            },
+            size: [518/1900, 540/1900, .01],
+        },
+        {
+            name: 'heart',
+            link: heart,
+            position: [-1.2, 1.5, -2.5],
+            rotation: {
+                y: Math.PI/180 * 30,
+            },
+            size: [54/250, 48/250, .01],
+        },
+        {
+            name: 'heart2',
+            link: heart,
+            position: [-2.4, 0.9, 0.1],
+            rotation: {
+                y: Math.PI/180 * 80,
+            },
+            size: [54/250, 48/250, .01],
+        },
+        {
+            name: 'toy_idle',
+            link: toyIdle,
+            position: [-2.2, -1, -2.2],
+            rotation: {
+                x: 0,
+                y: Math.PI/180 * 50,
+            },
+            size: [23/35, 21/35, .01],
+            animation: [4, 3, 12, 120, true],
+        },
+        {
+            name: 'star_idle',
+            link: starIdle,
+            position: [0, -0.8, -2.5],
+            rotation: {
+                x: 0,
+                y: Math.PI/180 * 0,
+            },
+            size: [32/50, 32/50, .01],
+            animation: [9, 2, 17, 110, true],
+        },
+        {
+            name: 'char1',
+            link: char1,
+            position: [2.4, -1, -1.6],
+            rotation: {
+                x: 0,
+                y: -Math.PI/180 * 30,
+            },
+            size: [581/600, 720/600, .01],
+        },
+        {
+            name: 'yeti',
+            link: yeti,
+            position: [-2.1, -0.7, -0.1],
+            rotation: {
+                x: 0,
+                y: Math.PI/180 * 80,
+            },
+            size: [736/500, 716/500, .01],
+        },
+        {
+            name: 'star',
+            link: star,
+            position: [0.3, 0.6, -2.5],
+            rotation: {
+                y: -Math.PI/180 * 10,
+            },
+            size: [74/300, 75/300, .01],
+        },
+    ];
+    var addedImages = {} // Reference for tweening 
+    var animationInstructions = {};
+    var textureReference = {};
+
+    animationInstructions['screenshot'] = new TWEEN.Tween({
+            yPos: 0.3,
+        })
+        .to({
+            yPos: 0.4,
+        }, 2000)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['screenshot'].position.y = this.yPos;
+        });
+    animationInstructions['screenshot'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['screenshot2'] = new TWEEN.Tween({
+            yPos: 0.6,
+        })
+        .to({
+            yPos: 0.5,
+        }, 3000)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['screenshot2'].position.y = this.yPos;
+        });
+    animationInstructions['screenshot2'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['screenshot3'] = new TWEEN.Tween({
+            yPos: 0.35,
+        })
+        .to({
+            yPos: 0.25,
+        }, 3500)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['screenshot3'].position.y = this.yPos;
+        });
+    animationInstructions['screenshot3'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['screenshot4'] = new TWEEN.Tween({
+            yPos: 0.35,
+        })
+        .to({
+            yPos: 0.25,
+        }, 3000)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['screenshot4'].position.y = this.yPos;
+        });
+    animationInstructions['screenshot4'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['candy1'] = new TWEEN.Tween({
+            yPos: -0.2,
+            zRot: Math.PI/180 * 0,
+        })
+        .to({
+            yPos: -0.3,
+            zRot: Math.PI/180 * 20,
+        }, 1700)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['candy1'].position.y = this.yPos;
+            addedImages['candy1'].rotation.z = this.zRot;
+        });
+    animationInstructions['candy1'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['candy2'] = new TWEEN.Tween({
+            yPos: 1,
+            zRot: Math.PI/180 * 0,
+        })
+        .to({
+            yPos: 0.6,
+            zRot: Math.PI/180 * 25,
+        }, 2500)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['candy2'].position.y = this.yPos;
+            addedImages['candy2'].rotation.z = this.zRot;
+        });
+    animationInstructions['candy2'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['candy2_2'] = new TWEEN.Tween({
+            yPos: 2.3,
+        })
+        .to({
+            yPos: 2.8,
+        }, 2100)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['candy2_2'].position.y = this.yPos;
+        });
+    animationInstructions['candy2_2'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['candy4'] = new TWEEN.Tween({
+            yPos: 1.7,
+            zRot: Math.PI/180 * 0,
+        })
+        .to({
+            yPos: 1.4,
+            zRot: -Math.PI/180 * 30,
+        }, 2300)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['candy4'].position.y = this.yPos;
+            addedImages['candy4'].rotation.z = this.zRot;
+        });
+    animationInstructions['candy4'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['candy5'] = new TWEEN.Tween({
+            yPos: -0.1,
+            zRot: Math.PI/180 * 0,
+        })
+        .to({
+            yPos: -0.25,
+            zRot: -Math.PI/180 * 25,
+        }, 2500)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['candy5'].position.y = this.yPos;
+            addedImages['candy5'].rotation.z = this.zRot;
+        });
+    animationInstructions['candy5'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['candy6'] = new TWEEN.Tween({
+            yPos: 1.8,
+            zRot: Math.PI/180 * 0,
+        })
+        .to({
+            yPos: 1.35,
+            zRot: Math.PI/180 * -10,
+        }, 2500)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['candy6'].position.y = this.yPos;
+            addedImages['candy6'].rotation.z = this.zRot;
+        });
+    animationInstructions['candy6'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['candy6_2'] = new TWEEN.Tween({
+            yPos: 2.7,
+        })
+        .to({
+            yPos: 2.5,
+        }, 1800)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['candy6_2'].position.y = this.yPos;
+        });
+    animationInstructions['candy6_2'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['yellow'] = new TWEEN.Tween({
+            yPos: 2.8,
+            zRot: Math.PI/180 * 0,
+        })
+        .to({
+            yPos: 2.6,
+            zRot: Math.PI/180 * 50,
+        }, 3500)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['yellow'].position.y = this.yPos;
+            addedImages['yellow'].rotation.z = this.zRot;
+        });
+    animationInstructions['yellow'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['red'] = new TWEEN.Tween({
+            yPos: 2.5,
+            zRot: Math.PI/180 * 20,
+        })
+        .to({
+            yPos: 2.2,
+            zRot: Math.PI/180 * 50,
+        }, 1700)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['red'].position.y = this.yPos;
+            addedImages['red'].rotation.z = this.zRot;
+        });
+    animationInstructions['red'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['red_2'] = new TWEEN.Tween({
+            yPos: -0.8,
+            zRot: Math.PI/180 * 10,
+        })
+        .to({
+            yPos: -0.7,
+            zRot: Math.PI/180 * 20,
+        }, 1500)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['red_2'].position.y = this.yPos;
+            addedImages['red_2'].rotation.z = this.zRot;
+        });
+    animationInstructions['red_2'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['red_3'] = new TWEEN.Tween({
+            yPos: 2.5,
+        })
+        .to({
+            yPos: 2.7,
+        }, 1800)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['red_3'].position.y = this.yPos;
+        });
+    animationInstructions['red_3'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['blue'] = new TWEEN.Tween({
+            yPos: 0.7,
+            zRot: Math.PI/180 * 45,
+        })
+        .to({
+            yPos: 0.4,
+            zRot: Math.PI/180 * 25,
+        }, 1500)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['blue'].position.y = this.yPos;
+            addedImages['blue'].rotation.z = this.zRot;
+        });
+    animationInstructions['blue'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['blue2'] = new TWEEN.Tween({
+            yPos: 1.8,
+            zRot: Math.PI/180 * 60,
+        })
+        .to({
+            yPos: 2.3,
+            zRot: Math.PI/180 * 50,
+        }, 2000)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['blue2'].position.y = this.yPos;
+            addedImages['blue2'].rotation.z = this.zRot;
+        });
+    animationInstructions['blue2'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['purple'] = new TWEEN.Tween({
+            yPos: 3.5,
+            zRot: -Math.PI/180 * 30,
+        })
+        .to({
+            yPos: 2.7,
+            zRot: -Math.PI/180 * 60,
+        }, 3000)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['purple'].position.y = this.yPos;
+            addedImages['purple'].rotation.z = this.zRot;
+        });
+    animationInstructions['purple'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['purple2'] = new TWEEN.Tween({
+            yPos: 0.2,
+            zRot: Math.PI/180 * 20,
+        })
+        .to({
+            yPos: 0.4,
+            zRot: Math.PI/180 * 35,
+        }, 3000)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['purple2'].position.y = this.yPos;
+            addedImages['purple2'].rotation.z = this.zRot;
+        });
+    animationInstructions['purple2'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['yeti'] = new TWEEN.Tween({
+            yPos: -0.7,
+        })
+        .to({
+            yPos: -0.65,
+        }, 4000)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['yeti'].position.y = this.yPos;
+        });
+    animationInstructions['yeti'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['char1'] = new TWEEN.Tween({
+            yPos: -1,
+        })
+        .to({
+            yPos: -1.05,
+        }, 4000)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['char1'].position.y = this.yPos;
+        });
+    animationInstructions['char1'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['heart'] = new TWEEN.Tween({
+            yPos: 1.5,
+        })
+        .to({
+            yPos: 1.4,
+        }, 1700)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['heart'].position.y = this.yPos;
+        });
+    animationInstructions['heart'].easing(TWEEN.Easing.Quadratic.InOut);
+
+
+    animationInstructions['heart2'] = new TWEEN.Tween({
+            yPos: 0.9,
+        })
+        .to({
+            yPos: 1,
+        }, 1700)
+        .yoyo(true)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['heart2'].position.y = this.yPos;
+        });
+    animationInstructions['heart2'].easing(TWEEN.Easing.Quadratic.InOut);
+
+    animationInstructions['star'] = new TWEEN.Tween({
+            zRot: Math.PI/180 * 0,
+        })
+        .to({
+            zRot: Math.PI/180 * 360,
+        }, 6000)
+        .repeat(Infinity)
+        .onUpdate(function() {
+            addedImages['star'].rotation.z = this.zRot;
+        });
+
+    init();
+    animate();
+
+    function init() {
+
+
+        container = document.createElement('div');
+        document.body.appendChild(container);
+
+        // setTimeout(function() {
+        //     document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled visible";
+        // }, 300);
+
+        // setTimeout(function() {
+        //     document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled";
+        // }, 10000);
+
+        // camera
+
+        camera = new THREE.PerspectiveCamera(60, document.body.scrollWidth / document.body.scrollHeight, 1, 1000);
+        camera.target = new THREE.Vector3(0,0,0);
+        camera.position.z = 0;
+
+        controls = new DeviceOrientationController(camera);
+        // scene
+
+        scene = new THREE.Scene();
+
+
+        var textureLoader = new THREE.TextureLoader();
+
+        // renderer
+
+        renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: true
+        });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(document.body.scrollWidth, document.body.scrollHeight);
+        container.appendChild(renderer.domElement);
+
+        //
+
+        renderer.gammaInput = true;
+        renderer.gammaOutput = true;
+
+        window.addEventListener('resize', onWindowResize, false);
+
+
+
+        var textures = getTexturesFromAtlasFile(" texture.jpg", 6);
+        var materials = [];
+        for (var i = 0; i < 6; i++) {
+            materials.push(new THREE.MeshBasicMaterial({
+                map: textures[i]
+            }));
+        }
+
+        skyBox = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1), new THREE.MultiMaterial(materials));
+        skyBox.applyMatrix(new THREE.Matrix4().makeScale(10, 10, -10));
+        scene.add(skyBox);
+
+
+        // initCube();
+
+        for (var i = 0; i < imagesToAdd.length; i++) {
+            addedImages[imagesToAdd[i]['name']] = createImage(imagesToAdd[i], i);
+        }
+
+        animationInstructions["screenshot"].start();
+        animationInstructions["screenshot2"].start();
+        animationInstructions["screenshot3"].start();
+        animationInstructions["screenshot4"].start();
+        animationInstructions["candy1"].start();
+        animationInstructions["candy2"].start();
+        animationInstructions["candy2_2"].start();
+        animationInstructions["candy4"].start();
+        animationInstructions["candy5"].start();
+        animationInstructions["candy6"].start();
+        animationInstructions["candy6_2"].start();
+        animationInstructions["yeti"].start();
+        animationInstructions["char1"].start();
+        animationInstructions["red"].start();
+        animationInstructions["red_2"].start();
+        animationInstructions["red_3"].start();
+        animationInstructions["blue"].start();
+        animationInstructions["blue2"].start();
+        animationInstructions["purple"].start();
+        animationInstructions["purple2"].start();
+        animationInstructions["yellow"].start();
+        animationInstructions["heart"].start();
+        animationInstructions["heart2"].start();
+        animationInstructions["star"].start();
+    }
+
+    function lensFlareUpdateCallback(object) {
+
+        var f, fl = object.lensFlares.length;
+        var flare;
+        var vecX = -object.positionScreen.x * 2;
+        var vecY = -object.positionScreen.y * 2;
+
+
+        for (f = 0; f < fl; f++) {
+
+            flare = object.lensFlares[f];
+
+            flare.x = object.positionScreen.x + vecX * flare.distance;
+            flare.y = object.positionScreen.y + vecY * flare.distance;
+
+            flare.rotation = 0;
+
+        }
+
+        object.lensFlares[2].y += 0.025;
+        object.lensFlares[3].rotation = object.positionScreen.x * 0.5 + THREE.Math.degToRad(45);
+
+    }
+
+
+    function getTexturesFromAtlasFile(atlasImgUrl, tilesNum) {
+
+        var textures = [];
+
+        for (var i = 0; i < tilesNum; i++) {
+
+            textures[i] = new THREE.Texture();
+
+        }
+
+        var imageObj = new Image();
+
+
+        imageObj.onload = function() {
+
+            var canvas, context;
+            var tileWidth = imageObj.height;
+
+            for (var i = 0; i < textures.length; i++) {
+
+                canvas = document.createElement('canvas');
+                context = canvas.getContext('2d');
+                canvas.height = tileWidth;
+                canvas.width = tileWidth;
+                context.drawImage(imageObj, tileWidth * i, 0, tileWidth, tileWidth, 0, 0, tileWidth, tileWidth);
+                textures[i].image = canvas
+                textures[i].needsUpdate = true;
+            }
+
+        };
+
+        imageObj.src = imageSource;
+
+        return textures;
+
+    }
+
+    function onWindowResize() {
+        camera.aspect = document.body.clientWidth / document.body.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(document.body.clientWidth, document.body.clientHeight);
+    }
+
+    function animate(time) {
+
+
+        controls.update();
+
+        renderer.render(scene, camera);
+
+        reqAnim = requestAnimationFrame(animate);
+
+        this.vector = new THREE.Vector3(0, 0, -1);
+        this.vector.applyQuaternion(camera.quaternion);
+
+        for (var i = 0; i < imagesToAdd.length; i++) {
+            if (imagesToAdd[i].hasOwnProperty('animateOnSight')) {
+                if (imagesToAdd[i].animateOnSight !== 'done' &&
+                    this.vector.x < imagesToAdd[i].animateOnSight[0] + .05 &&
+                    this.vector.x > imagesToAdd[i].animateOnSight[0] - .05
+                ) {
+                    imagesToAdd[i].animateOnSight = 'ready';
+
+                }
+            }
+        }
+
+        var delta = clock.getDelta();
+
+        for (var i = 0; i < annie.length; i++) {
+            annie[i].update(1000 * delta);
+        }
+
+        var multiplier = 1;
+        if (this.vector.x < 0) {
+            multiplier = -1;
+        }
+        var angle = Math.acos(this.vector.z/Math.sqrt(this.vector.x * this.vector.x + this.vector.y * this.vector.y + this.vector.z * this.vector.z)) * 180/Math.PI * multiplier + 180;
+
+        if (angle > 180) {
+            angle -= 270;
+        } else {
+            angle += 90;
+        }
+        angle -= 90;
+        angle *= -1;
+
+        TWEEN.update(time);
+
+
+
+    }
+
+
+    function initCube() {
+        var runnerTexture = new THREE.ImageUtils.loadTexture(girl);
+        var pushtoArray = new TextureAnimator(runnerTexture, 9, 1, 9, 85, true); // texture, #horiz, #vert, #total, duration.
+        annie.push(pushtoArray);
+        var runnerMaterial = new THREE.MeshBasicMaterial({
+            transparent: true,
+            map: runnerTexture,
+            side: THREE.DoubleSide
+        });
+        var runnerGeometry = new THREE.PlaneGeometry(.45 * .9, 1 * .7, 1 * 2, 1 * 2);
+        runner = new THREE.Mesh(runnerGeometry, runnerMaterial);
+        runner.position.x = .4;
+        runner.position.z = -.4;
+        runner.position.y = .05;
+        runner.rotation.y = -.7;
+        scene.add(runner);
+
+
+        setTimeout(function() {
+            tween.start();
+        }, 100)
+
+
+    }
+
+    function createImage(obj, arrayInPosition) {
+        var texture = new THREE.ImageUtils.loadTexture(obj.link);
+        var delay = obj.delay || 0;
+        if (obj.hasOwnProperty('spritesheetData')) {
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(obj.spritesheetData[2]/498, obj.spritesheetData[3]/1265);
+            texture.offset.x = (obj.spritesheetData[0])/498;
+            texture.offset.y = (1265 - obj.spritesheetData[1] - obj.spritesheetData[3])/1265;
+        }
+        if (obj.hasOwnProperty('animation')) {
+            var pushtoArray = new TextureAnimator(texture, obj.animation[0], obj.animation[1], obj.animation[2], obj.animation[3], arrayInPosition, obj.animation[4], obj.position[0], obj.position[2]); // texture, #horiz, #vert, #total, duration.
+            annie.push(pushtoArray);
+        }
+        var material = new THREE.MeshBasicMaterial({
+            transparent: true,
+            map: texture,
+            side: THREE.DoubleSide
+        });
+
+        material.opacity = typeof(obj.opacity) === 'undefined' ? 1 : obj.opacity;
+
+        textureReference[obj.name] = material;
+
+        var geometry = new THREE.PlaneGeometry(obj.size[0], obj.size[1], obj.size[2]);
+        entity = new THREE.Mesh(geometry, material);
+        entity.position.x = obj.position[0];
+        entity.position.y = obj.position[1];
+        entity.position.z = obj.position[2];
+        entity.rotation.x = obj.rotation.x || 0;
+        entity.rotation.y = obj.rotation.y || 0;
+        entity.rotation.z = obj.rotation.z || 0;
+        entity.name = obj.name;
+        entity.clickable = obj.clickable || false;
+        scene.add(entity);
+        objects.push(entity);
+
+        if (obj.hasOwnProperty('tween') && obj.tween === true) {
+            setTimeout(function() {
+                tween.start();
+            }, obj.delay || 100);
+        }
+
+        return entity;
+    }
+
+
+
+    function TextureAnimator(texture, tilesHoriz, tilesVert, numTiles, tileDispDuration, arrayInPosition, loop, x, z) {
+
+
+        // note: texture passed by reference, will be updated by the update function.
+        this.ready = imagesToAdd[arrayInPosition].animateOnSight || 'ready';
+        this.arrayPos = arrayInPosition;
+        this.tilesHorizontal = tilesHoriz;
+        this.tilesVertical = tilesVert;
+        this.xPos = x;
+        this.zPos = z;
+        // how many images does this spritesheet contain?
+        //  usually equals tilesHoriz * tilesVert, but not necessarily,
+        //  if there at blank tiles at the bottom of the spritesheet. 
+        this.numberOfTiles = numTiles;
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(1 / this.tilesHorizontal, 1 / this.tilesVertical);
+
+        // how long should each image be displayed?
+        this.tileDisplayDuration = tileDispDuration;
+
+        // how long has the current image been displayed?
+        this.currentDisplayTime = 0;
+
+        // which image is currently being displayed?
+        this.currentTile = 0
+
+        this.loop = loop;
+        this.counter = 0;
+
+        texture.offset.x = 0;
+        texture.offset.y = 1/this.tilesVertical;
+
+        this.update = function(milliSec) {
+            this.ready = imagesToAdd[this.arrayPos].animateOnSight || 'ready';
+            if (this.ready === 'ready') {
+                if (this.loop || this.loop == false && this.counter < this.numberOfTiles) {
+                    this.currentDisplayTime += milliSec;
+                    while (this.currentDisplayTime > this.tileDisplayDuration) {
+                        this.currentDisplayTime -= this.tileDisplayDuration;
+                        this.currentTile++;
+                        if (this.currentTile == this.numberOfTiles && loop)
+                            this.currentTile = 0;
+                        if (this.currentTile == this.numberOfTiles && !loop) {
+                            scene.remove(objects[this.arrayPos]);
+                        }
+                        var currentColumn = this.currentTile % this.tilesHorizontal;
+                        texture.offset.x = currentColumn / this.tilesHorizontal;
+                        var currentRow = Math.floor(this.currentTile / this.tilesHorizontal);
+                        texture.offset.y = Math.abs( 1 - currentRow / this.tilesVertical) - 1/this.tilesVertical;
+                        if (!this.loop) {
+                            this.counter++;
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    function onDocumentTouchStart(event) {
+
+
+        event.clientX = event.touches[0].clientX;
+        event.clientY = event.touches[0].clientY;
+        onDocumentMouseDown(event);
+
+    }
+    var jellyBurstCounter = 0;
+
+    function onDocumentMouseDown(event) {
+
+        mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+        mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+
+        var intersects = raycaster.intersectObjects(objects);
+        if (intersects.length > 1) {
+            for (var i = 0; i < intersects.length; i++) {
+                if (intersects[i].object.hasOwnProperty('clickable') && intersects[i].object.clickable === true) {
+
+                    console.log(intersects[i]);
+                    spiralAway(intersects[i].object.name);
+                    intersects[i].object.clickable = false;
+                    console.log(jellyBurstCounter);
+                    if (jellyBurstCounter >= 3) {
+                        setTimeout(function() {
+                            endgame();
+                            addClass(insertSpiral, 'insert-spiral-animation')
+                            cancelAnimationFrame(reqAnim);
+                        }, 1000);
+                    } else {
+                        jellyBurstCounter++;
+                    }
+                }
+            }
+
+        }
+    }
+
+    function spiralAway(obj) {
+        console.log(obj);
+        var coords = {
+            scale: 1,
+            rotation: 10,
+
+        }
+        var spiral = new TWEEN.Tween(coords)
+            .to({
+                scale: 0,
+                rotation: 0,
+            }, 1000)
+            .onUpdate(function() {
+                addedImages[obj].rotation.z = this.rotation;
+                addedImages[obj].scale.set(this.scale, this.scale, 0);
+            })
+        spiral.interpolation(TWEEN.Interpolation.Bezier);
+        spiral.start();
+
+    }
+
+    function endgame() {
+        addClass(endOverlay, 'show');
+    }
+
+
+
+
+    document.ontouchmove = function(e) {
+        e.preventDefault();
+    }
+
+    window.onload = function() {
+        removeClass(document.body, 'preload');
+        document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled visible";
+
+        setTimeout(function() {
+            document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled";
+        }, 2800);
+    };
+    </script>
+</body>
+
+</html>

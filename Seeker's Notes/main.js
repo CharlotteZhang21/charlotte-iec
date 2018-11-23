@@ -16,7 +16,7 @@ window.onload = function() {
         doSomething("download");
     })
     initCta();
-    $('centerScreen').sakura();
+    // $('#centerScreen').sakura();
     //start overlay
 
     if(!debug)

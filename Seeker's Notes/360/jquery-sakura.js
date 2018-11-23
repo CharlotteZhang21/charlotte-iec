@@ -58,15 +58,15 @@
             fallSpeed: 1,
             maxSize: 24,
             minSize: 9,
-            newOn: 300,
+            newOn: 3000,
             swayAnimations: ['sway-0', 'sway-1', 'sway-2', 'sway-3', 'sway-4', 'sway-5', 'sway-6', 'sway-7', 'sway-8']
         };
 
         var options = $.extend({}, defaults, options);
 
         // Declarations.
-        var documentHeight = $(document).height();
-        var documentWidth = $(document).width();
+        var documentHeight = document.body.clientHeight;
+        var documentWidth = document.body.clientWidth;
         var sakura = $('<div class="' + options.className + '" />');
 
         // Set the overflow-x CSS property on the body to prevent horizontal scrollbars.
@@ -120,8 +120,8 @@
 
         // Recalculate documentHeight and documentWidth on browser resize.
         $(window).resize(function () {
-            documentHeight = $(document).height();
-            documentWidth = $(document).width();
+            documentHeight = document.body.clientHeight;
+            documentWidth = document.body.clientWidth;
         });
 
         // Finally: Start adding petals.
