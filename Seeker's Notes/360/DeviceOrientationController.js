@@ -39,17 +39,17 @@ var DeviceOrientationController = function(object) {
     this.minLatPort = -0;
     this.maxLatPort = 0;
 
-    this.minLatLands = -5;
-    this.maxLatLands = 5;
+    this.minLatLands = -3;
+    this.maxLatLands = 3;
     
     //Portrait
     this.minLonPort = -45;
     this.maxLonPort = 45;
     //Landscape
-    this.minLonLands = -30;
-    this.maxLonLands = 30;
+    this.minLonLands = -16;
+    this.maxLonLands = 16;
     //motion sensitivity of ios / android
-    this.mobileVibrationValue = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ? 0.022 : 0.022;
+    this.mobileVibrationValue = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ? 0.022 : 0.05;
 
     // Manual rotate override components
     var startX = 0,

@@ -57,84 +57,83 @@
             </a>
         </div>
         <div id="vungle-footer" class="portrait-light landscape-light portrait-left landscape-left"><span class="footer" data-icon="q"></span></div>
-    </div>
+    
 
-    <!-- IEC Creative starts here-->
-    <div class="logo-container">
-        <img src="logo.png">
-    </div>
-
-    <div id="startOverlay" class="overlay">
-                    
-        <div class="text overlayText" id="findObject">
-            Find the object
-        </div>
-        <div class="objectsContainer">
-
-            <img class="object" src="object1.png"/>
-            <img class="object" src="object2.png"/>
-            <img class="object" src="object3.png"/>
-            
-        </div>
-        <div class="text tapAnywhereText">
-            Tap to play
+        <!-- IEC Creative starts here-->
+        <div class="logo-container">
+            <img src="logo.png">
         </div>
 
-    </div> 
+        <div id="startOverlay" class="overlay">
+                        
+            <div class="text overlayText" id="findObject">
+                <!-- Find the object -->
+            </div>
+            <div class="objectsContainer">
 
-    <div class="item hide" id="found_object1">
-        <img src="object1.png"/>
-    </div>
-
-    <div class="item hide" id="found_object2">
-        <img src="object2.png"/>
-    </div>
-
-    <div class="item hide" id="found_object3">
-        <img src="object3.png"/>
-    </div>
-
-    <div class="item" id="centerScreen"></div>
-
-    <div id='objectsDock' class="">
-        <img class="object" id="dock-object1"  src="object1-white.png"/>
-        <img class="object" id="dock-object2"  src="object2-white.png"/>
-        <img class="object" id="dock-object3"  src="object3-white.png"/>
-        <img class="dockBG" src="dockBG.png" />
-    </div>
-
-    <div class="overlay hidden" id="end-screen">
-        <div id="character">
-         <img src="character.png"/>
-        </div>
-        <div class="overlayText"  id="goodJob" style="margin-top:5%">
-            Great Job!
-        </div>
-        <div class="overlayText"  id="continueStory" style="margin-top:5%">
-            Download for more challenges.
-        </div>
-    </div> 
-
-    <div class="cta-container pulse">
-        <div id="vungle-cta-button" class="cta-holder">
+                <img class="object" src="object1.png"/>
+                <img class="object" src="object2.png"/>
+                <img class="object" src="object3.png"/>
                 
-                <img id="cta-img" class=" button1" src="button_1.png">
-                <img id="cta-img-2" class=" button2" src="button_2.png">
-                <p id="cta-text" >DOWNLOAD</p>
-            <!-- </a> -->
-        </div>
-    </div>
+            </div>
+            <div id="tapToPlay" class="text tapAnywhereText">
+                <!-- Tap to play -->
+            </div>
 
-    <div id="interactive-tooltip-360" class="interactive-tooltip-360">
-        <div id="icon-holder" class="icon-holder show">
-            <div class="pano"></div>
-            <div class="device"></div>
-            <!-- <div class="arrow-left"></div>
-            <div class="arrow-right"></div> -->
-            <div class="finger"></div>
-        </div>
-    </div>
+        </div> 
 
+        <div class="item hide" id="found_object1">
+            <img src="object1.png"/>
+        </div>
+
+        <div class="item hide" id="found_object2">
+            <img src="object2.png"/>
+        </div>
+
+        <div class="item hide" id="found_object3">
+            <img src="object3.png"/>
+        </div>
+
+        <div class="item" id="centerScreen"></div>
+
+        <div id='objectsDock' class="">
+            <img class="object" id="dock-object1"  src="object1-white.png"/>
+            <img class="object" id="dock-object2"  src="object2-white.png"/>
+            <img class="object" id="dock-object3"  src="object3-white.png"/>
+            <img class="dockBG" src="dockBG.png" />
+        </div>
+
+        <div class="overlay hidden" id="end-screen">
+            <div class="item" id="character">
+             <img src="character.png"/>
+            </div>
+            <div class="item overlayText"  id="goodJob" style="margin-top:5%">
+                GREAT JOB!
+            </div>
+        </div> 
+
+        <div class="cta-container pulse">
+            <div id="vungle-cta-button" class="cta-holder">
+                    
+                    <img id="cta-img" class=" button1" src="button_1.png">
+                    <img id="cta-img-2" class=" button2" src="button_2.png">
+                    <p id="cta-text" >DOWNLOAD</p>
+                <!-- </a> -->
+            </div>
+        </div>
+
+        <div id="interactive-tooltip-360" class="interactive-tooltip-360">
+            <div id="icon-holder" class="icon-holder show">
+                <div class="pano"></div>
+                <div class="device"></div>
+                <!-- <div class="arrow-left"></div>
+                <div class="arrow-right"></div> -->
+                <div class="finger"></div>
+            </div>
+        </div>
+
+        <div id="sakuraLayer"></div>
+    </div>
     <!-- <div id="coords">
     </div> -->
 
@@ -143,14 +142,16 @@
     <script type="text/javascript" src="object1.js"></script>
     <script type="text/javascript" src="object2.js"></script>
     <script type="text/javascript" src="object3.js"></script>
+    <script type="text/javascript" src="particles.js"></script>
 
     <script src="three.min.js"></script>
     <script src="TweenMax.min.js"></script>
     <script src="Tween.js"></script>
     <script src="jquery.min.js"></script>
     <script src="jquery-sakura.js"></script>
+    <script type="text/javascript" src="auto-localisation-util.js"></script>
     <script type="text/javascript" src="DeviceOrientationController.js"></script>
-    <script type="text/javascript" src="main.js"></script>
+   <!--  <script type="text/javascript" src="main.js"></script> -->
     <script>
     var gyroPresent = false;
     var orientation = orientationCheck();
@@ -163,6 +164,8 @@
     // Inserting base64 data to save space.
     var insertLogo = document.getElementById('insert-logo');
     var insertSpiral = document.getElementById('insert-spiral');
+
+
 
 
 
@@ -189,6 +192,7 @@
     var mouse = {};
 
     var objects = [];
+    var objectsObj = {};
 
     var sizee = 1;
     var horizon = 0;
@@ -199,6 +203,7 @@
     {
         name: 'object1',
         link: object1,
+        clickEffect: 'particles1',
         clickable: true,
         // audio: "hand-clap",
         position: [-3.1,  horizon-0.2, .3 + (-1)* 2],
@@ -207,7 +212,7 @@
             y: THREE.Math.degToRad(60),
             z: THREE.Math.degToRad(0),
         },
-        size: [267/900 * sizee, 267/900  *sizee, .5],
+        size: [267/800 * sizee, 267/800  *sizee, .5],
         // animation: [5, 1, 5, 200, true],
     },
   
@@ -215,20 +220,22 @@
     {
         name: 'object2',
         link: object2,
+        clickEffect: 'particles2',
         clickable: true,
-        position: [-1,  horizon+1.5, .1 + (-1)* 2],
+        position: [-1,  horizon+1.4, .1 + (-1)* 2],
         rotation: {
             x: THREE.Math.degToRad(-30),
             y: THREE.Math.degToRad(0),
             z: THREE.Math.degToRad(0),
         },
-        size: [267/900 * sizee, 267/900  *sizee, .5],
+        size: [267/800 * sizee, 267/800  *sizee, .5],
         // animation: [5, 1, 5, 180, true],
     },
     // photo
     {
         name: 'object3',
         link: object3,
+        clickEffect: 'particles3',
         clickable: true,
         position: [1,  horizon - 0.2, 1 + (-1)* 2],
         rotation: {
@@ -239,7 +246,109 @@
         size: [267/900 * sizee, 267/900  *sizee, .5],
         // animation: [5, 1, 5, 180, true],
     },
+
+    // particles
+
+    {
+        name: 'particles1',
+        link: particles,
+        visible: false,
+        animateStart: false, // control whether the animate should start or not
+        // animateOnSight: true,
+        position: [-3.2,  horizon-0.2, .3 + (-1)* 2],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(60),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [107/200 * sizee, 100/200  *sizee, .5],
+        animation: [8, 1, 8, 100, false],
+    },
+
+    {
+        name: 'particles2',
+        link: particles,
+        animateStart: false, // control whether the 
+        visible: false,
+        // animateOnSight: true,
+        position: [-1,  horizon+1.4, .1 + (-1)* 2],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [107/200 * sizee, 100/200  *sizee, .5],
+        animation: [8, 1, 8, 100, false],
+    },
+    {
+        name: 'particles3',
+        link: particles,
+        animateStart: false, // control whether the 
+        visible: false,
+        // animateOnSight: true,
+        position: [1,  horizon - 0.2, 1 + (-1)* 2],
+        rotation: {
+            x: THREE.Math.degToRad(0),
+            y: THREE.Math.degToRad(0),
+            z: THREE.Math.degToRad(0),
+        },
+        size: [107/300 * sizee, 100/300  *sizee, .5],
+        animation: [8, 1, 8, 100, false],
+    },
     ];
+
+    /*===============
+     *sound
+     *===============*/
+
+    var sounds = {
+       correct: "chimes",
+       wrong: 'wrong',
+       finish: 'win',
+    }
+
+    var audioType;
+    var audio = new Audio();
+    
+    var audioType = ".wav";
+    var muted = false;
+
+    var audios = {};
+    var currentAudio;
+
+    //Function to play the exact file format
+    function playAudio(file){
+        currentAudio = file;
+        if(!muted){
+            currentAudio.play();
+        }
+    }
+
+    function stopAudio() {
+        if(currentAudio!== undefined){
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+        }
+    }
+
+    
+    function generateAudio(){
+        // for(var i=0; i < sounds.length; i++) {
+        //     var audio = new Audio(sounds[i] + audioType);
+        //     audios[sounds[i]] = audio; 
+        // }
+
+        for(var key in sounds) {
+            var audio = new Audio(sounds[key] + audioType);
+            audios[key] = audio;
+        }
+
+    }
+
+    /*===============
+     *sound
+     *===============*/
+
     var addedImages = {} // Reference for tweening 
     var animationInstructions = {};
     var textureReference = {};
@@ -273,9 +382,9 @@
 
         // camera
 
-        var FOV = orientationCheck()=='portrait' ? 60 : 50;
+        var FOV = orientationCheck()=='portrait' ? 65 : 60;
 
-        camera = new THREE.PerspectiveCamera(FOV, document.body.scrollWidth / document.body.scrollHeight, 1, 1000);
+        camera = new THREE.PerspectiveCamera(FOV, document.body.clientWidth / document.body.clientHeight, 1, 1000);
         camera.target = new THREE.Vector3(0,0,0);
         camera.position.z = 1;
 
@@ -294,8 +403,10 @@
             alpha: true
         });
         renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(document.body.scrollWidth, document.body.scrollHeight);
+        renderer.setSize(document.body.clientWidth, document.body.clientHeight);
         container.appendChild(renderer.domElement);
+
+
 
         //
 
@@ -483,16 +594,12 @@
         entity.name = obj.name;
         entity.audio = obj.audio || null;
         entity.clickable = obj.clickable || false;
+        entity.visible = obj.visible == undefined? true : false;
+        entity.clickEffect = obj.clickEffect;
         scene.add(entity);
         objects.push(entity);
+        objectsObj[obj.name] = entity;
         
-
-        // if (obj.hasOwnProperty('tween') && obj.tween === true) {
-        //     setTimeout(function() {
-        //         tween.start();
-        //     }, obj.delay || 100);
-        // }
-
         return entity;
     }
 
@@ -503,6 +610,9 @@
 
         // note: texture passed by reference, will be updated by the update function.
         this.ready = imagesToAdd[arrayInPosition].animateOnSight || 'ready';
+
+        this.animateStart = imagesToAdd[arrayInPosition].animateStart === undefined? true : imagesToAdd[arrayInPosition].animateStart;
+
         this.arrayPos = arrayInPosition;
         this.tilesHorizontal = tilesHoriz;
         this.tilesVertical = tilesVert;
@@ -532,7 +642,7 @@
 
         this.update = function(milliSec) {
             this.ready = imagesToAdd[this.arrayPos].animateOnSight || 'ready';
-            if (this.ready === 'ready') {
+            if (this.ready === 'ready' && objectsObj[imagesToAdd[arrayInPosition].name].animateStart) {
                 if (this.loop || this.loop == false && this.counter < this.numberOfTiles) {
                     this.currentDisplayTime += milliSec;
                     while (this.currentDisplayTime > this.tileDisplayDuration) {
@@ -568,13 +678,12 @@
 
     function onDocumentMouseDown(event) {
 
-        console.log(event);
         mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
         mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
 
         raycaster.setFromCamera(mouse, camera);
 
-        console.log("mousex : " + mouse.x + "mousY: " + mouse.y);
+        // console.log("mousex : " + mouse.x + "mousY: " + mouse.y);
         var intersects = raycaster.intersectObjects(objects);
         
         if (intersects.length > 0) {
@@ -583,16 +692,25 @@
                 if (intersects[i].object.hasOwnProperty('clickable') && intersects[i].object.clickable === true) {
                     // updateTexture(intersects[i].object);
                     
+                    playAudio(audios['correct']);
                     intersects[i].object.clickable = false;
+                    var onClickEffect = intersects[i].object.clickEffect;
+                    objectsObj[onClickEffect].animateStart = true;
+
+                    objectsObj[onClickEffect].visible = true;
 
                     showAndAnimate(intersects[i].object, event.clientX, event.clientY);
 
 
+                }else {
+                    console.log('wrong');
+                    playAudio(audios['wrong']);
                 }
             }
 
-
-
+        }else {
+            // console.log('wrong');
+            // playAudio(audios['wrong']);
         }
     }
 
@@ -606,6 +724,7 @@
         item.style.top = posY + 'px';
         item.style.left = posX + 'px';
 
+
         TweenMax.to(item, 1, {
             top: centerScreen.offsetTop + centerScreen.clientHeight / 2,
             left: centerScreen.offsetLeft + centerScreen.clientWidth / 2,
@@ -615,12 +734,15 @@
 
                 var nextPoint = document.getElementById("dock-" + obj.name);
 
+
+                var targetScale = nextPoint.clientWidth / item.clientWidth;
+
                 var parent = nextPoint.parentNode;
-                console.log(nextPoint);
+
                  TweenMax.to(item, 1, {
                     top: parent.offsetTop + nextPoint.offsetTop + nextPoint.offsetHeight / 2,
-                    left: nextPoint.offsetLeft + nextPoint.offsetWidth / 2,
-                    scale: 1.2,
+                    left: parent.offsetLeft + nextPoint.offsetLeft + nextPoint.offsetWidth / 2,
+                    scale: targetScale,
                     ease: Quad.easeInOut,
                     onComplete: function(){
                         
@@ -628,7 +750,11 @@
                         addClass(nextPoint, 'fadeInTransition')
                         nextPoint.src = obj.name + '.png';
                         //fade in out the dock item 
-                        checkFinished();
+                        var container = $('#objectsDock');
+                        var className = "fadeInTransition";
+                        if(checkChildrenHaveClass(container, className)===true){
+                           endgame();
+                        };
                     }
                  });
             },
@@ -637,8 +763,25 @@
 
     }
 
-    function checkFinished() {
-        if(document.getElementById('dockBG'))
+    function checkChildrenHaveClass(container, className) {
+        
+        
+        var childrenGrp = container.children('.object');
+
+        
+
+        if(childrenGrp.length > 0){
+            for (var i = 0; i < childrenGrp.length; i++) {
+                var node = childrenGrp[i];
+                
+                if(node.className.indexOf('fadeInTransition') == -1){
+        
+                    return false;
+                }
+            }
+        }
+        
+        return true;
     }
 
     function spiralAway(obj) {
@@ -663,8 +806,130 @@
     }
 
     function endgame() {
-        addClass(endOverlay, 'show');
+        // addClass(endOverlay, 'show');
+        removeClass(document.getElementById('end-screen'), 'hidden');
+        playAudio(audios['finish']);
     }
+
+    var debug = false;
+    var startOverlayTimer = null;
+
+    document.ontouchmove = function(e) {
+        e.preventDefault();
+    }
+
+    var dynamicLocal = 'v2';
+    // var containersToLocalise = [
+    //     'findObjects',
+    //     'tapToPlay',
+    //     'goodJob'
+    // ]
+
+    window.onload = function() {
+        removeClass(document.body, 'preload');
+        generateAudio();
+
+
+        if(dynamicLocal !==undefined && dynamicLocal == 'v2'){
+
+            // for (var i = 0; i < containersToLocalise.length; i++) {
+               var findObjectsContainer = document.getElementById('findObject');
+               findObjectsContainer.innerHTML = getLocalisedFindObjects().text;
+               findObjectsContainer.style.font = getLocalisedFindObjects().font;
+
+               var tapToPlayContainer = document.getElementById('tapToPlay');
+               tapToPlayContainer.innerHTML = getLocalisedTapToPlay().text;
+               
+
+               // var container = document.getElementById('findObjects');
+               // container.innerHTML = getLocalisedFindObjects().text;
+               // container.style.font = getLocalisedFindObjects().font;
+
+            // }
+             
+            
+
+        }
+
+
+        //360 tool tip
+        document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled visible";
+
+        //cta
+        document.getElementById('vungle-cta-button').addEventListener('click', function(){
+            stopAudio();
+            doSomething("download");
+        })
+        initCta();
+        // var sakuraNewOn = isiOS? 3000 : 1000;
+        console.log(isiOS)
+        // if(!isiOS)
+            $('#centerScreen').sakura();
+        //start overlay
+
+        if(!debug)
+        startOverlayTimer = setTimeout(function(){
+            hideTooltip();
+        }, 3e3);
+
+        document.getElementById('startOverlay').addEventListener('mousedown', function(){
+            hideTooltip();
+        })
+
+        window.addEventListener('resize', onWindowResize, false);
+
+
+
+        init();
+
+        animate();
+
+    };
+
+    function hideTooltip() {
+        if(startOverlayTimer != null){
+            clearTimeout(startOverlayTimer);
+        }
+        document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled";
+        addClass(document.getElementById('startOverlay'), 'fadeOut');
+        addClass(document.getElementById('objectsDock'), 'moveDockUp');
+
+        window.addEventListener( 'touchstart', onDocumentTouchStart, true );
+
+    }
+
+    function initCta(){
+        var text = getLocalisedCta().text;
+        var fontFamily = getLocalisedCta().font;
+        var fontSizeMultiplier = getLocalisedCta().fontSizeMultiplier;
+
+        var fontSize = document.getElementById('cta-img').offsetHeight * fontSizeMultiplier;
+
+        document.getElementById('cta-text').innerHTML = text;
+
+        // var fontMarginTop = orientationCheck()=='portrait'? document.getElementById('cta-img').offsetHeight * 0.05 : document.getElementById('cta-img').offsetHeight * 0.3;
+
+
+
+        document.getElementById('cta-text').style.fontSize = fontSize + 'px';
+        // document.getElementById('cta-text').style.top = fontMarginTop + 'px';
+
+        // document.getElementById('cta-text').offsetWidth = document.getElementById('cta-img').offsetWidth * 0.8;
+        
+
+        document.getElementById('cta-text').style.opacity = 1;
+
+          
+    }
+
+
+    function onWindowResize() {
+        initCta();
+        camera.aspect = document.body.clientWidth / document.body.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(document.body.clientWidth, document.body.clientHeight);
+    }
+
 
 
     </script>

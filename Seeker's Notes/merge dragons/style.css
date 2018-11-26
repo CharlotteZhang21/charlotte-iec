@@ -1,0 +1,635 @@
+/* DO NOT TOUCH ANY OF THE CSS: IT WILL BREAK THE ENDCARD */
+
+body {
+    /*height: 100%;
+    margin: 0;
+    overflow: hidden;*/
+    background-color: #000000;
+}
+
+html, body{
+	-ms-content-zooming:none;
+	-ms-touch-action: none;
+	touch-action: none;
+	content-zooming:none;
+}
+
+.preload * {
+	-webkit-animation-play-state: paused !important;
+}
+
+a {
+	text-decoration: none;
+}
+
+/***********/
+.hero{
+	position: absolute;
+	margin: auto;
+}
+
+.hero img{
+	width: 100%;
+	height: auto;
+}
+
+#hero1{
+    width: 185vw;
+    height: 80vw;
+    z-index: 10;
+    right: -28vw;
+    bottom: 50vh;
+    animation: float 4s infinite;
+    -webkit-animation: float1 5s ease-out infinite;
+}
+
+#hero2 img, #hero4 img{
+    transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
+#light {
+	width: 50vw;
+    z-index: 1000;
+    position: absolute;
+    margin: auto;
+    left: 60vw;
+    animation: redLight 5s infinite;
+    pointer-events: none;
+}
+
+#light img{
+	width: 100%;
+}
+
+.pulse {
+		position: absolute;
+		width: 150px; 
+		height: 150px;
+		left: -12px;
+		top: -18px;
+		border: 12px solid #b9f3fe;
+		-webkit-border-radius: 300px;
+		-moz-border-radius: 300px;
+		border-radius: 300px;
+		z-index: 160;
+		opacity: 0;
+		-webkit-animation: warn 1.5s ease-out;
+		animation: warn 1.5s ease-out;
+		-webkit-animation-iteration-count: infinite;
+		animation-iteration-count: infinite;
+	}
+
+    .foreground{
+	position: absolute;
+	width: 100%;
+	z-index: 200;
+	right: 61vw;
+	bottom: -2%;
+	text-align: center;
+}
+
+.foreground img {
+    width: 320%;
+    right: 0;
+}
+
+.cta-container {
+    position: absolute;
+    width: 80%;
+    height: 14%;
+    right: 0;
+    left: 10%;
+    z-index: 500;
+    bottom: 5%;
+}
+
+
+#auto-text-bg{
+    position: absolute;
+    width: 100%;
+    margin: auto;
+    left: 0;
+    right: 0;
+    vertical-align:middle;
+}
+
+#auto-text {
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    font-size: 2.5em;
+    color: #d9f0ca;
+    text-align: center;
+    font-weight: bold;
+    text-shadow: -2px 1px 10px #092b1a;
+
+}
+
+@media all and (orientation: landscape) {
+    .foreground{
+	right: 0;
+	bottom: -7%;
+	text-align: center;
+}
+    
+    .foreground img {
+    width: 100%;
+    right: 0;
+}
+
+    
+	.hand{
+		width: 150px;
+		height: 150px;
+		left: 10vw;
+		bottom: 25vh;
+	}	
+	.hand img{
+		width: 100%;
+		height: auto;
+	}
+	.pulse {
+		left: -17px;
+		top: -22px;
+	}
+	#vungle-footer {
+	transform:translate(0%,0%);
+    left:0%;
+	}
+
+
+	#auto-text-bg{
+	    position: absolute;
+	    width: 40%;
+	    margin: auto;
+	    left: auto;
+	    right: 1%;
+	    bottom: 0%;
+	    vertical-align:middle;
+	}
+
+	#auto-text {
+	    left: auto;
+	    right: 1%;
+	    width: 40%;
+	}
+
+
+}
+
+@-webkit-keyframes "warn" {
+	0% {
+		-webkit-transform: scale(0);
+		opacity: 0.0;
+}
+	10% {
+		-webkit-transform: scale(0.1);
+		opacity: 0.5;
+		}
+	20% {
+		-webkit-transform: scale(0.2);
+		opacity: 0.5;
+	}
+	30% {
+		-webkit-transform: scale(0.3);
+		opacity: 0.5;
+	/*}
+	40% {
+		-webkit-transform: scale(0.4);
+		opacity: 0.4;
+	}
+	50% {
+		-webkit-transform: scale(0.5);
+		opacity: 0.5;*/
+	}
+	100% {
+		-webkit-transform: scale(0.6);
+		opacity: 0.0;
+	}
+	100% {
+		-webkit-transform: scale(0.7);
+		opacity: 0.0;
+	}
+}
+
+.center-screen {
+    background-image: url(background.jpg);
+    background-position: center bottom;
+    background-size: cover;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+}
+	
+
+@media all and (orientation: landscape) {
+	#hero1{
+		width: 90vw;
+		left: -93vw;
+		bottom: 17vh;
+		top: 0;
+	}
+
+	#light {
+		left: 60vw;
+	}
+
+}
+
+.center-screen {
+    background-position: center center;
+	width: 100%;
+	z-index: 100;
+	height: 100%;
+	top:auto;
+	bottom: 0;
+	left:0;
+	right:0;
+	overflow: hidden;
+}
+
+
+.logo-container {
+	position: absolute;
+	width: 100%;
+	z-index: 200;
+	left: 0;
+	right: 0;
+	bottom: 60vh;
+	text-align: center;
+}
+
+.logo-container img {
+	width: 80%;
+
+}
+
+@media all and (orientation: landscape) {
+	.logo-container {
+		top: 10vh;
+	    left: auto;
+	    right: 5vw;
+	    width: 35vw;
+	    height: auto;
+	}
+	.logo-container img {
+		width: 100%;
+	}
+
+	.cta-container {
+		position: absolute;
+		bottom: 6%;
+		width: 100%;
+		right: 0;
+		left: auto;
+		height: 25%;
+		z-index: 500;
+		text-align: center;
+	}
+	.cta {
+		bottom: 27vh;
+		right: 2vw;
+		width: 40vw;
+	}
+}
+
+.button1 {
+	animation: shake 4.5s cubic-bezier(.36,.07,.19,.97) infinite;
+}
+.button1 img{
+	width:100%;
+}
+/*
+@media all and (orientation: landscape) {
+	.button1, .button2 {
+		width:100%;
+		top: auto;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		margin: 0 auto;
+
+	}
+}*/
+
+/*iPhone X landscape*/
+@media (min-aspect-ratio: 724/354) and (orientation: landscape) {
+	.cta-container{
+		height: 29%;
+	}
+}
+
+
+@keyframes float1 {
+	0% {
+		transform: rotate(-0.2deg) translateY(8px);	
+	}
+	50% {
+		transform: rotate(0.3deg) translateY(0px);
+	}
+	100% {
+		transform: rotate(-0.2deg) translateY(8px);	
+	}	
+}
+
+@-webkit-keyframes float1 {
+	0% {
+		-webkit-transform: rotate(-0.2deg) translateY(8px);	
+	}
+	50% {
+		-webkit-transform: rotate(0.3deg) translateY(0px);
+	}
+	100% {
+		-webkit-transform: rotate(-0.2deg) translateY(8px);	
+	}	
+}
+
+@keyframes float2 {
+	0% {
+		transform: translateY(-6px);	
+	}
+	50% {
+		transform: translateY(0px);
+	}
+	100% {
+		transform: translateY(-6px);	
+	}	
+}
+
+@-webkit-keyframes float2 {
+	0% {
+		-webkit-transform: translateY(-6px);	
+	}
+	50% {
+		-webkit-transform: translateY(0px);
+	}
+	100% {
+		-webkit-transform: translateY(-6px);	
+	}	
+}
+
+@keyframes shake {
+	2%, 18% {
+		transform: rotate(0deg) translate3d(-1px, 0, 0);
+	}
+	4%, 16% {
+	  transform: rotate(3deg) translate3d(2px, 0, 0);
+	}
+
+	6%, 10%, 14% {
+	  transform: rotate(-3deg) translate3d(-4px, 0, 0);
+	}
+
+	8%, 12% {
+	  transform: rotate(0deg) translate3d(4px, 0, 0);
+	}
+	0%, 20%{
+	  transform: rotate(0deg) translate3d(-1px, 0, 0);
+	}
+}
+
+@-webkit-keyframes shake {
+	2%, 18% {
+		-webkit-transform: rotate(0deg) translate3d(-1px, 0, 0);
+	}
+	4%, 16% {
+	  -webkit-transform: rotate(3deg) translate3d(2px, 0, 0);
+	}
+
+	6%, 10%, 14% {
+	  -webkit-transform: rotate(-3deg) translate3d(-4px, 0, 0);
+	}
+
+	8%, 12% {
+	  -webkit-transform: rotate(0deg) translate3d(4px, 0, 0);
+	}
+	0%, 20%{
+	  -webkit-transform: rotate(0deg) translate3d(-1px, 0, 0);
+	}
+}
+
+@keyframes redLight {
+	0%, 50%, 100%{
+		opacity: 0;
+	}
+	25% {
+		opacity: 0.8;
+	}
+}
+
+@-webkit-keyframes redLight {
+	0%, 50%, 100%{
+		-webkit-opacity: 0;
+	}
+	25% {
+		-webkit-opacity: 0.8;
+	}
+}
+
+@keyframes moveHero1
+
+   .ui-loader-default{ display:none}
+       .ui-mobile-viewport{ border:none;}
+       .ui-page {padding: 0; margin: 0; outline: 0} 
+	   /* iPads (landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) {
+  /* Styles */
+  .hand{
+		width: 150px;
+		height: 150px;
+		left: 10vw;
+		bottom: 25vh;
+	}	
+	.hand img{
+		width: 100%;
+		height: auto;
+	}
+	.pulse {
+		left: -17px;
+		top: -22px;
+	}
+
+}
+
+@media (orientation : landscape){
+	.midground{
+		animation-duration: 10s;
+		position:absolute;
+	}
+
+}
+
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) {
+  /* Styles */
+  .hand{
+		width: 150px;
+		height: 150px;
+		right:15%;
+		bottom:47%;
+	}	
+	.hand img{
+		width: 130%;
+		height: auto;
+	}
+	.pulse {
+		left: 5px;
+		top: -5px;
+	}
+	.sword1, .sword2 {
+		position: absolute;
+		left:-5%;
+		right:0;
+		top: 7%;
+		bottom: 0;
+		z-index: 160;
+		width:130%;
+		height: auto;	
+	}
+	.sword1 img, .sword2 img {
+		position: absolute;
+		display: block;
+		top:auto;
+		bottom:10%;
+		width:125%;
+		left:-10%;
+		height:auto;
+	}
+	#foreground img{
+		position: absolute;
+		top:auto;
+		bottom: -8%;
+		width: 100%;
+		height: auto;
+		z-index:160;
+	}
+	
+}
+/*ipad*/
+@media (min-height: 768px) and (orientation: landscape) {
+        #hero1{
+            width: 120vw;
+            bottom: 40vh;
+        }
+    
+        .logo-container {
+        top: 20vh;
+        }
+
+        .cta-container{
+        	height: 19%;
+        }
+        
+    }
+
+@media (min-height: 1024px) and (orientation: portrait) {
+    .logo-container img {
+        width: 60%;
+    }
+    
+    .cta-container {
+        bottom: 10vh;
+        width: 70%;
+        left: 15%;
+    }
+    
+    #hero1{
+        width: 140vw;
+        bottom: 40vh;
+        left: -50vw;
+    }
+    
+    
+}
+
+/* VUNGLE CSS */
+
+#vungle-header {
+    position: relative;
+    top: 0;
+    width: 100%;
+    min-height: 60px;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+    z-index: 20000;
+}
+
+#vungle-header a {
+    color: #ffffff;
+    font-size: 1.5em;
+    text-shadow: rgba(0, 0, 0, 0.37) 0 1px 2px;
+    -webkit-transition: color 0.05s ease-in-out;
+    z-index: 20000;
+}
+
+#vungle-header a:hover {
+    color: #d3d3d3;
+}
+
+#vungle-header a:active {
+    color: #949494;
+}
+
+#vungle-close {
+    width: 30px;
+    height: 30px;
+    padding: 20px;
+    right: 0;
+    position: absolute;
+}
+
+#vungle-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 35px;
+    margin: 0 auto;
+    pointer-events: none;
+    display: block;
+    overflow: hidden;
+    color: #ffffff;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    z-index: 1000;
+}
+
+#vungle-footer span.footer {
+    font-size: 40px;
+    line-height: 1em !important;
+}
+
+#vungle-footer.center {
+    text-align: center;
+}
+
+@media all and (orientation: landscape) {
+    #vungle-footer span.footer {
+        position: absolute;
+    }
+    
+
+}
+
