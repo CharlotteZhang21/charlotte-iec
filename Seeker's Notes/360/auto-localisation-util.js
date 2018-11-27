@@ -39,6 +39,7 @@ function getLocalisedFindObjects() {
  if(language == null)
         language = getBrowserLanguage();
     var text = 'Find the objects';
+    var font = 'myFont';
     switch ( language) {
         case 'en':
             break;
@@ -54,8 +55,7 @@ function getLocalisedFindObjects() {
             font = 'asian';
             break;
         case "de":
-            text = "Finde die versteckten Objekte";
-            fontSizeMultiplier = 0.34;
+            text = "Finden Sie alle versteckten Objekte!";
             break;
         case "fr":
             text = "Trouvez les objets cachés";
@@ -71,6 +71,7 @@ function getLocalisedTapToPlay() {
  if(language == null)
         language = getBrowserLanguage();
     var text = 'Tap to play';
+    var font = 'myFont';
     switch ( language) {
         case 'en':
             break;
@@ -82,18 +83,50 @@ function getLocalisedTapToPlay() {
             text = "눌러서 플레이하세요";
             break;
         case "zh":
-            text = "找到请点击物品";
+            text = "找到请点击";
             font = 'asian';
             break;
         case "de":
-            text = "Finde die versteckten Objekte";
-            fontSizeMultiplier = 0.34;
+            text = "Tippe zum spielen";
             break;
         case "fr":
-            text = "Trouvez les objets cachés";
+            text = "cliquez pour jouer";
             break;
         default:
-            text = 'Find the objects'
+            text = 'Tap to play'
+    }
+    return {'text' : text.toUpperCase(), 'font' : font};
+   
+}
+
+function getLocalisedGoodJob() {
+ if(language == null)
+        language = getBrowserLanguage();
+    var text = 'Great Job';
+    var font = 'myFont';
+    switch ( language) {
+        case 'en':
+            break;
+        case 'ja':
+            text = '上出来だ!';
+            font = 'asian';
+            break;
+        case "ko":
+            text = "잘 했어요!";
+            break;
+        case "zh":
+            text = "恭喜全部找到!";
+            font = 'asian';
+            break;
+        case "de":
+            text = "Toll gemacht!";
+            
+            break;
+        case "fr":
+            text = "Excellent travail!";
+            break;
+        default:
+            text = 'Great Job'
     }
     return {'text' : text.toUpperCase(), 'font' : font};
    

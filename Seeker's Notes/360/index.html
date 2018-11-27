@@ -40,7 +40,7 @@
 <body ontouchstart="ontouchstart" class="preload light">
     <div id="abs-container">
         <div id="vungle-header" class="">
-            <a id="vungle-close" class="" href="javascript:void(0)" onclick="doSomething('close');">
+            <a id="vungle-close" class="hide" href="javascript:void(0)" onclick="doSomething('close');">
                 <!-- CLOSE ICON -->
                 <svg version="1.1" id="svg-vungle-ad-close" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 321.2 321" style="enable-background:new 0 0 321.2 321;" xml:space="preserve">
                     <g>
@@ -808,6 +808,18 @@
     function endgame() {
         // addClass(endOverlay, 'show');
         removeClass(document.getElementById('end-screen'), 'hidden');
+        document.getElementById('end-screen').addEventListener('click', function(){
+
+            stopAudio();
+            doSomething("download");
+        })
+
+        if(ASOI) {
+            setTimeout(function(){
+                stopAudio();
+                doSomething('download');
+            }, 2000);
+        }
         playAudio(audios['finish']);
     }
 
@@ -819,6 +831,8 @@
     }
 
     var dynamicLocal = 'v2';
+    var ASOI = true;
+    var closeButtonTimerDuration = 0; //seconds
     // var containersToLocalise = [
     //     'findObjects',
     //     'tapToPlay',
@@ -828,7 +842,9 @@
     window.onload = function() {
         removeClass(document.body, 'preload');
         generateAudio();
-
+        setTimeout(function(){
+            removeClass(document.getElementById('vungle-close'), 'hide');
+        }, closeButtonTimerDuration * 1000);
 
         if(dynamicLocal !==undefined && dynamicLocal == 'v2'){
 
@@ -838,8 +854,14 @@
                findObjectsContainer.style.font = getLocalisedFindObjects().font;
 
                var tapToPlayContainer = document.getElementById('tapToPlay');
-               tapToPlayContainer.innerHTML = getLocalisedTapToPlay().text;
-               
+               tapToPlayContainer.innerHTML = getLocalisedTapToPlay().text;               
+               tapToPlayContainer.style.font = getLocalisedTapToPlay().font;
+
+
+
+               var goodJobContainer = document.getElementById('goodJob');
+               goodJobContainer.innerHTML = getLocalisedGoodJob().text;               
+               goodJobContainer.style.font = getLocalisedGoodJob().font;
 
                // var container = document.getElementById('findObjects');
                // container.innerHTML = getLocalisedFindObjects().text;

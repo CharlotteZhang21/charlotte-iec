@@ -1,4 +1,13 @@
 
+.abs-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+
+}
 .hidden {
     visibility: hidden;
     /*  display: none !important; */
@@ -6,7 +15,14 @@
 }
 
 /************   end   **********************/
-
+#sakuraLayer {
+    width: 100%;
+    height: 100%;
+    z-index: 400;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+}
 .item{
     position: absolute;
     margin: auto;
@@ -50,6 +66,7 @@
 }
 
 .overlayText {
+    font-family: 'myFont';
     width: 90%;
     top: 40%;
     left: 0;
@@ -58,26 +75,31 @@
     color: #fff;
 }
 .tapAnywhereText {
-    width: 30%;
+    width: 50%;
     top: 70%;
     left: 0;
     right: 0;
     font-size: 6vw;
     color: #fff;
 }
-/*#confirmBtn {
-    width: 20%;
-    font-size: 6vw;
+#character {
     left: 0;
     right: 0;
-    top: 80%;
-    color: #000;
-    background-color: #fff;
-    padding: 5%;
-    border-radius: 10px;
+    top: 0;
+    bottom: 0;
+    height: 55%;
 }
 
-*/
+#goodJob {
+    left: 50%;
+    top: 26%;
+    font-size: 9vw;
+}
+
+#continueStory {
+    width: 80%;
+}
+
 .objectsContainer {
     width: 70%;
     max-width: 1000px;
@@ -105,16 +127,19 @@
 #objectsDock {
     width: 100%;
     position: absolute;
-    bottom: 13%;
-    left: 50%;
-    transform: translate(-50%, 200%);
+    margin: auto;
+    bottom: -20%;
+    left: 0;
+    right: 0;
+    /*transform: translate(0%, 200%);*/
     z-index: 1;
     transition: 0.5s ease-in;
 
 }
 
 #objectsDock.moveDockUp {
-    transform: translate(-50%, 0%);
+    /*transform: translate(0%, 0%);*/
+    bottom: 12%;
 }
 
 #objectsDock .object{
@@ -215,7 +240,7 @@
     font-family: 'myFont';
     width: 100%;
     height: 50%;
-    margin: 5% auto;
+    margin: 6.5% auto;
     display: block;
     position: absolute;
     text-align: center;
@@ -223,6 +248,8 @@
 .cta-holder img{
     width: 100%;
     height: auto;
+    left: 0;
+    right: 0;
 }
 
 .cta-container {
@@ -270,123 +297,6 @@
 }
 
 
-@media all and (orientation: landscape) {
-
-    .logo-container {
-        position: absolute;
-        top: 2.5%;
-        bottom: auto;
-        width: 31%;
-        height: 27vh;
-        left: 3vh;
-        right: auto;
-        margin: auto;
-    }
-    .logo-container img {
-        position: absolute;
-        max-width: 100%;
-        max-height: 100%;
-        top: 0;
-        left: 0;
-        right: auto;
-        margin: auto;
-    }
-
-    .cta-container {
-        position: absolute;
-        bottom: 2%;
-        width: 40%;
-        right: 4%;
-        left: auto;
-        height: 21%;
-        z-index: 500;
-        margin: 0 auto;
-        vertical-align: middle;
-    }
-
-    .button1,
-    .button2 {
-        width: 76%;
-        top: auto;
-        bottom: 0;
-        left: 5%;
-        right: 0;
-        margin: 0 auto;
-    }
-    .button1 img,
-    .button2 img {
-        width: 100%;
-    }
-}
-
-.button2 {
-    z-index: 1;
-    -webkit-animation: pulseFade 1.5s infinite ease-in-out;
-}
-
-@media all and (min-width: 768px) and (orientation: portrait) {
-      
-    .cta-container {
-        width: 55%;
-        left: 0;
-        right: 0;
-        margin: auto;
-    }
-}
-
-
-@media all and (min-height: 768px) and (orientation: landscape) {
-      
-    .cta-container {
-        width: 40%;
-        right: 5%;
-    }
-}
-
-/*iPhone X portrait*/
-@media (min-device-height: 724px) and (max-device-width: 411px) and (min-aspect-ratio: 354/724) and (orientation: portrait){
-    
-}
-
-/*iPhone X landscape*/
-@media (min-aspect-ratio: 724/354) and (orientation: landscape){   
-
-    .cta-container {
-        width: 33%;
-        right: 5%;
-    }
-}
-
-
-@-webkit-keyframes pulseFade {
-    0% {
-        opacity: 1;
-    }
-    60% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
-
-/*****  jquery mobile can't display "loading" *********/
-
-.ui-loader-default {
-    display: none
-}
-
-.ui-mobile-viewport {
-    border: none;
-}
-
-.ui-page {
-    padding: 0;
-    margin: 0;
-    outline: 0
-}
-
 /* TOOLTIP */
 
 .interactive-tooltip-360 {
@@ -410,7 +320,7 @@
     backface-visibility: hidden;
     transform: scale(0.9);
     transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1), opacity 1s cubic-bezier(0.77, 0, 0.175, 1);
-    transition-delay: 0.5s;
+    transition-delay: 0.1s;
     transform: scale(0.9);
     
     user-select: none;
@@ -503,6 +413,230 @@
     -webkit-animation-iteration-count: infinite;
     animation: finger 2s ease;
     animation-iteration-count: infinite;
+}
+
+
+
+@media all and (orientation: landscape) {
+
+    .logo-container {
+        position: absolute;
+        top: 2.5%;
+        bottom: auto;
+        width: 20%;
+        height: 20vh;
+        left: 3vh;
+        right: auto;
+        margin: auto;
+    }
+    .logo-container img {
+        position: absolute;
+        max-width: 100%;
+        max-height: 100%;
+        top: 0;
+        left: 0;
+        right: auto;
+        margin: auto;
+    }
+
+    #objectsDock {
+        left: 10%;
+        right: auto;
+        /*bottom: 0%;*/
+        width: 43%;
+    }
+    #objectsDock.moveDockUp{
+        bottom: 0%;
+    }
+
+    .objectsContainer {
+        width: 45%;
+        top: 70%;
+    }
+
+    .overlayText {
+        font-size: 7vh;
+        top: 20%;
+    }
+
+    .tapAnywhereText {
+        font-size: 6vh;
+        top: 85%;
+    }
+
+    .interactive-tooltip-360 {
+        top: 8%;
+        width: 30%;
+    }
+    #findObject{
+        top: 47%;
+    }
+
+    #centerScreen {
+        width: 50vh;
+        height: 50vh;
+    }
+
+    #character {
+        height: 94%;
+        width: 45%;
+        top: auto;
+        bottom: 0;
+        left: 21%;
+        right: auto;
+    }
+    #goodJob {
+        top: 15%;
+        font-size: 9vh;
+    }
+
+
+    .cta-container {
+        position: absolute;
+        bottom: 0%;
+        width: 35%;
+        right: 1%;
+        left: auto;
+        height: 21%;
+        z-index: 500;
+        margin: 0 auto;
+        vertical-align: middle;
+    }
+
+    .cta-holder p{
+        margin: 15% auto;
+    }
+
+    .button1,
+    .button2 {
+        width: 76%;
+        top: auto;
+        bottom: 0;
+        left: 5%;
+        right: 0;
+        margin: 0 auto;
+    }
+    .button1 img,
+    .button2 img {
+        width: 100%;
+    }
+}
+
+.button2 {
+    z-index: 1;
+    -webkit-animation: pulseFade 1.5s infinite ease-in-out;
+}
+@media all and (min-width: 700px) and (orientation: landscape ){
+    .cta-holder p {
+        margin: 11% auto;
+    }
+}
+
+@media all and (min-width: 768px) and (orientation: portrait) {
+     
+    #objectsDock {
+        width: 60%;
+    } 
+
+    #objectsDock.moveDockUp {
+        bottom: 15%;
+    }
+    #character {
+        height: 68%;
+        width: 80%;
+
+    }
+    #goodJob {
+        font-size: 7vw;
+    }
+    .cta-container {
+        width: 55%;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+}
+
+
+@media all and (min-height: 768px) and (orientation: landscape) {
+      
+    .cta-holder p{
+        margin: 27% auto;
+    }
+    .cta-container {
+        bottom: 2%;
+    }
+    #character {
+        left: 8%;
+        height: 84%;
+        width: 52%;
+    }
+    #goodJob {
+        left: 32%;
+    }
+}
+
+/*iPhone X portrait*/
+@media (min-device-height: 724px) and (max-device-width: 411px) and (min-aspect-ratio: 354/724) and (orientation: portrait){
+    
+}
+
+/*iPhone X landscape*/
+@media (min-aspect-ratio: 724/354) and (orientation: landscape){   
+
+    .cta-container {
+        width: 35%;
+        /*right: 5%;*/
+    }
+    .cta-holder p{
+        margin: 11% auto;
+    }
+    .interactive-tooltip-360 {
+        top: -4%;
+    }
+    #findObject {
+        top: 43%;
+    }
+    .objectsContainer {
+        top: 65%;
+    }
+    .tapAnywhereText {
+        top: 80%;
+    }
+
+    #objectsDock {
+        bottom: -32%;
+    }
+}
+
+
+@-webkit-keyframes pulseFade {
+    0% {
+        opacity: 1;
+    }
+    60% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+/*****  jquery mobile can't display "loading" *********/
+
+.ui-loader-default {
+    display: none
+}
+
+.ui-mobile-viewport {
+    border: none;
+}
+
+.ui-page {
+    padding: 0;
+    margin: 0;
+    outline: 0
 }
 
 @-webkit-keyframes device {
