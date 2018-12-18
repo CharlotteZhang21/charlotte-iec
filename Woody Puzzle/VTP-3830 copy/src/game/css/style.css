@@ -1,0 +1,74 @@
+html {
+    background-repeat: no-repeat;
+
+    background-position: center center;
+
+    /*-webkit-background-size: 100% auto;           !* Safari 3.0 *!
+    -moz-background-size: 100% auto;           !* Gecko 1.9.2 (Firefox 3.6) *!
+    -o-background-size: 100% auto;*/ /* Opera 9.5 */
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+
+    background-position: center center;
+
+    /*-webkit-background-size: 100% auto;           !* Safari 3.0 *!
+    -moz-background-size: 100% auto;           !* Gecko 1.9.2 (Firefox 3.6) *!
+    -o-background-size: 100% auto;*/ /* Opera 9.5 */
+    background-size: 100% 100%;
+
+    background-image: url(bg.png);
+}
+#overlay{
+    /*background: radial-gradient(!*circle*!80% 100%, rgba(0,0,0,.8) 50%, rgba(0,0,0,.5) 70%)*/
+    /*background-image: linear-gradient(to right, rgba(0,0,0,.1), rgba(0,0,0,.8) 50%, rgba(0,0,0,.1) 100%);
+    background-size: 100% 100%;
+    background-position: 50% 100%;
+    background-repeat: no-repeat;*/
+}
+
+@font-face {
+    font-family: 'GameFont';
+    src: url("font.ttf") format('truetype');
+
+}
+
+@font-face {
+    font-family: 'GameFont_bold';
+    src: url("font_bold.ttf") format('truetype');
+}
+
+@font-face {
+    font-family: 'GameFont_bold_italic';
+    src: url("font_bold_italic.ttf") format('truetype');
+}
+
+@font-face {
+    font-family: 'GameFont_italic';
+    src: url("font_italic.ttf") format('truetype');
+}
+
+
+
+@font-face {
+    font-family: 'GameSpeicalFont';
+    src: url("jp-zh-ru-font.ttf") format('truetype');
+
+}
+
+@-ms-viewport {
+    width: 100vw ;
+    zoom: 100% ;
+}
+
+@viewport {
+    width: 100vw ;
+    zoom: 100% ;
+}
+
+@-ms-viewport {
+    user-zoom: fixed ;
+}
+
+@viewport {
+    user-zoom: fixed ;
+}

@@ -1,0 +1,72 @@
+/**
+ * Created by Programmer on 09.10.2017.
+ */
+//здесь будут храниться координаты и скейлы уи элементов
+
+var layout = {
+    landscape: {
+        logo: {x: 860, y: 80, scale: 0.2},
+        gamefield: {x: 480, y: 320, scale: 0.6},
+        download_btn: {x: 860, y: 550, scaleX: 0.5, scaleY: 0.6},
+        downloadText: {x: 845, y: 550, scale: 0.3},
+        download_pic: {x: 920, y: 550, scale: 0.3},
+        points_ui: {x: 860, y: 200, scale: 1},
+        time_text: {x: 860, y: 420, scale: 1},
+        time_word: {x: 860, y: 360, scale: 1},
+        leave_left: {x: 820, y: 240, scale: 0.7},
+        leave_right: {x: 900, y: 240, scale: 0.7, scaleX: -0.7},
+        combo0: {x: 110, y: 120, scale: 0.4},
+        combo1: {x: 110, y: 320, scale: 0.4},
+        combo2: {x: 110, y: 520, scale: 0.4},
+        combo0Start: {x: -390},
+        combo1Start: {x: -390},
+        combo2Start: {x: -390},
+        xStart: 230,
+        yStart: 72,
+        final_logo: {x: 260, y: 180, scale: 0.3},
+        final_score_word: {x: 260, y: 290, scale: 1},
+        final_leave_left: {x: 180, y: 400, scale: 0.9},
+        final_leave_right: {x: 340, y: 400, scale: 0.9, scaleX: -0.9},
+        final_download_btn: {x: 700, y: 420, scale: 0.9},
+        retry_btn: {x: 260, y: 510, scale: 0.4},
+        final_continue_btn: {x: 260, y: 510, scale: 0.7},
+        final_download_text: {x: 670, y: 420, scale: 0.6},
+        final_download_pic: {x: 820, y: 420, scale: 0.5},
+        wellDone: {x: 700, y: 270, scale: 1},
+        final_pointsText: {x: 260, y: 360, scale: 1},
+
+    },
+
+    portrait: {
+        logo: {x: 140, y: 60, scale: 0.2},
+        gamefield: {x: 320, y: 380, scale: 0.6},
+        download_btn: {x: 320, y: 900, scaleX: 1, scaleY: 0.9},
+        downloadText: {x: 280, y: 900, scale: 0.6},
+        download_pic: {x: 440, y: 900, scale: 0.5},
+        points_ui: {x: 360, y: 60, scale: 1},
+        time_text: {x: 560, y: 90, scale: 1},
+        time_word: {x: 560, y: 40, scale: 0.8},
+        leave_left: {x: 300, y: 60, scale: 0.7},
+        leave_right: {x: 420, y: 60, scale: 0.7, scaleX: -0.7},
+        combo0: {x: 135, y: 755, scale: 0.4},
+        combo1: {x: 320, y: 755, scale: 0.4},
+        combo2: {x: 515, y: 755, scale: 0.4},
+        combo0Start: {x: 635},
+        combo1Start: {x: 820},
+        combo2Start: {x: 1015},
+        xStart: 70,
+        yStart: 130,
+        final_score_word: {x: 320, y: 280, scale: 1},
+        final_leave_left: {x: 240, y: 410, scale: 0.9},
+        final_leave_right: {x: 400, y: 410, scale: 0.9, scaleX: -0.9},
+        final_logo: {x: 320, y: 150, scale: 0.3},
+        final_download_btn: {x: 320, y: 880, scale: 1},
+        retry_btn: {x: 320, y: 580, scale: 0.4},
+        final_continue_btn: {x: 320, y: 580, scale: 0.8},
+        final_download_text: {x: 300, y: 880, scale: 0.6},
+        final_download_pic: {x: 440, y: 880, scale: 0.5},
+        wellDone: {x: 320, y: 700, scale: 1},
+        final_pointsText: {x: 320, y: 380, scale: 1},
+    }
+
+}
