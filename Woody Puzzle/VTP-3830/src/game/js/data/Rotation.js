@@ -160,7 +160,10 @@ function rotateTutorial() {
     }
     
         var center = MainGame.instance.tutorial.findFigureCenter(xPositions, yPositions);
-        if (MainGame.instance.tutorial.arrow) MainGame.instance.tutorial.arrow.parent.removeChild(MainGame.instance.tutorial.arrow);
+        if (MainGame.instance.tutorial.arrow!= null && MainGame.instance.tutorial.arrow.parent!= null) {
+            // console.log();
+            MainGame.instance.tutorial.arrow.parent.removeChild(MainGame.instance.tutorial.arrow);
+        }
         if (!MainGame.instance.tutorial.step1.end) MainGame.instance.tutorial.findArrowPlace(center); 
     
    

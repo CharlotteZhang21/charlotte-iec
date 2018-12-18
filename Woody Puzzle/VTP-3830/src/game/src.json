@@ -17,6 +17,7 @@
   "ui/ElementsDesk.js",
   "data/Field.js",
   "data/GameData.js",
+  "data/AutoLocalisation.js",
   "ui/FieldUI.js",
   "ui/PointsUI.js",
   "ui/FinalBoard.js",

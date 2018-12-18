@@ -1,5 +1,5 @@
 //duration of ad in seconds
-var time_ad = 30;
+var time_ad = 50;
 
 // number of points for game over
 var max_points = 300;

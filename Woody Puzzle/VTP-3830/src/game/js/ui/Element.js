@@ -103,7 +103,8 @@ Element.prototype.mouseMoveHandler = function (e) {
 }
 
 Element.prototype.letGoElement = function (e) {
-
+    if(!ASOI_USER_INTERACTED)
+        ASOI_USER_INTERACTED = true;
     this.off('pointerup', Element.prototype.letGoElement);
     this.off('pointerupoutside', Element.prototype.letGoElement);
 

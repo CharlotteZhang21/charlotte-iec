@@ -80,32 +80,25 @@ function loadFonts (callback) {
     var Gamefont_bold = new FontFaceObserver("Gamefont_bold", {});
     var Gamefont_bold_italic = new FontFaceObserver("Gamefont_bold_italic", { });
     var Gamefont_italic = new FontFaceObserver("Gamefont_italic", {});
-
+    var GameSpecialFont = new FontFaceObserver("GameSpeicalFont", { });
+    
     Promise.all([
         Gamefont.load(),
         Gamefont_bold.load(),
         Gamefont_bold_italic.load(),
-        Gamefont_italic.load()
+        Gamefont_italic.load(),
+        GameSpecialFont.load(),
     ]).then(function() {
         document.documentElement.className += " fonts-loaded";
         PIXI.loader.load(/*onAssetsLoaded*/callback);
     });
 
 
+
 }
 
 
 
-function addCloseOption (){
-    var closeBtn = document.getElementById('vungle-close');
-    if (!closeBtn) return;
-    /*closeBtn.addEventListener('click', function(){
-        doSomething('close');
-    })*/
-    closeBtn.addEventListener('tap', function(){
-        doSomething('close');
-    })
-}
 
 function Game() {
     // create an new instance of a pixi stage
@@ -183,7 +176,6 @@ function Game() {
         });
         fitLayout();
         rotateGame();
-        addCloseOption();
 
        
         requestAnimationFrame(animate);

@@ -1,5 +1,6 @@
 MainGame.instance = null;
 MainGame.VERSION = "0.1";
+MainGame.autoLocalisation = new AutoLocalisation();
 
 function MainGame() {
     MainGame.instance = this;
@@ -13,7 +14,6 @@ MainGame.constructor = MainGame;
 MainGame.prototype.loadAssets = function () {
     
     this.gameData.loadAssets();
-    
 
 
 };

@@ -155,7 +155,7 @@ gulp.task('release-full-source', ['cleanup-old-digest'], function () {
 
 
 gulp.task('watch', () => {
-  gulp.watch(['src/game/js/*.js', 'src/game/js/**/*.js', 'src/game/html/**', 'src/css/*.css'], ['default']);
+  gulp.watch(['src/game/js/*.js', 'src/game/js/**/*.js', 'src/game/html/**', 'src/game/css/*.css'], ['default']);
 })
 
 gulp.task('reload', (done) => {

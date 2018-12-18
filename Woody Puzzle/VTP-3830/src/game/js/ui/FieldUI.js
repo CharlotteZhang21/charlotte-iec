@@ -45,14 +45,8 @@ FieldUI.prototype.addFieldChildren = function () {
     this.addChild(download_pic);
     download_pic.anchor.set(0.5);
 
-
-    this.downLoadText = new PIXI.Text('Download', {
-        fontFamily: "GameFont_bold",
-        fontSize: 86,
-        fill: 0xFFFFFF,
-        align: 'center',
-        lineHeight: '65'
-    });
+    var translation = MainGame.autoLocalisation.getLocalisedCta();
+    this.downLoadText = MainGame.autoLocalisation.placeTextInButton(translation, this.download_btn, 1.1, 1.1);
     this.downLoadText.anchor.set(0.5);
     this.downLoadText.key = 'downloadText';
     this.addChild(this.downLoadText);

@@ -10,14 +10,17 @@ function Time(){
    
     this.time = time_ad * 1000;
 
-    this.timeWord = new PIXI.Text('Time', {
-        fontFamily: "GameFont_bold",
-        fontSize: 48,
-        fill: 0xffffff/*A7ACB2*/,
-        align: 'center',
-        lineHeight: '65'
+    // this.timeWord = new PIXI.Text('Time', {
+    //     fontFamily: "GameFont_bold",
+    //     fontSize: 48,
+    //     fill: 0xffffff/*A7ACB2*/,
+    //     align: 'center',
+    //     lineHeight: '65'
 
-    });
+    // });
+
+    var translation = MainGame.autoLocalisation.getLocalisedTimeWord();
+    this.timeWord = MainGame.autoLocalisation.placeTextInGame(translation, 48);
 
     this.timeWord.anchor.set(0.5);
     this.timeWord.key = 'time_word';    

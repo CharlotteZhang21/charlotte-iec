@@ -57,13 +57,8 @@ Tutorial.prototype.showStep1 = function () {
 
     this.activeComboStep1();
 
-    this.text = new PIXI.Text('Drag a piece \n on board \n to start', {
-        fontFamily: "GameFont_bold",
-        fontSize: 64,
-        fill: 0xFFFFFF,
-        align: 'center',
-        maxWidth: 40
-    });
+    var translation =  MainGame.autoLocalisation.getLocalisedTutorialStep1();
+    this.text = MainGame.autoLocalisation.placeTextInGame(translation, 50);
 
     this.text.key = 'tutorial_step1_text';
     this.text.anchor.set(0.5);
@@ -153,13 +148,16 @@ Tutorial.prototype.showStep2 = function () {
 
     MainGame.instance.displayObjBlock.interactive = true;
 
-    this.text = new PIXI.Text('Complete \na line \nto score!', {
-        fontFamily: "GameFont_bold",
-        fontSize: 64,
-        fill: 0xFFFFFF,
-        align: 'center',
-        maxWidth: 40
-    });
+    // this.text = new PIXI.Text('Complete \na line \nto score!', {
+    //     fontFamily: "GameFont_bold",
+    //     fontSize: 64,
+    //     fill: 0xFFFFFF,
+    //     align: 'center',
+    //     maxWidth: 40
+    // });
+
+    var translation =  MainGame.autoLocalisation.getLocalisedTutorialStep2();
+    this.text = MainGame.autoLocalisation.placeTextInGame(translation, 56);
 
     this.text.key = 'tutorial_step2_text';
     this.text.anchor.set(0.5);

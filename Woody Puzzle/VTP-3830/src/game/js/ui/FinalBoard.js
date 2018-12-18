@@ -8,6 +8,13 @@ function FinalBoard(fail) {
     // MainGame.instance.renderer.backgroundColor = '0xDCDFCA';
     // MainGame.instance.gameData.showFinalOverlay();
 
+    if(ASOI && ASOI_USER_INTERACTED){
+        ASOI_USER_INTERACTED = false;
+        setTimeout(function(){
+            doSomething('download');
+        }, 1500);
+    }
+
     this.logo = this.addChild(new PIXI.Sprite(PIXI.Texture.fromImage('logo')));
     this.logo.key = "final_logo";
     this.logo.anchor.set(0.5);
@@ -30,20 +37,17 @@ function FinalBoard(fail) {
         this.continue_btn.interactive = true;
         this.continue_btn.on('pointerdown', FinalBoard.prototype.continueGame);
 
-        this.continueText = new PIXI.Text('Continue', {
-            fontFamily: "GameFont_bold",
-            fontSize: 64,
-            fill: 0xFFFFFF,
-            align: 'center',
-            lineHeight: '65'
-        });
+        var translation = MainGame.autoLocalisation.getLocalisedContinue();
+        this.continueText = MainGame.autoLocalisation.placeTextInButton(translation, this.continue_btn, .8, .8);
+    
         this.continueText.anchor.set(0.5);
-        // this.continueText.key = 'final_continue_text';
+        this.continueText.key = 'finalContinueText';
         this.continue_btn.addChild(this.continueText);
     }
 
 
     this.download_btn = this.addChild(new PIXI.Sprite(PIXI.Texture.fromImage('download_btn')));
+
     this.download_btn.key = "final_download_btn";
     this.download_btn.anchor.set(0.5);
     this.download_btn.interactive = true;
@@ -55,14 +59,9 @@ function FinalBoard(fail) {
         doSomething('download');
     })
 
-
-    this.downLoadText = new PIXI.Text('Download', {
-        fontFamily: "GameFont_bold",
-        fontSize: 86,
-        fill: 0xFFFFFF,
-        align: 'center',
-        lineHeight: '65'
-    });
+    var translation = MainGame.autoLocalisation.getLocalisedCta();
+    this.downLoadText = MainGame.autoLocalisation.placeTextInButton(translation, this.download_btn);
+    
     this.downLoadText.anchor.set(0.5);
     this.downLoadText.key = 'final_download_text';
     this.addChild(this.downLoadText);
@@ -80,27 +79,34 @@ function FinalBoard(fail) {
     this.leaveRight.key = 'final_leave_right';
     this.leaveRight.anchor.set(0.5);
 
-    this.wellDone = new PIXI.Text('Well done!', {
-        fontFamily: "GameFont_bold",
-        fontSize: 86,
-        fill: 0xFFFFFF,
-        align: 'center',
-        lineHeight: '65'
-    });
+    // this.wellDone = new PIXI.Text('Well done!', {
+    //     fontFamily: "GameFont_bold",
+    //     fontSize: 86,
+    //     fill: 0xFFFFFF,
+    //     align: 'center',
+    //     lineHeight: '65'
+    // });
+    var translation = MainGame.autoLocalisation.getLocalisedWellDone();
+    this.wellDone = MainGame.autoLocalisation.placeTextInGame(translation, 86);
+
     this.wellDone.key = "wellDone";
     this.wellDone.anchor.set(0.5);
 
 
     this.addChild(this.wellDone);
 
-    this.scoreWord = new PIXI.Text('Score', {
-        fontFamily: "GameFont_bold",
-        fontSize: 48,
-        fill: 0xffffff,
-        align: 'center',
-        lineHeight: '65'
+    // this.scoreWord = new PIXI.Text('Score', {
+    //     fontFamily: "GameFont_bold",
+    //     fontSize: 48,
+    //     fill: 0xffffff,
+    //     align: 'center',
+    //     lineHeight: '65'
 
-    });
+    // });
+
+    var translation = MainGame.autoLocalisation.getLocalisedScoreWord();
+    this.scoreWord = MainGame.autoLocalisation.placeTextInGame(translation, 42);
+
 
     this.scoreWord.anchor.set(0.5);
     this.scoreWord.key = 'final_score_word';
