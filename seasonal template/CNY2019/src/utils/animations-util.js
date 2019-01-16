@@ -121,3 +121,26 @@ export function fireworkExplosion(game, fire, finalX, finalY, initialScaleX, dur
             }, duration, ease, true, 0);
         }, this);
 }
+
+export function coinDropwithDelayCuston(game, coin, coinUpX, coinUpY, coinFallX, coinFallY, finalScale, duration, delay, coinTargetAngle, easeUp, easeDown) {
+	
+	game.time.events.add(delay, function() {
+		game.add.tween(coin).to({
+			x: [coinUpX],
+			y: [coinUpY],
+			angle: [coinTargetAngle * 0.5]
+		}, duration/2 , easeUp, true, 0).onComplete.add(function(){
+			// game.world.bringToTop(coin);
+			if(Math.random() > 0.5)
+				coin.bringToTop();
+			game.add.tween(coin).to({
+				x: [coinFallX],
+				y: [coinFallY],
+				angle: [coinTargetAngle]
+			}, duration*0.7, easeDown, true, 0).onComplete.add(function(){
+            	coin.destroy();
+        	},this)
+        }, this);
+	  
+	},this);
+}

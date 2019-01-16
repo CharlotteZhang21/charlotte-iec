@@ -266,26 +266,23 @@ a {
   z-index: 10;
   pointer-events: none; }
 
-#ground {
-  width: 100%;
-  height: 50%;
-  left: 0;
-  right: 0;
-  bottom: -10%; }
-
 #sky {
   width: 100%;
-  height: 70%;
+  height: 100%;
   left: 0;
   right: 0;
   top: 0; }
 
 #gift {
-  width: 60%;
-  height: 30%;
+  width: 70%;
+  height: 40%;
   left: 0;
   right: 0;
-  bottom: 30%; }
+  bottom: -5%; }
+
+#star-container {
+  width: 10%;
+  height: 5%; }
 
 #contents {
   width: 100%;
@@ -295,66 +292,22 @@ a {
   top: 0;
   bottom: 0; }
 
-#christmasTree {
-  width: 60%;
-  height: 60%;
-  right: -15%;
-  bottom: 30%; }
-
-#blueTree {
-  width: 60%;
-  height: 30%;
-  left: -8%;
-  bottom: 0%; }
-
-#blueTreeRight {
-  width: 30%;
-  height: 30%;
-  right: -20%;
-  bottom: 0%; }
-
 #message {
-  width: 90%;
+  width: 80%;
   left: 0;
   right: 0;
-  top: 14%;
+  top: 40%;
   pointer-events: none; }
 
-#santa {
-  width: 30%;
-  height: 10%;
-  left: -50%;
-  top: 30%; }
+#coin {
+  width: 10%;
+  height: 10%; }
 
-#giftStack1, #giftStack2, #giftStack3 {
-  bottom: 0; }
-
-#giftStack1 {
-  width: 20%;
-  height: 10%;
-  left: 0; }
-
-#giftStack2 {
-  width: 40%;
-  height: 10%;
-  left: 20%; }
-
-#giftStack3 {
-  width: 20%;
-  height: 10%;
-  left: 80%; }
-
-#cta-elements-container {
-  position: absolute;
+#coins-container {
+  height: 30%;
   width: 100%;
-  bottom: 0;
-  min-height: 200px;
-  z-index: 100;
-  position: absolute;
-  left: 5%;
-  right: 0;
-  bottom: 0%;
-  transition: all 1s ease-in-out; }
+  left: 0;
+  top: 0; }
 
 .icon {
   position: absolute;
@@ -426,25 +379,13 @@ a {
   max-height: 50%; }
 
 @media all and (orientation: landscape) {
-  #goal {
-    width: 15vw;
-    left: 3vw;
-    right: auto; }
-  #ok-button {
-    width: 20vh;
-    height: 20vh; }
-  #selection-menu {
-    width: 45vw; }
-  #firework-left {
-    width: 30%;
-    top: 18%;
-    right: auto;
-    left: 2%; }
-  #firework-right {
-    width: 30%;
-    top: 18%;
-    right: 4%;
-    left: auto; }
+  #message {
+    width: 40%;
+    top: 20%; }
+  #gift {
+    width: 40%;
+    height: 10%;
+    bottom: -22%; }
   #cta-elements-container {
     min-height: 80px;
     bottom: 2%;
@@ -524,15 +465,12 @@ a {
   right: 0; }
 
 #cta-container, #cta-container-final {
-  width: 50%;
+  width: 60%;
   height: 10vw;
   left: 0;
   right: 0;
   top: auto;
   bottom: 5%; }
-
-#cta-container-final {
-  bottom: 8%; }
 
 .hide {
   /*opacity: 0;*/

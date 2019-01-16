@@ -23,32 +23,25 @@ class CtaButton extends Phaser.Group {
 
         this.button.y = this.game.global.windowHeight * window.devicePixelRatio + this.button.height * 1.5;
 
-        var tween = this.game.add.tween(this.button).to({
-            y: finalY
-        }, 1000, Phaser.Easing.Quadratic.InOut, true, 0);
-
-
-        // this.game.time.events.add(500, function() {
-        //     document.getElementById("cta-elements-container").className = "";
-        // });
-
     }
 
-    moveUp() {
+    moveUp(containerName, pulse = true) {
 
-
-        var tween = this.game.add.tween(this.button).to({
-            y: ContainerUtil.getYCenterWithinContainer('cta-container-final')
-        }, 1000, Phaser.Easing.Quadratic.InOut, true, 0);
+        // if(containerName != null)
+            var tween = this.game.add.tween(this.button).to({
+                y: ContainerUtil.getYCenterWithinContainer(containerName)
+            }, 1000, Phaser.Easing.Quadratic.InOut, true, 0);
         
-        // Pulse animation
-        tween.onComplete.add(function() {
-            var initialScale = this.button.scale.x;
-            this.game.add.tween(this.button.scale).to({
-                x: initialScale * 1.11,
-                y: initialScale * 1.07,
-            }, 700, Phaser.Easing.Quadratic.InOut, true, 0).loop().yoyo(true);
-        }, this);
+
+        if(pulse)
+            // Pulse animation
+            tween.onComplete.add(function() {
+                var initialScale = this.button.scale.x;
+                this.game.add.tween(this.button.scale).to({
+                    x: initialScale * 1.11,
+                    y: initialScale * 1.07,
+                }, 700, Phaser.Easing.Quadratic.InOut, true, 0).loop().yoyo(true);
+            }, this);
 
     }
 

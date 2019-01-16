@@ -1,22 +1,23 @@
 import * as ContainerUtil from '../utils/container-util';
 import * as AnimationsUtil from '../utils/animations-util';
-
+import * as Util from '../utils/util';
 class GiftBox extends Phaser.Group {
     constructor(game) {
         super(game);
 
         this.createBackground();
         this.createForeground();
-        this.createLid();
-        // this.contents = contents;
+        // this.createShadow();
+        
         this.createContents();
-        this.createShadow();
 
-
+        this.foreground.bringToTop();
         this.stars = [];
 
 
-
+        // this.game.time.events.add(function(){
+        //     this.revealContent(500);
+        // }, this);
     }
 
     createLid() {
@@ -31,14 +32,25 @@ class GiftBox extends Phaser.Group {
         this.add(this.foreground);
 
         this.foreground.anchor.set(0.5, 1);
-        this.foreground.y = this.y + this.height / 2;
+        this.foreground.y = this.y;
+
+        this.foregroundAnimation = new Phaser.Sprite(this.game, 0, 0, 'box-animation');
+        this.add(this.foregroundAnimation);
+
+        this.foregroundAnimation.anchor.set(0.5,1);
+        this.foregroundAnimation.scale.x = this.foreground.width / this.foregroundAnimation.width * this.foregroundAnimation.scale.x;
+        this.foregroundAnimation.scale.y = this.foregroundAnimation.scale.x;
+        this.foreground.y = this.y;
+        this.foregroundAnimation.alpha = 0;
+
+        // this.foreground.alpha = 0.5;
     }
 
     createBackground() {
         this.background = new Phaser.Sprite(this.game, 0, 0, 'boxBg');
         this.add(this.background);
         this.background.anchor.set(0.5, 1);
-        this.background.y = this.y + this.height / 3;
+        this.background.y = this.y;
     }
 
     createShadow() {
@@ -140,24 +152,103 @@ class GiftBox extends Phaser.Group {
         // set a correct scale and a target Y
         this.contentsReplaceScale = ContainerUtil.getContainerHeight('gift') / this.contentsReplace.height;
 
-        this.contentsReplaceY = ContainerUtil.getYCenterWithinContainer('contents') - ContainerUtil.getYCenterWithinContainer('gift') - ContainerUtil.getContainerHeight('gift') / 2;
+        this.contentsReplaceY = ContainerUtil.getYCenterWithinContainer('contents') - ContainerUtil.getYCenterWithinContainer('gift') - ContainerUtil.getContainerHeight('gift');
         this.contentsReplace.scale.x = 0;
         this.contentsReplace.scale.y = 0;
         this.contentsReplace.angle = -45;
 
     }
 
+    animateBox(status) {
+        if(status == "replace"){
+
+            this.game.add.tween(this.foreground).to({
+                alpha: 0,
+            },10, Phaser.Easing.Linear.None, true, 0);
+
+            this.game.add.tween(this.foregroundAnimation).to({
+                alpha: 1,
+            },10, Phaser.Easing.Linear.None, true, 0);   
+        }else{
+
+            this.game.add.tween(this.foregroundAnimation).to({
+                alpha: 0,
+            },10, Phaser.Easing.Linear.None, true, 0);
+
+            this.game.add.tween(this.foreground).to({
+                alpha: 1,
+            },10, Phaser.Easing.Linear.None, true, 0);   
+        }
+    }
+
+    dropCoins(coinNum) {
+            
+        for (var i = 0; i < coinNum; i++) {
+
+            var scaleMultiplier = 1;
+            var particleName = 'coin';
+            if(coinNum > 2 && Math.random() > 0.6) {
+                particleName = 'star_particle';
+            }
+
+            var star = new Phaser.Sprite(this.game, 0, 0, particleName);
+            this.add(star);
+            this.stars.push(star);
+
+            star.anchor.set(0.5);
+
+            star.y = -this.foreground.height / 2 * 1.5;
+
+            var initialScale = star.scale.x;
+            var initialY = star.y;
+            var initialX = star.x;
+
+            var finalXMultiplier = 0.5;
+            if (this.game.global.windowWidth > this.game.global.windowHeight) {
+                finalXMultiplier = 1;
+            }
+
+            //random x distance the coin can go 
+            var distanceX = this.foreground.width * finalXMultiplier * (Math.random() > 0.5 ? 1 : -1);
+            var coinUpX = initialX + distanceX * 0.5;
+            
+            var coinFallX = initialX + distanceX * (Math.random() + 1);
+            
+            var finalYMultiplier = 2.5;
+            if (this.game.global.windowWidth > this.game.global.windowHeight) {
+                finalYMultiplier = 3;
+            }
+            var coinUpY = initialY - (1-0.55 * Math.random()) * this.foreground.height * finalYMultiplier;
+            // var finalScale = initialScale * Math.random();
+            var finalScale = initialScale;
+            var coinFallY = this.y;
+
+
+            var speed = 80;
+            
+
+            var delay = i * 30;
+            var duration = (coinFallY - coinUpY) / speed * 100;
+            
+            star.angle = 90;
+            var coinTargetAngle = 180 + 360 * Math.random();
+
+            AnimationsUtil.coinDropwithDelayCuston(this.game, star, coinUpX, coinUpY, coinFallX, coinFallY, finalScale, duration, delay, coinTargetAngle, Util.getEasing('QuadraticOut'), Util.getEasing('QuadraticIn'));
+            this.foreground.bringToTop();
+            this.foregroundAnimation.bringToTop();
+        }
+    }
 
 
     revealContent(duration) {
         
-        var smallCardRisingDuration = 500,
-            cardScaleUpDuration = 1000;
+        var smallCardRisingDuration = duration,
+            cardScaleUpDuration = duration;
         
             // scale up the clone.
         this.game.add.tween(this.contentsReplace.scale).to({
-            x: this.contentsReplaceScale * 0.1,
-            y: this.contentsReplaceScale * 0.1
+            x: this.contentsReplaceScale * 0.2,
+            y: this.contentsReplaceScale * 0.2
         }, 50, Phaser.Easing.Linear.InOut, true, 0);
             
             //tween clone up
@@ -193,6 +284,35 @@ class GiftBox extends Phaser.Group {
                     angle: [.5, 0],
                     y: [this.contentsY+10, this.contentsY],
                 }, 1000, Phaser.Easing.Linear.InOut, true, 0);
+
+                //twinkle stars 
+                this.game.time.events.loop(1000, function(){
+                    var particleName = "spark_particle";
+                    var star = new Phaser.Sprite(this.game, 0, 0, particleName);
+                    this.game.add.existing(star);
+                    var starX = ContainerUtil.getRandomXWithinContainer('contents'),
+                        starY = ContainerUtil.getRandomYWithinContainer('contents');
+                    
+                    ContainerUtil.fitInContainer(star, 'star-container', 0.5, 0.5);
+                    star.x = starX;
+                    star.y = starY;
+                    var initialScale = star.scale.x;
+                    star.alpha = 0;
+                    star.scale.x = 0;
+                    star.scale.y = 0;
+                    this.game.add.tween(star.scale).to({
+                        x: initialScale,
+                        y: initialScale
+                    },800, Phaser.Easing.Linear.None, true, 0);
+                    this.game.add.tween(star).to({
+                        alpha: [1, 0],
+                        angle: 90
+                    },800, Phaser.Easing.Linear.None, true, 0)
+                    .onComplete.add(function(){
+                        star.destroy();
+                    }, this);
+                }, this)
+
             }, this);
         }, this);
 

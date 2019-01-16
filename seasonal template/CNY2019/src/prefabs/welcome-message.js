@@ -9,16 +9,16 @@ class WelcomeMessage extends Phaser.Group {
 
 
 
-        this.fireworks = this.createFirework('firework', ['firework-left', 'firework-right']);
-        for (var i = 0; i < this.fireworks.length; i++) {
-            var  firework = this.fireworks[i];
-            var duration = 800;
-            var dly = Math.random() * 600;
-            var direction = 1;
-            this.animateFireworks(firework, duration, dly, direction);
-        }
+        // this.fireworks = this.createFirework('firework', ['firework-left', 'firework-right']);
+        // for (var i = 0; i < this.fireworks.length; i++) {
+        //     var  firework = this.fireworks[i];
+        //     var duration = 800;
+        //     var dly = Math.random() * 600;
+        //     var direction = 1;
+        //     this.animateFireworks(firework, duration, dly, direction);
+        // }
 
-        this.fxLayer = this.game.add.group();
+        // this.fxLayer = this.game.add.group();
         
         this.showMessage();
     }
@@ -26,16 +26,16 @@ class WelcomeMessage extends Phaser.Group {
     showMessage() {
 
         var message_spriteName = 'message';
-        if(this.game.global.windowWidth > this.game.global.windowHeight){
-            message_spriteName += '-landscape';
-        }else{
-            message_spriteName += '-portrait';
-        }
+        // if(this.game.global.windowWidth > this.game.global.windowHeight){
+        //     message_spriteName += '-landscape';
+        // }else{
+        //     message_spriteName += '-portrait';
+        // }
         this.message = new Phaser.Sprite(this.game, 0, 0, message_spriteName);
-        this.message.anchor.set(0.5);
+        
         this.add(this.message);
 
-        ContainerUtil.fitInContainerAnchorAtCenter(this.message, 'message');
+        ContainerUtil.fitInContainer(this.message, 'message', 0.5, 0.5);
 
         var finalScale = this.message.scale.x;
         var initialY = this.message.y;

@@ -35,8 +35,8 @@
          // this.game.load.image('firework', PiecSettings.assetsDir + 'firework.png');
          // this.game.load.image('firework-particle', PiecSettings.assetsDir + 'firework_particle.png');
          this.game.load.image('cta', PiecSettings.assetsDir + 'cta.png');
-         this.game.load.image('star-particle', PiecSettings.assetsDir + 'star_particle.png');
-         this.game.load.image('spark-particle', PiecSettings.assetsDir + 'spark_particle.png');
+         // this.game.load.image('star-particle', PiecSettings.assetsDir + 'star_particle.png');
+         // this.game.load.image('spark-particle', PiecSettings.assetsDir + 'spark_particle.png');
 
          for (var i = 0; i < PiecSettings.assets.length; i++) {
              var assetsName = PiecSettings.assets[i];

@@ -24,9 +24,9 @@ export function rndRgba(alpha) {
 }
 
 // boolean screen orientation
-export function isPortrait() {
+export function isPortrait(game) {
 
-    return this.game.global.windowHeight > this.game.global.windowWidth;
+    return game.global.windowHeight > game.global.windowWidth;
 }
 
 
@@ -123,4 +123,61 @@ export function extend( defaults, options ) {
 
 export function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+export function getEasing(easing) {
+
+    switch (easing) {
+
+        case 'Linear':
+            return Phaser.Easing.Linear.None;
+        case 'LinearOut':
+            return Phaser.Easing.Linear.Out;
+        case 'LinearIn':
+            return Phaser.Easing.Linear.In;
+        case 'BackIn':
+            return Phaser.Easing.Back.In;
+        case 'BackOut':
+            return Phaser.Easing.Back.Out;
+        case 'BounceIn':
+            return Phaser.Easing.Bounce.In;
+        case 'BounceOut':
+            return Phaser.Easing.Bounce.Out;
+        case 'CircularIn':
+            return Phaser.Easing.Circular.In;
+        case 'CircularOut':
+            return Phaser.Easing.Circular.Out;
+        case 'CubicIn':
+            return Phaser.Easing.Cubic.In;
+        case 'CubicOut':
+            return Phaser.Easing.Cubic.Out;
+        case 'ElasticIn':
+            return Phaser.Easing.Elastic.In;
+        case 'ElasticOut':
+            return Phaser.Easing.Elastic.Out;
+        case 'ExponentialIn':
+            return Phaser.Easing.Exponential.In;
+        case 'ExponentialOut':
+            return Phaser.Easing.Exponential.Out;
+        case 'QuadraticIn':
+            return Phaser.Easing.Quadratic.In;
+        case 'QuadraticOut':
+            return Phaser.Easing.Quadratic.Out;
+        case 'QuadraticInOut':
+            return Phaser.Easing.Quadratic.InOut;
+        case 'QuarticIn':
+            return Phaser.Easing.Quartic.In;
+        case 'QuarticOut':
+            return Phaser.Easing.Quartic.Out;
+        case 'QuinticIn':
+            return Phaser.Easing.Quintic.In;
+        case 'QuinticOut':
+            return Phaser.Easing.Quintic.Out;
+        case 'SinusoidalIn':
+            return Phaser.Easing.Sinusoidal.In;
+        case 'SinusoidalOut':
+            return Phaser.Easing.Sinusoidal.Out;
+    }
+
+    console.error('unkown easing value "' + easing + '"');
 }

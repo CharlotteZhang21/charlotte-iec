@@ -1,16 +1,22 @@
 import * as ContainerUtil from '../utils/container-util';
+import * as Util from '../utils/util';
 class Background extends Phaser.Group {
 	constructor(game) {
 		super(game);
 
 		this.createSky();
-		this.createGround();
+		// this.createGround();
 	}
 
 	createSky() {
-		this.sky = new Phaser.Sprite(this.game, 0, 0, 'sky');
+		this.sky = new Phaser.Sprite(this.game, 0, 0, 'bg');
 		this.add(this.sky);
-		ContainerUtil.fitInContainerHeight(this.sky, 'sky', 0, 0);
+		if(Util.isPortrait(this.game)){
+			ContainerUtil.fitInContainerHeight(this.sky, 'sky', 0.5, 0.5);	
+		}else{
+			ContainerUtil.fitInContainer(this.sky, 'sky', 0.5, 0.5);
+
+		}
 	}
 
 	createGround() {
