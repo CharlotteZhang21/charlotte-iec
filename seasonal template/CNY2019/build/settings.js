@@ -7,17 +7,15 @@ PiecSettings.version = "-";
 // }
 
 PiecSettings.assets = [
-    'sky.png',
-    'lid.png',
+    'bg.jpg',
     'box.png',
     'boxBg.png',
-    'blueTree.png',
-    'christmasTree.png',
-    'ground.png',
+    'message.png',
+    'coin.png',
     'shadow.png',
-    'santa.png',
-    'fence.png',
-
+    'star_particle.png',
+    'spark_particle.png',
+    'box-animation.png'
 ]
 
 

@@ -14,7 +14,7 @@ class Background extends Phaser.Group {
 		if(Util.isPortrait(this.game)){
 			ContainerUtil.fitInContainerHeight(this.sky, 'sky', 0.5, 0.5);	
 		}else{
-			ContainerUtil.fitInContainer(this.sky, 'sky', 0.5, 0.5);
+			ContainerUtil.fitInContainer(this.sky, 'sky', 0.5, .4);
 
 		}
 	}

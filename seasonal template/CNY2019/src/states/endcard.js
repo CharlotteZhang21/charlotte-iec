@@ -7,6 +7,7 @@ import WelcomeMessage from '../prefabs/welcome-message';
 import GiftBox from '../prefabs/box';
 
 import * as ContainerUtil from '../utils/container-util';
+import * as Util from '../utils/util';
 
 import * as CustomPngSequencesRenderer from '../utils/custom-png-sequences-renderer.js';
 
@@ -79,9 +80,13 @@ import * as CustomPngSequencesRenderer from '../utils/custom-png-sequences-rende
             piggyChangeBackDelay = 500,
             piggyStartShakingDelay = 2000;
 
+
+        var boxX = this.giftBox.x;
+
+        var pigShakingDistance = this.giftBox.width / 2 * 0.1;
         //shake the first time
         this.game.add.tween(this.giftBox).to({
-            angle: [-5, 5, 0]
+            x: [boxX + 10, boxX, boxX - 10, boxX]
         }, 200, Phaser.Easing.Quadratic.In, true, aniDelay).onComplete.add(function(){
             this.giftBox.animateBox('replace');
             this.game.time.events.add(firstPopDelay, function(){
@@ -92,21 +97,27 @@ import * as CustomPngSequencesRenderer from '../utils/custom-png-sequences-rende
             }, this);
 
         },this);
+
         //shake and tons of money + endcard fly out
-        var boxX = this.giftBox.x;
         this.game.time.events.add(piggyStartShakingDelay, function(){
             this.giftBox.animateBox('replace');
             this.game.add.tween(this.giftBox).to({
-                x: boxX + 10,
+                x: boxX + pigShakingDistance,
                 // y:[this.giftBox.y * 1.1],
                 // angle: [-5, 5],
             }, 100, Phaser.Easing.Quadratic.In, true, 0, -1).yoyo(true, 0);
 
             this.game.time.events.add(500, function(){
-                this.giftBox.dropCoins(80);
+                if(Util.isPortrait(this.game)) {
+                    this.giftBox.dropCoins(150);
+                }else{
+                    this.giftBox.dropCoins(200);
+                }
                 this.game.time.events.add(800, function(){
                     this.giftBox.revealContent(1000);
-                    this.cta.moveUp('cta-container-final', true);
+                    this.game.time.events.add(500, function(){
+                        this.cta.moveUp('cta-container-final', true);
+                    }, this);
                 }, this)
                 
 
