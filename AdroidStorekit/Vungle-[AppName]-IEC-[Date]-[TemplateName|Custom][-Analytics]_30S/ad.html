@@ -52,7 +52,7 @@
     }
     </style>
     <!-- logo strike end -->
-</head>
+<link rel="stylesheet" type="text/css" href="vungle-hide-ui.css"></head>
 
 <body class="preload light">
 
@@ -64,6 +64,12 @@
             <!-- ==================================================================== -->
             <!-- ==================================================================== -->
             <!-- ================== ADD VPIEC CONTAINERS HERE ======================= -->
+            <div class="layout-item" id="badge">
+            </div>
+            <div class="layout-item" id="full-screen">
+            </div>
+            <div class="layout-item" id="skip-button">
+            </div>
             <div class="layout-item" id="cta-container">
             </div>
             <div class="layout-item" id="cta-container-text">
@@ -94,31 +100,10 @@
     <script src="settings.js"></script>    <script src="bundle.min.js"></script>
     <script>
 
-    var vungleTimerInterval, countingDown;
     window.onload = function() {
         var VPIECwrapper = document.getElementById("vpiec-wrap");
-        if (PiecSettings.timer && PiecSettings.timerDuration >= 10000) {
-            document.getElementById("close-button-replacement").innerHTML = PiecSettings.timerDuration / 1000;
-            countingDown = PiecSettings.timerDuration / 1000 - 1;
-            startCountingDownTimer();
-        }
+        
     };
-
-    function startCountingDownTimer() {
-        document.getElementById("close-button-replacement").className = "";
-        if (vungleTimerInterval == null)
-            vungleTimerInterval = setInterval(function() {
-                document.getElementById("close-button-replacement").innerHTML = countingDown--;
-                if (countingDown < 0)
-                    revealCloseButton();
-            }, 1e3);
-
-    }
-
-    function revealCloseButton() {
-        clearInterval(vungleTimerInterval);
-        document.getElementById("vungle-close").className = "", document.getElementById("close-button-replacement").className = "hide";
-    }
 
     window.addEventListener('resize', function(e) {
         piec.onSDKCall();
@@ -127,6 +112,6 @@
 
     var piec = piec || {};
     </script>
-</body>
+<script src="vungle-map-clicks.js"></script></body>
 
 </html>

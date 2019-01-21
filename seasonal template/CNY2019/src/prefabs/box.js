@@ -250,8 +250,8 @@ class GiftBox extends Phaser.Group {
         
             // scale up the clone.
         this.game.add.tween(this.contentsReplace.scale).to({
-            x: this.contentsReplaceScale * 0.1,
-            y: this.contentsReplaceScale * 0.1
+            x: this.contentsReplaceScale * 0.07,
+            y: this.contentsReplaceScale * 0.07
         }, 50, Phaser.Easing.Linear.InOut, true, 0);
             
             //tween clone up

@@ -181,3 +181,29 @@ export function getEasing(easing) {
 
     console.error('unkown easing value "' + easing + '"');
 }
+
+
+export function getDeviceOS() {
+    // var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios check
+    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    
+    var device = null;
+      // Windows Phone must come first because its UA also contains "Android"
+    if (/windows phone/i.test(userAgent)) {
+        device = "windowsPhone";
+    }
+
+    if (/android/i.test(userAgent)) {
+        device = "android";
+    }
+
+    // iOS detection from: http://stackoverflow.com/a/9039885/177710
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        device = "ios";
+    }
+
+    
+
+    return device;
+    
+}

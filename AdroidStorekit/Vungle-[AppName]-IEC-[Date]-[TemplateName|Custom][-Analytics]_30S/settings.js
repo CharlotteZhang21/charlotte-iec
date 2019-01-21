@@ -2,7 +2,6 @@ var PiecSettings = PiecSettings || {};
 PiecSettings.version = "-";
 
 //========================== General Settings. Timer, ASOI, fonts =============================
-PiecSettings.asoi = false;                    //Remember close timer settings are now in the index.html file
 
 PiecSettings.videoOrientation = "responsive"; //Choose between "portrait", "landscape" or "responsive"
                                               //Responsive mode will expect "portrait.mp4" and "lanscape.mp4"
@@ -20,17 +19,56 @@ PiecSettings.script = {
     'opener': {
         video: 'portrait.mp4',
         from: 0,                //If no "to" field is added, the template will just play the video until the end
+        loop: false,
+        hud: [
+            { tag: 'badge', at: 0, effect: 'fadeIn'},
+            // { tag: 'cta-button', at: 0, effect:'fadeIn', triggerOnce: false },       //CTA background button example. It doesn't have text, as text is rendered separately (below)
+            // { tag: 'download-text', at: 0, show: true, triggerOnce: false },    //CTA Text. Autolocalised text example.
+            { tag: 'cta', at: 7, show: true, triggerOnce: true },               //Full Screen CTA example
+            { tag: 'skip', at: 7, effect: 'fadeIn'},
+        ],
+        interactions: [
+            { from: 7, typeOfInteraction: 'tap', htmlTag: "skip-button", onSuccess: 'googleStore' },
+        ],
+        autoPlay: {
+            script: 'googleStore',
+        }
+    },
+    'googleStore': {
+        video: 'portrait.mp4',
+        from: 0,
+        to: 0.1,
         loop: true,
         hud: [
-            { tag: 'cta-button', at: 0, effect:'fadeIn', triggerOnce: false },       //CTA background button example. It doesn't have text, as text is rendered separately (below)
-            { tag: 'download-text', at: 0, show: true, triggerOnce: false },    //CTA Text. Autolocalised text example.
-            { tag: 'cta', at: 0, show: true, triggerOnce: true },               //Full Screen CTA example
-        ],
-    },
+            { tag: 'skip', at: 0, effect: 'fadeOut'},
+            { tag: 'darkOverlay', at: 0, show: true, triggerOnce: true},
+            { tag: 'googleStoreScreenShot', at: 0, effect: 'slideInUp', triggerOnce: true},
+        ]
+    }
 };
 
 //======================================== HUD Elements ========================================
 PiecSettings.hudElements = {
+    'badge': {
+        src: 'Google_play_store.png',
+        htmlTag: 'badge',
+        anchor: { x: 0.5, y: 0.5}
+    },
+    'skip': {
+        src: 'skip.png',
+        htmlTag: 'skip-button',
+        anchor: { x: 0, y: 0}
+    },
+    'darkOverlay': {
+        src: 'darkOverlay.png',
+        htmlTag: 'full-screen',
+        anchor: { x: 0, y: 0},
+    },
+    'googleStoreScreenShot': {
+        src: 'googleStoreScreenShot.jpg',
+        htmlTag: 'full-screen',
+        anchor: { x: 0, y: 0}
+    },
     'cta': {                            //Fullscreen transparent CTA
         src: "",
         htmlTag: 'cta-container-final',

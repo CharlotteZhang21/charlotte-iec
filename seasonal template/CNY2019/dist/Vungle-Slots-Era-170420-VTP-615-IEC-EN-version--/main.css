@@ -236,7 +236,7 @@ a {
   height: 40%;
   left: 0;
   right: 0;
-  bottom: -5%; }
+  bottom: -3%; }
 
 #star-container {
   width: 10%;
@@ -286,16 +286,12 @@ a {
   max-width: 100%;
   max-height: 100%; }
 
-.badge {
-  width: 50%;
-  float: left;
-  display: inline;
-  position: initial;
-  top: initial;
-  left: initial;
-  -webkit-transform: initial;
-  transform: initial;
-  height: initial; }
+#badge {
+  width: 30%;
+  height: 10%;
+  left: 0;
+  right: 0;
+  bottom: 10%; }
 
 .ratings {
   position: relative;
@@ -370,13 +366,18 @@ a {
     width: 100%;
     top: 0;
     left: 0; }
+  #badge {
+    left: 5%;
+    right: auto;
+    width: 20%;
+    bottom: 5%; }
   #cta-container, #cta-container-final {
     width: 28%;
-    height: 0%;
+    height: 10%;
     left: auto;
     right: 4%;
     top: auto;
-    bottom: 10%; }
+    bottom: 5%; }
   #message {
     width: 40%;
     top: 25%; }
@@ -411,7 +412,11 @@ a {
     width: 50%;
     bottom: 4%; }
   #sky {
-    height: 105%; } }
+    height: 105%; }
+  #cta-container, #cta-container-final {
+    width: 40%; }
+  #badge {
+    width: 20%; } }
 
 @media all and (min-height: 768px) and (orientation: landscape) {
   #sky {
@@ -433,17 +438,14 @@ a {
   #tiles-area {
     width: 35%;
     top: 16%; }
-  #cta-container {
-    width: 33%;
-    height: 9vw;
-    bottom: 2.5%; }
+  #cta-container, #cta-container-final {
+    bottom: 8%; }
   #keyboard-area {
     bottom: 50%; }
   #hint-area {
     top: 60%; }
-  #message {
-    width: 80%;
-    height: 38vw; } }
+  #badge {
+    bottom: 10%; } }
 
 @media (min-aspect-ratio: 724 / 354) and (orientation: portrait) {
   #cta-background {

@@ -15,7 +15,9 @@ PiecSettings.assets = [
     'shadow.png',
     'star_particle.png',
     'spark_particle.png',
-    'box-animation.png'
+    'box-animation.png',
+    'android-store.png',
+    'ios-store.png'
 ]
 
 

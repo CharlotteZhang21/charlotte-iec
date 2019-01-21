@@ -76,7 +76,7 @@ a {
     height: 40%;
     left: 0;
     right: 0;
-    bottom: -5%;
+    bottom: -3%;
 }
 
 #star-container {
@@ -138,16 +138,12 @@ a {
     max-height: 100%;
 }
 
-.badge {
-    width: 50%;
-    float: left;
-    display: inline;
-    position: initial;
-    top: initial;
-    left: initial;
-    -webkit-transform: initial;
-    transform: initial;
-    height: initial;
+#badge {
+    width: 30%;
+    height: 10%;
+    left: 0;
+    right: 0;
+    bottom: 10%;
 }
 
 .ratings {
@@ -216,8 +212,9 @@ a {
     left: 0;
     right: 0;
     top: auto;
-    bottom: 5%;
+    bottom: 3%;
 }
+
 
 .hide {
     /*opacity: 0;*/
@@ -241,14 +238,20 @@ a {
         left: 0;
     }
 
+    #badge {
+        left: 5%;
+        right: auto;
+        width: 20%;
+        bottom: 5%;
+    }
 
     #cta-container, #cta-container-final {
         width: 28%;
-        height: 0%;
+        height: 10%;
         left: auto;
         right: 4%;
         top: auto;
-        bottom: 10%;
+        bottom: 5%;
     }
 
 
@@ -304,6 +307,12 @@ a {
     #sky {
         height: 105%;
     }
+    #cta-container, #cta-container-final {
+        width: 40%;
+    }
+    #badge {
+        width: 20%;
+    }
 }
 
 @media all and (min-height: 768px) and (orientation: landscape) {
@@ -319,6 +328,7 @@ a {
     #gift {
         bottom: -10%;
     }
+
 }
 
 
@@ -339,10 +349,8 @@ a {
         width: 35%;
         top: 16%;
     }
-    #cta-container {
-        width: 33%;
-        height: 9vw;
-        bottom: 2.5%;
+    #cta-container, #cta-container-final {
+        bottom: 8%;
     }
     #keyboard-area {
         bottom: 50%;
@@ -350,10 +358,14 @@ a {
     #hint-area {
         top: 60%;
     }
-    #message {
-        width: 80%;
-        height: 38vw;
+
+    #badge {
+        bottom: 10%;   
     }
+    // #message {
+    //     width: 80%;
+    //     height: 38vw;
+    // }
 }
 
 @media (min-aspect-ratio: 724/354) and (orientation: portrait) {
@@ -366,4 +378,5 @@ a {
     #cta-container {
         bottom: 3.25%;
     }
+
 }

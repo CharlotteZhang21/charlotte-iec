@@ -41,9 +41,13 @@ import * as CustomPngSequencesRenderer from '../utils/custom-png-sequences-rende
         this.game.add.existing(this.giftBox);
         ContainerUtil.fitInContainer(this.giftBox, 'gift', 0.5, 0.5);
         
-
-
-
+        //Create app store badge
+        var badgeName = Util.getDeviceOS() !=null? Util.getDeviceOS() + '-store' : 'ios-store';
+        this.appStore = new Phaser.Sprite(this.game, 0, 0, badgeName);
+        this.game.add.existing(this.appStore);
+        ContainerUtil.fitInContainer(this.appStore, 'badge');
+        if(Util.isPortrait(this.game))
+            this.appStore.alpha = 0;
 
 
 
@@ -116,6 +120,9 @@ import * as CustomPngSequencesRenderer from '../utils/custom-png-sequences-rende
                 this.game.time.events.add(800, function(){
                     this.giftBox.revealContent(1000);
                     this.game.time.events.add(500, function(){
+                        if(Util.isPortrait(this.game))
+                            this.game.add.tween(this.appStore).to({alpha: 0.8}, 500, Phaser.Easing.Linear.None, true, 500);
+                        
                         this.cta.moveUp('cta-container-final', true);
                     }, this);
                 }, this)

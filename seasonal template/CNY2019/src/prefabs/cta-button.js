@@ -26,11 +26,11 @@ class CtaButton extends Phaser.Group {
     }
 
     moveUp(containerName, pulse = true) {
-
-        // if(containerName != null)
-            var tween = this.game.add.tween(this.button).to({
-                y: ContainerUtil.getYCenterWithinContainer(containerName)
-            }, 1000, Phaser.Easing.Quadratic.InOut, true, 0);
+        
+        var tween = this.game.add.tween(this.button).to({
+            x: ContainerUtil.getXCenterWithinContainer(containerName),
+            y: ContainerUtil.getYCenterWithinContainer(containerName)
+        }, 1000, Phaser.Easing.Quadratic.InOut, true, 0);
         
 
         if(pulse)
