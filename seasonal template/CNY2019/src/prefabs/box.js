@@ -2,7 +2,7 @@ import * as ContainerUtil from '../utils/container-util';
 import * as AnimationsUtil from '../utils/animations-util';
 import * as Util from '../utils/util';
 class GiftBox extends Phaser.Group {
-    constructor(game) {
+    constructor(game, audioController) {
         super(game);
 
         this.createBackground();
@@ -10,6 +10,8 @@ class GiftBox extends Phaser.Group {
         this.createShadow();
         
         this.createContents();
+
+        this.audio = audioController;
 
         this.foreground.bringToTop();
         this.stars = [];
@@ -184,7 +186,27 @@ class GiftBox extends Phaser.Group {
     }
 
     dropCoins(coinNum) {
-            
+
+        var audioSrc = coinNum == 1? PiecSettings.assetsDir+'coin-falling.wav' : PiecSettings.assetsDir+'many-coins-falling.mp3';
+        var audioKeyName = coinNum == 1? 'coin-falling' : 'many-coins-falling';
+        var audioArgs = {
+            loop: false
+        }
+        if(coinNum==1){
+            this.audio.play('whooshe', PiecSettings.assetsDir + 'Whooshes_27.wav', {loop: false});
+            this.game.time.events.add(1000, function(){
+                this.audio.mute('whooshe');
+                this.audio.play(audioKeyName, audioSrc, audioArgs);
+            }, this);
+        }else {
+            this.audio.play(audioKeyName, audioSrc, audioArgs);
+
+            this.game.time.events.add(4000, function(){
+                this.audio.mute(audioKeyName);
+            },this)
+        }
+        
+
         for (var i = 0; i < coinNum; i++) {
 
             var scaleMultiplier = 1;

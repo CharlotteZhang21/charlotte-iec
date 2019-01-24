@@ -3,6 +3,8 @@ import DarkOverlay from '../prefabs/dark-overlay';
 import CtaButton from '../prefabs/cta-button';
 import Background from '../prefabs/background';
 
+import AudioContoller from '../prefabs/audio-controller';
+
 import WelcomeMessage from '../prefabs/welcome-message';
 import GiftBox from '../prefabs/box';
 
@@ -37,9 +39,14 @@ import * as CustomPngSequencesRenderer from '../utils/custom-png-sequences-rende
         this.message = new WelcomeMessage(this.game);
         this.game.add.existing(this.message);
 
-        this.giftBox = new GiftBox(this.game, this.card);
+        this.audioController = new AudioContoller();
+
+        this.giftBox = new GiftBox(this.game, this.audioController);
         this.game.add.existing(this.giftBox);
         ContainerUtil.fitInContainer(this.giftBox, 'gift', 0.5, 0.5);
+
+        
+
         
         //Create app store badge
         var badgeName = Util.getDeviceOS() !=null? Util.getDeviceOS() + '-store' : 'ios-store';

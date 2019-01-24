@@ -1,0 +1,154 @@
+<!-- ==================================================================== -->
+<!-- ========================= READ THIS FIRST ========================== -->
+<!-- This is the index.html file.
+
+     The only thing you need to tweak here is the containers.
+     Containers will later be used by the PIEC overlay to know where to place things (HUD elements, buttons, etc.).
+
+     A container will look like:
+
+     <div class="layout-item" id="name-of-your-container"></div>
+
+     Don't forget to style it inside main.css!!!
+
+<!   ==================================================================== -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0, user-scalable=no" />
+    <title>Vungle Endcard</title>
+    <link rel="stylesheet" href="main.css">
+    <style>
+    @font-face {
+        font-family: "vungle-fonticon";
+        src: url("vungle-fonticon.eot");
+        src: url("vungle-fonticon.eot?#iefix") format("embedded-opentype"), url("vungle-fonticon.woff") format("woff"), url("vungle-fonticon.ttf") format("truetype"), url("vungle-fonticon.svg#vungle-fonticon") format("svg");
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'Toon Blast';
+        src: url('Toon-Blast-Font.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    /* Generic font for autolocalised texts! */
+    @font-face {
+        font-family: 'Noto Sans';
+        src: url('NotoSans-ExtraBold.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    </style>
+    <!-- logo strike start -->
+    <style>
+    #vungle-footer {
+        display: none !important;
+    }
+    </style>
+    <!-- logo strike end -->
+</head>
+
+<body class="preload light">
+    <div id="wrap">
+        <video preload playsinline muted autoplay id='videoBg'></video>
+        <!-- VPIEC WRAPPER -->
+        <!-- select aspect ratio from '16-9', '4-3'-->
+        <div id="vpiec-wrap">
+            <!-- ==================================================================== -->
+            <!-- ==================================================================== -->
+            <!-- ================== ADD VPIEC CONTAINERS HERE ======================= -->
+            <div class="layout-item" id="cta-rectangle"></div>
+
+            <div class="layout-item" id="cta-text"></div>            
+            
+            <div class="layout-item" id="cta-full-screen"></div>
+
+            <div class="layout-item" id="hand"></div>
+
+            <div class="layout-item" id="tutorial-text"></div>
+
+            <div class="layout-item" id="heart-counter"></div>
+
+            <div class="layout-item" id="heart-counter"></div>
+
+            <div class="layout-item" id="tooltip"></div>
+
+            <div class="layout-item" id="try-again"></div>
+
+            <div class="layout-item" id="full-screen"></div>
+            
+            <div class="layout-item" id="heart-counter"></div>
+
+            <div class="layout-item" id="dock"></div>
+
+            <div class="layout-item" id="target-container"></div>
+
+            
+            <!-- ================== END VPIEC CONTAINERS HERE ======================= -->
+            <!-- ==================================================================== -->
+            <!-- ==================================================================== -->
+        </div>
+        <!-- End of VPIEC WRAPPER -->
+        <div id="game">
+        </div>
+    </div>
+    <!-- IEC Creative ends here -->
+    <!-- phaser requires fonts to be preloaded before they can be used "in game" -->
+    <!-- note: you can add more fonts below -->
+    <div class="preload-font" style="font-family: Toon Blast;">.</div>
+    <div class="preload-font" style="font-family: Noto Sans;">.</div>    <script src="phaser.min.js"></script>
+    <script src="settings.js"></script>    <script src="bundle.min.js"></script>
+    <script>
+    // call out to vungle SDK
+    function closeAndMute() {
+        piec.onSDKCall();
+        setTimeout(function() {
+            doSomething('close');
+        }, 100);
+    }
+
+    function doSomething(s) {
+        return actionClicked(s);
+    }
+
+    var vungleTimerInterval, countingDown;
+    window.onload = function() {
+        var VPIECwrapper = document.getElementById("vpiec-wrap");
+        if (PiecSettings.timer && PiecSettings.timerDuration >= 10000) {
+            document.getElementById("close-button-replacement").innerHTML = PiecSettings.timerDuration / 1000;
+            countingDown = PiecSettings.timerDuration / 1000 - 1;
+            startCountingDownTimer();
+        }
+    };
+
+    function startCountingDownTimer() {
+        document.getElementById("close-button-replacement").className = "";
+        if (vungleTimerInterval == null)
+            vungleTimerInterval = setInterval(function() {
+                document.getElementById("close-button-replacement").innerHTML = countingDown--;
+                if (countingDown < 0)
+                    revealCloseButton();
+            }, 1e3);
+
+    }
+
+    function revealCloseButton() {
+        clearInterval(vungleTimerInterval);
+        document.getElementById("vungle-close").className = "", document.getElementById("close-button-replacement").className = "hide";
+    }
+
+    window.addEventListener('resize', function(e) {
+        piec.onSDKCall();
+        piec.onResize();
+    });
+
+    var piec = piec || {};
+    </script>
+</body>
+
+</html>

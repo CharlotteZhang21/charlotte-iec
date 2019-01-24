@@ -1,0 +1,155 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-width: 100% auto;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-color: black;
+    /*background-image: url(../assets/bg.jpg);*/
+}
+
+canvas {
+    display: block;
+    cursor: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+#cta-text {
+    width: 60%;
+    height: 7%;
+    right: 0;
+    left: 0;
+    bottom: 0%;
+}
+#cta-rectangle {
+    width: 80%;
+    height: 10%;
+    right: 0;
+    left: 0;
+    bottom: 5.5%;
+}
+
+#cta-full-screen{
+    width: 100%;
+    height: 90%;
+    top: 10%;
+}
+
+#dock {
+    width: 100%;
+    height: 20%;
+    left: 0;
+    top: 70%;
+}
+
+#target {
+    width: 25%;
+    height: 20%;
+    left: 5%;
+    top: 70%;
+}
+
+.destination-container {
+    width: 30%;
+    height: 10%;
+    left: 0;
+    right: 0;
+    top: 20%;
+}
+#destination-1 {
+    top: 30%;
+}
+
+#symbol-container {
+    width: 20%;
+    height: 10%;
+    
+}
+
+#heart {
+    width: 10%;
+    height: 10%;
+}
+
+/*
+ * ==========================================================================================================
+ * VPIEC Basic Elements - NO NEED TO TWEAK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
+
+
+
+#wrap {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    background-color: #061628;
+}
+
+#vpiec-wrap {
+    position: absolute;
+    margin: auto;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.layout-item {
+    position: absolute;
+    margin: auto;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.layout-item img {
+    width: 100%;
+}
+
+#game {
+    position: absolute;
+    margin: auto;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    z-index: 10;
+}
+
+#videoBg {
+    width: 100%;
+    height: 100%;
+    transform-origin: left top;
+    overflow-x: hidden;
+    position: absolute;
+}
+
+/*
+ * ==========================================================================================================
+ */
+@media all and (orientation: landscape) {}
+
+@media all and (min-width: 768px) and (orientation: portrait) {}
+
+@media all and (min-height: 768px) and (orientation: landscape) {}
+
+
+
+/* iphone X */
+
+@media (min-aspect-ratio: 724/354) and (orientation: landscape) {}
