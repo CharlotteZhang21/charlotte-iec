@@ -30,7 +30,7 @@ PiecSettings.script = {
         interactions: [
             { from: 7, typeOfInteraction: 'tap', htmlTag: "skip-button", onSuccess: 'googleStore' },
         ],
-        autoPlay: {
+        autoplay: {
             script: 'googleStore',
         }
     },

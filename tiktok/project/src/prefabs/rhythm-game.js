@@ -1,6 +1,7 @@
 import * as ContainerUtil from '../utils/container-util';
 import * as CustomPngSequenceRender from '../utils/custom-png-sequences-renderer';
 import * as ParticlesUtil from '../utils/particles-util';
+import CustomText from '../prefabs/custom-text';
 class RhythmGame extends Phaser.Group {
     /*
     args:
@@ -32,24 +33,23 @@ class RhythmGame extends Phaser.Group {
 
         this.interactDuration = this.gameDuration - this.initialTimeMargin -this.endTimeMargin;
 
-        // console.log('this.interactDuration duration: '+ this.interactDuration);
-        console.log('initialTimeMargin duration: '+ this.initialTimeMargin);
-        console.log('endTimeMargin duration: '+ this.endTimeMargin);
-
         this.failAni = args.failAni !== undefined ? args.failAni : null;
 
         this.successAni = args.successAni !== undefined ? args.successAni : null;
 
         this.handGestureController = handGestureController;
-
-
-        this.failed = false;
         
         this.initialised = false;
 
-        this.perfectTiming = false;
+        this.clickTiming = 'bad';
 
-        this.result = 'missed' // the result of the tapping timing
+
+        this.particleNum = {
+            "good": 5,
+            "perfect": 10,
+        }
+
+        this.result = 'miss' // the result of the tapping timing
 
         this.init();
         // this.createSymbol(args.src, args.htmlTag, args.isAnimation, args.amount, args.direction);
@@ -60,13 +60,18 @@ class RhythmGame extends Phaser.Group {
     init() {
         if (!this.initialised) {
             this.createDock();
-            this.createSymbol();
+            
+            this.symbol = this.createSymbol();
+            
             this.createInteractiveArea();
-            // this.createFollowFinger();
-            // if (this.args.tutorial !== undefined && this.args.tutorial.tagName !== undefined) {
-            //     this.createTutorial();
-            // }
             this.initialised = true;
+            
+            this.add(this.symbol);
+
+        
+            this.symbol.bringToTop();
+
+            this.fly();
         }
     }
 
@@ -86,11 +91,26 @@ class RhythmGame extends Phaser.Group {
 
         //control the interaction timing
         this.game.time.events.add(this.initialTimeMargin, function(){
-            this.perfectTiming = true;
-            console.log('perfectTime start');
-            this.game.time.events.add(this.interactDuration, function(){
-                this.perfectTiming = false;
-                console.log('perfectTime end');
+            // console.log('good time');
+            this.clickTiming = 'good';
+            this.game.time.events.add(this.interactDuration / 2, function(){
+                // console.log('perfect time');
+                this.clickTiming = 'perfect';
+                this.game.time.events.add(this.interactDuration / 2, function(){
+                    // console.log('click time out');
+                    this.clickTiming = 'bad';
+
+                    // this.game.time.events.add(50, function(){
+
+                        //when it times out can show the result
+                        this.feedbackText.alpha = 1;
+                        
+                        this.animateText();
+
+                    // }, this);
+                    
+
+                }, this);
             }, this);
         }, this);
         
@@ -130,25 +150,48 @@ class RhythmGame extends Phaser.Group {
         var audioIndex = 0;
 
         this.button.inputEnabled = true;
+
         this.button.input.useHandCursor = true;
+
         this.button.events.onInputDown.add(function() {
-            if(this.perfectTiming)
-                this.result = 'perfect';
 
+            // this.feedbackText.alpha = 1;
+            
+            switch(this.clickTiming){
+                case 'bad': 
+            
+                    this.result = 'miss';
+            
+                    break;
+            
+                case 'good':
+            
+                    this.result = 'good';
 
-            // console.log(this.result);
-            // this.increasePower(this.valueIncrementPerInteraction);
-            // if (this.args.particles !== undefined && this.args.particles.src !== undefined && this.args.particles.htmlTag !== undefined && this.args.particles.src.length > 0) {
+                    this.button.inputEnabled = false;
 
-            //     if (this.args.particles.effect !== undefined && !this.poweredUp) {
-            //         this.playEffect(this.args.particles.effect);
-            //     }
+                    this.feedbackText.text = this.result;
 
-            //     if (this.args.sounds !== undefined && this.args.sounds.interact !== undefined) {
-            //         this.audioController.playAudio(this.args.sounds.interact + "_" + audioIndex, PiecSettings.assetsDir + this.args.sounds.interact);
-            //         audioIndex++;
-            //     }
-            // }
+                    // this.animateText();
+
+                    break;
+                case 'perfect':
+
+                    this.result = 'perfect';
+
+                    this.button.inputEnabled = false;
+
+                    this.feedbackText.text = this.result;
+
+                    // this.animateText();
+
+                    break;
+
+                default:
+
+                    this.result = 'miss';
+            }
+
         }, this);
     }
 
@@ -169,44 +212,27 @@ class RhythmGame extends Phaser.Group {
           
             
         if (this.symbolArgs.isAnimation) {
+        
             var symbol = CustomPngSequenceRender.playPngSequence(this.game, this.symbolArgs.src, this);
-            // this.add(symbol);
-        } else {
-            var symbol = new Phaser.Sprite(this.game, 0, 0, this.symbolArgs.src);
+
             ContainerUtil.fitInContainer(symbol, this.symbolArgs.htmlTag, 0.5, 0.5);
+
+        } else {
+        
+            var symbol = new Phaser.Sprite(this.game, 0, 0, this.symbolArgs.src);
+        
+            ContainerUtil.fitInContainer(symbol, this.symbolArgs.htmlTag, 0.5, 0.5);
+        
             this.add(symbol);
 
         }
         symbol.anchor.set(0.5);
 
-        // console.log(this.containerHeight);
-        // symbol.scale.y = this.containerHeight / symbol.height / amount;
-        // symbol.scale.x = symbol.scale.y;
-
-        // symbol.x = 0;
         symbol.x = this.containerWidth + Math.abs(symbol.width) / 2 + this.x;
         
         symbol.y = ContainerUtil.getYCenterWithinContainer(this.containerName);
         
-        // switch (direction) {
-        //     case 'inverse':
-        //         symbol.scale.x *= -1;
-        //         break;
-        //     case 'random':
-        //         symbol.scale.x *= Math.floor(Match.random() * 2 - 1); //generates -1 and 1 randomly
-        //         break;
-        //     case 'same':
-        //         symbol.scale.x *= 1;
-        //         break;
-        //     default:
-        //         console.log('please set the symbol direction');
-
-        // }
-        // this.game.bringToTop(this.symbol);
-        this.symbol = symbol;
-        this.symbol.bringToTop();
-        this.fly();
-
+        return symbol;
 
     }
 
@@ -221,7 +247,9 @@ class RhythmGame extends Phaser.Group {
             }
         }, this);
 
-    }//this.dock is the counter in the setting
+    }
+
+    //this.dock is the counter in the setting
     createDock() {
         
         var background = new Phaser.Sprite(this.game, 0, 0, this.dockArgs.backgroundSrc);
@@ -230,16 +258,25 @@ class RhythmGame extends Phaser.Group {
         var target = new Phaser.Sprite(this.game, 0, 0, this.dockArgs.iconSrc);
 
         ContainerUtil.fitInContainer(target, this.dockArgs.targetTag, 0.5, 0.5);
-   
+
         this.add(background);
         this.add(target);
+
+
+        if(this.symbolArgs.textFeedback !== undefined){
+
+            this.generateFeedbackText(this.result);
+
+            this.feedbackText.alpha = 0;
+
+        }
     }
 
     fly(){
 
         var targetX = ContainerUtil.getXCenterWithinContainer(this.dockArgs.targetTag);
 
-        var scale = this.symbol.scale.x;
+        var textOriginalStyle = this.symbol.scale.x;
     
         this.game.add.tween(this.symbol).to({
             x: targetX
@@ -247,41 +284,159 @@ class RhythmGame extends Phaser.Group {
         .onComplete.add(function() {
             
             this.game.add.tween(this.symbol.scale).to({
-                x: [scale * 1.1, 0],
-                y: [scale * 1.1, 0],
+                x: [textOriginalStyle * 1.1, 0],
+                y: [textOriginalStyle * 1.1, 0],
             }, 100, Phaser.Easing.Linear.Out, true, 0)
             .onComplete.add(function(){
-                console.log(this.result);
-    
-                this.symbol.sendToBack();
-                this.symbol.scale.x = scale;
-                this.symbol.scale.y = scale;
-                this.symbol.alpha = 0.5;
 
-                var flyToContainerX = ContainerUtil.getXCenterWithinContainer(this.dockArgs.iconFlyToContainer);
-                var flyToContainerY = ContainerUtil.getYCenterWithinContainer(this.dockArgs.iconFlyToContainer);
-                this.game.add.tween(this.symbol).to({
-                    x: flyToContainerX,
-                    y: flyToContainerY,
-                }, this.endTimeMargin, Phaser.Easing.Linear.Out, true, 0);
-                this.game.add.tween(this.symbol.scale).to({
-                    x: scale * 0.4,
-                    y: scale * 0.4,
-                }, this.endTimeMargin, Phaser.Easing.Linear.Out, true, 0);
+                var symbolClone = this.createSymbol();
+                this.game.add.existing(symbolClone);
+                symbolClone.x = this.symbol.world.x;
+                symbolClone.y = this.symbol.world.y;
+                this.symbolFlyToDestination(symbolClone, textOriginalStyle);
+                this.symbol.destroy();
+                //check the result and fire the success or fail event
+                if(this.result !== 'miss'){
 
-                if(this.result == 'perfect')
-                    if(this.symbolArgs.successEffect!==undefined){
+                    if(this.symbolArgs.successEffect !== undefined)
                         this.playEffect(this.symbolArgs.successEffect);
-                        this.onSuccess.dispatch(this);
+                    
+                    if (typeof this.successConsequences === 'object' || this.successConsequences instanceof Object){
+                        this.successConsequences = this.symbolArgs.successConsequences[this.result];
+                    }
+                    
+                    this.onSuccess.dispatch(this);
+
+                    this.feedbackText.alpha = 1;
+
+                    this.animateText();
+                }else {
+                    // this.target
+                    if(this.symbolArgs.failEffect !== undefined){
+                        this.playEffect(this.symbolArgs.failEffect);
                     }
 
+                    if (typeof this.failConsequences === 'object' || this.failConsequences instanceof Object){
+                        this.failConsequences = this.symbolArgs.failConsequences[this.result];
+                    }
+                    
+                    this.onFail.dispatch(this);
+                }
+
             }, this)
+                // }
         }, this);
 
     }
 
-    flyUpSymbol(){
+    symbolFlyToDestination(symbol, textOriginalStyle){
+
+        symbol.sendToBack();
+        symbol.scale.x = textOriginalStyle;
+        symbol.scale.y = textOriginalStyle;
+
+        var flyToContainerX = ContainerUtil.getXCenterWithinContainer(this.dockArgs.iconFlyToContainer);
+        var flyToContainerY = ContainerUtil.getYCenterWithinContainer(this.dockArgs.iconFlyToContainer);
+        this.game.add.tween(symbol).to({
+            x: flyToContainerX,
+            y: flyToContainerY,
+        // }, this.endTimeMargin, Phaser.Easing.Linear.Out, true, 0);
+        }, this.endTimeMargin, Phaser.Easing.Linear.Out, true, 0);
+        this.game.add.tween(symbol.scale).to({
+            x: textOriginalStyle * 0.2,
+            y: textOriginalStyle * 0.2,
+        }, this.endTimeMargin, Phaser.Easing.Linear.Out, true, 0).onComplete.add(function(){
+            symbol.alpha = 0;
+            symbol.destroy();
+        },this);
     }
+
+    generateFeedbackText(text) {
+        text = text.toUpperCase();
+        var fontWeight = 'bold',
+            fontSize,
+            fontFamily = PiecSettings.fontFamily,
+            fontColor = [PiecSettings.fontColor],
+            fontStroke = null,
+            strokeThickness = null,
+            fontShadow = null,
+            anchorX = 0.5,
+            anchorY = 0.5;
+
+        if (this.symbolArgs.textFeedback.fontStyle != undefined) {
+            var fontStyle = this.symbolArgs.textFeedback.fontStyle;
+
+            fontWeight = fontStyle.fontWeight;
+            
+            fontSize = ContainerUtil.getContainerHeight(this.symbolArgs.textFeedback.container);
+            
+            fontFamily = fontStyle.fontFamily;
+            fontColor = fontStyle.color;
+            fontStroke = fontStyle.stroke || null;
+            strokeThickness = fontStyle.strokeThickness || null;
+            fontShadow = fontStyle.shadow || null;
+
+            anchorX = fontStyle.anchor.x;
+            anchorY = fontStyle.anchor.y;
+
+        }
+
+
+        var style = {
+            font: fontWeight + " " + fontSize + "px " + (fontFamily + "," + PiecSettings.genericFontFamily),
+            align: "center",
+        };
+
+
+        this.feedbackText = new Phaser.Text(this.game, 0, 0, text, style);
+        
+        ContainerUtil.fitInContainer(this.feedbackText, this.symbolArgs.textFeedback.container, 0.5, 0.5);
+        this.add(this.feedbackText);
+        
+        this.feedbackText.anchor.set(anchorX, anchorY);
+        
+        this.feedbackText.align = 'center';
+        
+        this.feedbackText.initialScale = this.feedbackText.scale.x;
+        this.feedbackText.fill = "black";
+
+
+        var gradient = this.feedbackText.context.createLinearGradient(0, 0, 0, this.height);
+
+        if (fontColor !== undefined && fontColor.length > 0) {
+            for (var i = 0; i < fontColor.length; i++) {
+                var index = i / fontColor.length;
+                gradient.addColorStop(index, fontColor[i]);
+            }
+        }
+
+
+        this.feedbackText.fill = gradient;
+
+
+        if (fontStroke !== null)
+            this.feedbackText.stroke = fontStroke;
+        if (strokeThickness !== undefined)
+            this.feedbackText.strokeThickness = strokeThickness;
+
+        if (fontShadow !== null) {
+            var shadow = fontShadow;
+            this.feedbackText.setShadow(shadow.x, shadow.y, shadow.color, shadow.blur);
+        }
+
+    }
+
+    animateText(){
+
+        var targetY = ContainerUtil.getContainerY(this.dockArgs.iconFlyToContainer);
+        
+        this.game.add.tween(this.feedbackText).to({
+            // y: targetY,
+            alpha: 0
+        }, 800, Phaser.Easing.Linear.None, true, 0);
+
+    }
+
 
     hide() {
         if (this.alpha > 0)
@@ -304,6 +459,9 @@ class RhythmGame extends Phaser.Group {
 
         if (this.game != null) {
             switch (effect) {
+                case 'explodeInCircle': 
+                    ParticlesUtil.particleExplosion(this.game, this.symbolArgs.particles.src, this.symbolArgs.particles.htmlTag, this.dockArgs.iconFlyToContainer, inputX, inputY, this.particleNum[this.result]);
+                    break;
                 case "burst":
                     ParticlesUtil.particleBurst(this.game, this.symbolArgs.particles.src, this.symbolArgs.particles.htmlTag, inputX, inputY, 10);
                     break;

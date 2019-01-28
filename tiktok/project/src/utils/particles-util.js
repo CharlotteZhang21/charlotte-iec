@@ -225,6 +225,60 @@ export function particleSpawn(game, particlesSrc, particleContainer, x, y, amoun
     return particles;
 }
 
+export function particleExplosion(game, particlesSrc, particleContainer, parentContainer, x, y, amount, angleRange = 360) {
+    var particles = [];
+
+    var radius = ContainerUtil.getContainerWidth(parentContainer) / 2;
+
+    var angle = 0;
+    var step = (2 * Math.PI ) / amount;
+    // var amount = 2;
+
+    // var step = 360 / amount;
+    console.log(" step === " + step);
+
+
+    for (var i = 0; i < amount; i++) {
+
+        var particle = getRandomParticleFromArray(game, particlesSrc);
+        
+        ContainerUtil.fitInContainer(particle, particleContainer, 0.5, 0.5);
+        
+        
+        particle.angle =  90 + 360 / amount * i;
+ 
+        particles.push(particle);
+        
+        game.add.existing(particle);
+        
+        particle.x = x;
+        particle.y = y;
+
+        var particleScale = particle.scale.x;
+
+        var targetX = particle.x + radius * Math.cos(angle),
+            targetY = particle.y + radius * Math.sin(angle);
+
+        angle += step;
+
+        game.add.tween(particle).to({
+            x: targetX,
+            y: targetY,
+            // angle: angle,
+        }, 400, Phaser.Easing.Quadratic.Out, true, 0);
+
+        particle.scale.x = particleScale * 0.1;
+
+        game.add.tween(particle.scale).to({
+            x: [particleScale, 0],
+            y: [particleScale, 0],
+        }, 400, Phaser.Easing.Quadratic.Out, true, 0);
+
+        
+    }
+    return particles;
+}
+
 function particleSpawnSingle(game, particlesSrc, particleContainer, x, y, angleRange = 360) {
     var particle = getRandomParticleFromArray(game, particlesSrc);
 
@@ -246,3 +300,4 @@ function particleSpawnSingle(game, particlesSrc, particleContainer, x, y, angleR
 
     return particle;
 }
+

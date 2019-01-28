@@ -36,7 +36,7 @@ export function playPngSequence(game, sequenceKey, layer) {
     var sprite = game.add.sprite(0, 0, pngSequenceName);
 
     // if (containerName != null)
-    //     ContainerUtil.animToDom(sprite, containerName);
+    //     ContainerUtil.[animToDom](sprite, containerName);
     sprite.animations.add("animation");
     // sprite.anchor.set(0,0);
     sprite.alpha = 0;

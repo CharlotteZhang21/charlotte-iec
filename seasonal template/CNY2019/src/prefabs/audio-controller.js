@@ -35,11 +35,12 @@ class AudioController {
             // sound.volume = 0;
             var fadeAudio = setInterval(function () {
                 // Only fade if past the fade out point or not at zero already
-                if (sound.volume-0.1 > 0.0) {
+                if (sound.volume-0. > 0.0) {
                     sound.volume -= 0.1;
                 }
                 // When volume at zero stop all the intervalling
                 else {
+                    console.log('here');
                     clearInterval(fadeAudio);
                     _this.mute(sound);
                 }

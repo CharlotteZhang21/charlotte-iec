@@ -250,27 +250,29 @@ class Counter extends Phaser.Group {
         this.counterIcon = new Phaser.Sprite(this.game, 0, 0, this.args.iconSrc);
         this.add(this.counterIcon);
 
+        var iconScale = this.args.iconScale !== undefined ? this.args.iconScale : 0.7;
+        this.counterIcon.anchor.set(0.5, 0.5);
         //perhaps needs to change .7 to a value that we can tweak
         if (this.args.htmlTagIcon !== undefined) {
             ContainerUtil.fitInContainer(this.counterIcon, this.args.htmlTagIcon, .5, .5);
-            // this.counterIcon.x -= ContainerUtil.getContainerX(this.args.htmlTag);
-            // this.counterIcon.y -= ContainerUtil.getContainerY(this.args.htmlTag);
+            
             this.counterIcon.x = ContainerUtil.getContainerX(this.args.htmlTagIcon) - ContainerUtil.getContainerX(this.args.htmlTag) -
                 this.counterBackground.width / 2 + this.counterIcon.width / 2;
             this.counterIcon.y = ContainerUtil.getContainerY(this.args.htmlTagIcon) - ContainerUtil.getContainerY(this.args.htmlTag) -
                 this.counterBackground.height / 2 + this.counterIcon.height / 2;
         } else {
             if (iconPos == 'contain') {
-                this.counterIcon.scale.x = this.counterBackground.height * .7 / this.counterIcon.height;
+                this.counterIcon.scale.x = this.counterBackground.height * iconScale / this.counterIcon.height;
                 this.counterIcon.x = this.counterBackground.x + this.counterIcon.width;
             } else if (iconPos == 'outside') {
 
-                this.counterIcon.scale.x = this.counterBackground.height * .7 / this.counterIcon.height;
+                this.counterIcon.scale.x = this.counterBackground.height * iconScale / this.counterIcon.height;
                 this.counterIcon.x = this.counterBackground.x - this.counterIcon.width;
 
             }
             this.counterIcon.scale.y = this.counterIcon.scale.x;
             this.counterIcon.y = this.counterBackground.y + this.counterBackground.height / 2;
+            console.log(this.counterBackground.height);
         }
 
 

@@ -213,9 +213,10 @@ class VideoPlayableInteractiveElementsController {
                     args);
                 this.initMinigame(interaction, minigame, i, variablesController);
             } else if (this.typeOfInteractionIsARhythmGame(interaction.typeOfInteraction)) {
-                // console.log('rhythm-minigame');
+                
                 var gameScript = PiecSettings.minigames[interaction.typeOfInteraction];
-                var args = { 'initialTimeMargin': gameScript.initialTimeMargin, 'endTimeMargin': gameScript.endTimeMargin, 'gameDuration': duration, 'container': interaction.htmlTag };
+                
+                var args = { 'initialTimeMargin': gameScript.initialTimeMargin, 'endTimeMargin': gameScript.endTimeMargin, 'gameDuration': duration, 'container': interaction.htmlTag, successConsequences: interaction.successConsequences };
                 
                 interactionDuration -= (gameScript.initialTimeMargin + gameScript.endTimeMargin);
                 interactionDelay += gameScript.initialTimeMargin;
