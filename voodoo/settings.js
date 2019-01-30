@@ -1,76 +1,74 @@
 var PiecSettings = PiecSettings || {};
 PiecSettings.version = "-";
 
-//========================== General Settings. Timer, ASOI, fonts =============================
+//========================== General Settings. Fonts, Responsiveness, Orientation locking =============================
 
-PiecSettings.videoOrientation = "responsive"; //Choose between "portrait", "landscape" or "responsive"
+PiecSettings.videoOrientation = "portrait"; //Choose between "portrait", "landscape" or "responsive"
                                               //Responsive mode will expect "portrait.mp4" and "lanscape.mp4"
-PiecSettings.orientationLock = "none";        //Choose between "portrait", "landscape" and "none"
+PiecSettings.orientationLock = "portrait";        //Choose between "portrait", "landscape" and "none"
                                               //For VEC, use "responsive" and "none"
 
 PiecSettings.fontColor = "#fff";
 // PiecSettings.fontFamily = "Agu Sans"; //Make sure that this font is on the CSS and that there is a div in the ad.html file that uses it. (preload-font div)
 PiecSettings.genericFontFamily = "Noto Sans"; //This font will be used when the font above has no characters for a specific language
-
 // PiecSettings.videoFramerate = 25; //REMOVE if you want to write in seconds.
 
 PiecSettings.initialScript = "opener";
 PiecSettings.script = {
     'opener': {
-        video: 'portrait.mp4',
-        from: 0,                //If no "to" field is added, the template will just play the video until the end
+        video: 'video.mp4',
+        from: 0,
+        to: 7.9,
         loop: false,
         hud: [
-            { tag: 'badge', at: 0, effect: 'fadeIn'},
-            // { tag: 'cta-button', at: 0, effect:'fadeIn', triggerOnce: false },       //CTA background button example. It doesn't have text, as text is rendered separately (below)
-            // { tag: 'download-text', at: 0, show: true, triggerOnce: false },    //CTA Text. Autolocalised text example.
-            { tag: 'cta', at: 7, show: true, triggerOnce: true },               //Full Screen CTA example
-            { tag: 'skip', at: 7, effect: 'fadeIn'},
-        ],
-        interactions: [
-            { from: 7, typeOfInteraction: 'tap', htmlTag: "skip-button", onSuccess: 'googleStore' },
+            { tag: 'cta-button', at: 0, effect:'fadeIn', triggerOnce: false },       //CTA background button example. It doesn't have text, as text is rendered separately (below)
+            { tag: 'cta', at: 0, show: true, triggerOnce: true },               //Full Screen CTA example
         ],
         autoplay: {
-            script: 'googleStore',
+            script: 'waitingForInteraction',
         }
     },
-    'googleStore': {
-        video: 'portrait.mp4',
-        from: 0,
-        to: 0.1,
-        revealCloseButton: true,
+    "waitingForInteraction": {
+        video: 'video.mp4',
+        from: 7.8,
+        to: 11.43,
         loop: true,
         hud: [
-            { tag: 'skip', at: 0, effect: 'fadeOut'},
-            { tag: 'badge', at: 0, effect: 'fadeOut'},
-            { tag: 'darkOverlay', at: 0, show: true, triggerOnce: true},
-            { tag: 'googleStoreScreenShot', at: 0, effect: 'slideInUp', triggerOnce: true},
-        ]
+            { tag: 'cta-button', at: 0, effect:'fadeIn', triggerOnce: false },       //CTA background button example. It doesn't have text, as text is rendered separately (below)
+            { tag: 'download-text', at: 0, show: true, triggerOnce: false },    //CTA Text. Autolocalised text example.
+            { tag: 'cta', at: 0, show: true, triggerOnce: true },               //Full Screen CTA example
+        ],
+        interactions: [
+            { from: 7.8, typeOfInteraction: 'tap', htmlTag: "tap-area", onSuccess: 'interacted' },
+        ],
+        autoplay: {
+            script: 'interacted',
+            after: 5000,
+        }
+    },
+    'interacted': {
+        video: 'video.mp4',
+        "from": 11.43,
+        "to": 18,
+        loop: false,
+        hud: [
+            // {tag: ''}
+        ],
+        autoplay: {
+            script: 'end'
+        }
+    },
+    'end': {
+        video: 'video.mp4',
+        "from": 18,
+        "to": 19,
+        loop: false,
+        
     }
 };
 
 //======================================== HUD Elements ========================================
 PiecSettings.hudElements = {
-    'badge': {
-        src: 'googlestore-badge.png',
-        htmlTag: 'badge',
-        anchor: { x: 0.5, y: 0.5}
-    },
-    'skip': {
-        src: 'skip.png',
-        htmlTag: 'skip-button',
-        anchor: { x: 0, y: 0}
-    },
-    'darkOverlay': {
-        src: 'darkOverlay.png',
-        htmlTag: 'full-screen',
-        anchor: { x: 0, y: 0},
-    },
-    'googleStoreScreenShot': {
-        src: 'googleStoreScreenShot.png',
-        htmlTag: 'screen-shot-container',
-        anchor: { x: 0, y: 0}
-    },
     'cta': {                            //Fullscreen transparent CTA
         src: "",
         htmlTag: 'cta-container-final',
@@ -79,7 +77,7 @@ PiecSettings.hudElements = {
     },
     'cta-button': {                     //CTA Button (sprite without text, text is added separately, to allow autolocalisation)
         src: "cta.png",
-        htmlTag: 'cta-container',
+        htmlTag: 'cta-round',
         anchor: { x: 0.5, y: 0.5 },
         type: 'cta',
     },
@@ -303,4 +301,4 @@ PiecSettings.translations = {
         sw: "Jaribu",
     }
 };
-PiecSettings.version = '-';
+
