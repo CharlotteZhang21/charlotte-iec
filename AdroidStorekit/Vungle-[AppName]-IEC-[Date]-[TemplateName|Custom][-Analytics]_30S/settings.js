@@ -3,9 +3,9 @@ PiecSettings.version = "-";
 
 //========================== General Settings. Timer, ASOI, fonts =============================
 
-PiecSettings.videoOrientation = "responsive"; //Choose between "portrait", "landscape" or "responsive"
+PiecSettings.videoOrientation = "portrait"; //Choose between "portrait", "landscape" or "responsive"
                                               //Responsive mode will expect "portrait.mp4" and "lanscape.mp4"
-PiecSettings.orientationLock = "none";        //Choose between "portrait", "landscape" and "none"
+PiecSettings.orientationLock = "portrait";        //Choose between "portrait", "landscape" and "none"
                                               //For VEC, use "responsive" and "none"
 
 PiecSettings.fontColor = "#fff";
@@ -17,34 +17,34 @@ PiecSettings.genericFontFamily = "Noto Sans"; //This font will be used when the 
 PiecSettings.initialScript = "opener";
 PiecSettings.script = {
     'opener': {
-        video: 'portrait.mp4',
+        video: PiecSettings.videoOrientation + '.mp4',
         from: 0,                //If no "to" field is added, the template will just play the video until the end
         loop: false,
         hud: [
             { tag: 'badge', at: 0, effect: 'fadeIn'},
-            // { tag: 'cta-button', at: 0, effect:'fadeIn', triggerOnce: false },       //CTA background button example. It doesn't have text, as text is rendered separately (below)
-            // { tag: 'download-text', at: 0, show: true, triggerOnce: false },    //CTA Text. Autolocalised text example.
             { tag: 'cta', at: 7, show: true, triggerOnce: true },               //Full Screen CTA example
             { tag: 'skip', at: 7, effect: 'fadeIn'},
         ],
         interactions: [
-            { from: 7, typeOfInteraction: 'tap', htmlTag: "skip-button", onSuccess: 'googleStore' },
+            { from: 7, typeOfInteraction: 'tap', htmlTag: "skip-button" + '-' + PiecSettings.videoOrientation, onSuccess: 'googleStore' },
         ],
         autoplay: {
             script: 'googleStore',
         }
     },
     'googleStore': {
-        video: 'portrait.mp4',
+        video: PiecSettings.videoOrientation + '.mp4',
         from: 0,
-        to: 0.1,
+        to: 0.02,
         revealCloseButton: true,
         loop: true,
         hud: [
             { tag: 'skip', at: 0, effect: 'fadeOut'},
             { tag: 'badge', at: 0, effect: 'fadeOut'},
+            { tag: 'cta', at: 0, show: true,},  
             { tag: 'darkOverlay', at: 0, show: true, triggerOnce: true},
             { tag: 'googleStoreScreenShot', at: 0, effect: 'slideInUp', triggerOnce: true},
+            { tag: 'download-text', at: 0.01, effect: 'fadeIn', triggerOnce: true}
         ]
     }
 };
@@ -53,12 +53,12 @@ PiecSettings.script = {
 PiecSettings.hudElements = {
     'badge': {
         src: 'googlestore-badge.png',
-        htmlTag: 'badge',
+        htmlTag: 'badge' + '-' + PiecSettings.videoOrientation,
         anchor: { x: 0.5, y: 0.5}
     },
     'skip': {
         src: 'skip.png',
-        htmlTag: 'skip-button',
+        htmlTag: 'skip-button' + '-' + PiecSettings.videoOrientation,
         anchor: { x: 0, y: 0}
     },
     'darkOverlay': {
@@ -67,8 +67,8 @@ PiecSettings.hudElements = {
         anchor: { x: 0, y: 0},
     },
     'googleStoreScreenShot': {
-        src: 'googleStoreScreenShot.png',
-        htmlTag: 'screen-shot-container',
+        src: 'googleStoreScreenShot' + '-' + PiecSettings.videoOrientation + '.png',
+        htmlTag: 'screen-shot-container' + '-' + PiecSettings.videoOrientation,
         anchor: { x: 0, y: 0}
     },
     'cta': {                            //Fullscreen transparent CTA
@@ -77,17 +77,12 @@ PiecSettings.hudElements = {
         anchor: { x: 0.5, y: 0.5 },
         type: 'cta',
     },
-    'cta-button': {                     //CTA Button (sprite without text, text is added separately, to allow autolocalisation)
-        src: "cta.png",
-        htmlTag: 'cta-container',
-        anchor: { x: 0.5, y: 0.5 },
-        type: 'cta',
-    },
 
     'download-text': {                  //Autolocalised text
-        text: 'Download',
+        text: 'Install',
         autolocalise: true,
-        htmlTag: 'cta-container-text',
+        htmlTag: 'cta-container-text'+ '-' + PiecSettings.videoOrientation,//choose this line when it's portrait video
+        // htmlTag: 'cta-container-text-landscape', //choose this line when it's landscape video
         anchor: { x: 0.5, y: 0.5 },
         style: {
             fontWeight: "bold",
@@ -105,27 +100,6 @@ PiecSettings.hudElements = {
                 shadowFill: false,
             },
         },
-        // SLIGHTLY MORE COMPLEX STYLING EXAMPLE
-        // text: 'Play!',
-        // autolocalise: true,             //Autolocalisation set to true. Make sure there's available translations for the text above in PiecSettings.translations
-        // htmlTag: 'cta-container-text',
-        // anchor: { x: 0.5, y: 0.5 },
-        // style: {                        //Feel free to tweak. These are just examples.
-        //     fontWeight: 'bold',
-        //     fontFamily: PiecSettings.fontFamily,
-        //     fontCase: 'uppercase',
-        //     color: ['#fff', '#fff2aa'], // if there is no gradient, leave only one color in the array
-        //     stroke: '#5f850b',
-        //     strokeThickness: 15,
-        //     shadow: {
-        //         x: 2,
-        //         y: 10,
-        //         color: 'rgba(58,82,8,1)',
-        //         blur: 2,
-        //         shadowStroke: true,     //These settings make sure that the shadow will be applied after the stroke
-        //         shadowFill: false,
-        //     },
-        // },
     },
 };
 
@@ -147,8 +121,8 @@ PiecSettings.translations = {
         en: "Download",
         ja: "ダウンロード",
         ko: "다운로드",
-        zh: "下载",
-        de: "Download",
+        zh: "立即下载",
+        de: "Herunterladen",
         fr: "Télécharger",
         it: "Scarica",
         es: "Descargar",
@@ -301,6 +275,51 @@ PiecSettings.translations = {
         eu: "Jokatu",
         fi: "Pelata",
         sw: "Jaribu",
+    },
+    'Install': {
+        en: "Install" ,
+        ja: "インストール" ,
+        ko: "설치" ,
+        zh: "安装" ,
+        de: "Installieren" ,
+        fr: "Installer" ,
+        it: "Installare" ,
+        es: "Instalar" ,
+        pt: "Instalar" ,
+        ca: "instal·lar" ,
+        ru: "устанавливать" ,
+        tr: "kurmak" ,
+        nl: "Installeren" ,
+        sv: "Installera" ,
+        id: "Memasang" ,
+        ro: "Instalare" ,
+        ar: "التثبت" ,
+        uk: "встановлювати" ,
+        no: "Installere" ,
+        nb: "Installere" ,
+        nn: "Install" ,
+        he: "להתקין" ,
+        ms: "memasang" ,
+        th: "ติดตั้ง" ,
+        pl: "zainstalować" ,
+        be: "ўсталёўваць" ,
+        el: "Εγκαθιστώ" ,
+        bg: "Инсталирай" ,
+        da: "Installere" ,
+        sr: "Инсталирај" ,
+        kk: "орнату" ,
+        vi: "cài đặt, dựng lên" ,
+        hr: "Instalirati" ,
+        km: "ដំឡើង" ,
+        sq: "instaloj" ,
+        sl: "namestitev" ,
+        lt: "Diegti" ,
+        az: "Yüklemek" ,
+        zu: "Fakela" ,
+        ga: "Suiteáil" ,
+        is: "setja upp" ,
+        hu: "Telepítés" ,
+        lv: "Uzstādīt" ,
     }
 };
 PiecSettings.version = '-';

@@ -18,15 +18,16 @@
  * }
  */
 
-#badge {
+#badge-portrait {
     width: 35%;
     bottom: 4%;
     left: 0;
     right: 0;
     /*left: 3%;*/
 }
-#skip-button {
-    width: 13%;
+
+#skip-button-portrait {
+    width: 13.5%;
     height: 8%;
     top: 0;
     left: 0;
@@ -45,12 +46,11 @@
     bottom: 0.5%;
 }
 
-#cta-container-text {
-    width: 35%;
-    height: 9%;
-    right: 13%;
-    /*left: 0;*/
-    bottom: 2.5%;
+#cta-container-text-portrait {
+    width: 28%;
+    height: 4%;
+    right: 6.5%;
+    top: 34.3%;
 }
 
 #cta-container-final {
@@ -61,56 +61,50 @@
     right: 0;
 }
 
-#screen-shot-container {
+#screen-shot-container-portrait {
     width: 98%;
     left: 0;
     right: 0;
     top: 20%;
 }
 
-/*
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    REMOVE MEDIA QUERIES BELOW IF YOU ARE ORIENTATION LOCKING
-    
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- */
-
-@media all and (orientation: landscape) {
-    #cta-container-text {
-        width: 25%;
-        height: 12%;
-        left: auto;
-        right: 11.5%;
-        bottom: 5%;
-    }
-
-    #cta-container {
-        width: 35%;
-        left: auto;
-        right: 2.5%;
-    }
-
-    #cta-container-final {
-        height: 85%;
-    }
-
-    #screen-shot-container {
-        width: 40%;
-        
-    }
-
-    #badge {
-        width: 20%;
-        bottom: 8%;
-        left: auto;
-        right: 10%;
-    }
-
-    #skip-button {
-        width: 7%;
-    }
+#cta-container-text-landscape {
+    width: 15.5%;
+    height: 7.5%;
+    left: auto;
+    right: 13.5%;
+    top: 10%;
 }
+
+#cta-container {
+    width: 35%;
+    left: auto;
+    right: 2.5%;
+}
+
+#cta-container-final {
+    height: 85%;
+}
+
+#screen-shot-container-landscape {
+    width: 80%;
+    top: 5%;
+    left: 0;
+    right: 0
+    
+}
+
+#badge-landscape {
+    width: 20%;
+    bottom: 8%;
+    left: auto;
+    right: 10%;
+}
+
+#skip-button-landscape {
+    width: 7%;
+}
+
 
 
 /*
