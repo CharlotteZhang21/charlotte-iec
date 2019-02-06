@@ -67,15 +67,124 @@ class CookiePan extends Phaser.Group {
                     var endBlock = this.blockArray[endRow][endColumn];
                     
                     this.moveHandTo(endBlock, this.moveHandDuration);
-                    this.unpressHandAndMoveOutWithDelay(1000);                
+                    
+                    this.unpressHandAndMoveOutWithDelay(1000);
+
+                    this.autoFill(startRow, endRow, startColumn, endColumn);
+
                 }, this);
 
 
             }, this);
+
         }
 
        
 
+    }
+
+    autoFill(startRow, endRow, startColumn, endColumn){
+
+        if(PiecSettings.tutorialAutoFill !== undefined && PiecSettings.tutorialAutoFill == true){
+            //if there's the auto fill tutorial, first lock the input, and auto play the hand
+            this.inputLocked = true;
+
+            if(startColumn == endColumn){
+                var blockNum = Math.abs(startRow-endRow);
+                var animateDelay = this.moveHandDuration / blockNum;
+                for (var row = startRow; row <= blockNum; ) {
+
+                    var block = this.blockArray[row][startColumn];
+
+                    block.used = true;
+
+
+                    var coordinate = {
+                        row: block.row,
+                        column: block.column
+                    }
+
+                    this.tempSelectedBlocksCoordinates.push(coordinate); 
+
+                    
+                    this.game.add.tween(block.children[2]).to({
+                        alpha: 0
+                    }, 10, Phaser.Easing.Linear.None, true, animateDelay * row);
+
+                    this.game.add.tween(block.children[3]).to({
+                        alpha: 0
+                    }, 10, Phaser.Easing.Linear.None, true, animateDelay * row);
+                    
+
+
+                    this.letters += block.key;
+
+                    this.cookieWord.updateBox(this.letters);
+                    
+                    if(startRow > endRow)
+                        row--;
+                    else
+                        row++;
+                }    
+                    
+            }else {
+                var blockNum = Math.abs(startColumn-endColumn);
+                var animateDelay = this.moveHandDuration / blockNum;
+                for (var column = startColumn; column <= blockNum;) {
+
+                    var block = this.blockArray[startRow][column];
+
+                    block.used = true;
+
+
+                    var coordinate = {
+                        row: block.row,
+                        column: block.column
+                    }
+
+                    this.tempSelectedBlocksCoordinates.push(coordinate); 
+
+                    
+                    this.game.add.tween(block.children[2]).to({
+                        alpha: 0
+                    }, 10, Phaser.Easing.Linear.None, true, animateDelay * column);
+
+                    this.game.add.tween(block.children[3]).to({
+                        alpha: 0
+                    }, 10, Phaser.Easing.Linear.None, true, animateDelay * column);
+                    
+
+
+                    this.letters += block.key;
+
+                    this.cookieWord.updateBox(this.letters);
+                    
+
+                    if(startColumn > endColumn)
+                        column--;
+                    else
+                        column++;
+
+                }    
+            }
+
+
+
+            this.game.time.events.add(animateDelay * blockNum+1000, function(){
+
+                 this.wordFlyToGoal();
+
+                this.game.time.events.add(1000, function(){
+                
+                    this.callOut();
+
+                }, this);
+
+            }, this);
+           
+           
+
+        }
     }
 
     pressHand(cookie) {
@@ -95,9 +204,6 @@ class CookiePan extends Phaser.Group {
             // x: [initialX + 10, initialX + 30, initialX + 30],
         }, 650, Phaser.Easing.Quadratic.InOut, true, 0);
 
-        // this.game.time.events.add(700, function() {
-        //     this.onInputDownLetterTutorial(cookie);
-        // }, this);
 
         return tween;
     }
@@ -219,11 +325,11 @@ class CookiePan extends Phaser.Group {
             block.scale.y =  block.scale.x;
 
 
-            var highlightLetterText = this.createLetterText(block, letter, PiecSettings.colorPalette.incorrect);
+            var highlightLetterText = this.createLetterText(block, letter, PiecSettings.colorPalette.stackWhenPress);
             blockLayerGrp.add(highlightLetterText);
 
             //create font
-            var letterText = this.createLetterText(block, letter, PiecSettings.colorPalette.correct);
+            var letterText = this.createLetterText(block, letter, PiecSettings.colorPalette.stackDefault);
             
             blockLayerGrp.add(letterText);
 
@@ -341,7 +447,8 @@ class CookiePan extends Phaser.Group {
 
                 // reset every thing
                 this.blockArray[coordinate.row][coordinate.column].used = false;
-                this.blockArray[coordinate.row][coordinate.column].children[1].alpha = 1;
+                this.blockArray[coordinate.row][coordinate.column].children[2].alpha = 1;
+                this.blockArray[coordinate.row][coordinate.column].children[3].alpha = 1;
             }  
 
             // this.resetArray();
@@ -586,9 +693,17 @@ class CookiePan extends Phaser.Group {
 
 
     update() {
-        if(this.moveStart){
-            this.mouseX = (this.game.input.x - this.x) / this.scale.x;
-            this.mouseY = (this.game.input.y - this.y) / this.scale.y;
+        // if(PiecSettings.tutorialAutoFill)
+
+        this.moveBlock(this.game.input.x, this.game.input.y);
+       
+        
+    }
+
+    moveBlock(inputX, inputY){
+         if(this.moveStart){
+            this.mouseX = (inputX - this.x) / this.scale.x;
+            this.mouseY = (inputY - this.y) / this.scale.y;
            
             var block = this.isInputOverLetter(this.mouseX, this.mouseY);
 
@@ -726,7 +841,6 @@ class CookiePan extends Phaser.Group {
 
             }
         }
-        
     }
 }
 

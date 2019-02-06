@@ -85,7 +85,7 @@ class Endcard extends Phaser.State {
         // }
         this.game.time.events.add(waitForAutoplay, function() {
             if (!this.game.global.tutorialCanceled) {
-                this.cookiePan.handFollowWord(PiecSettings.hint[0]);
+                this.cookiePan.handFollowWord(PiecSettings.hint[1]);
             }
         }, this);
 
