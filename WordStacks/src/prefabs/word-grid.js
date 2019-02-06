@@ -202,8 +202,11 @@ class WordGrid extends Phaser.Group {
 
     turnGrid(word){
        
+       if(word==''){
+        return;
+       }
+
         var grid = this.targetWords[word];
-         // console.log(grid);
 
         this.game.add.tween(grid).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true, 100)
         .onComplete.add(function(){

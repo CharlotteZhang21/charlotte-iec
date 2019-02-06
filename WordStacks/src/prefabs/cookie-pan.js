@@ -21,6 +21,7 @@ class CookiePan extends Phaser.Group {
         this.tempSelectedBlocksCoordinates = [];
 
         this.canHandTutorial = true;
+        this.firstTutorial = true;
 
         this.createStacks();
 
@@ -70,7 +71,12 @@ class CookiePan extends Phaser.Group {
                     
                     this.unpressHandAndMoveOutWithDelay(1000);
 
-                    this.autoFill(startRow, endRow, startColumn, endColumn);
+                    if(this.firstTutorial){
+                        this.autoFillControl(startRow, endRow, startColumn, endColumn);
+                        this.firstTutorial = false; 
+                    }
+
+                    
 
                 }, this);
 
@@ -83,89 +89,58 @@ class CookiePan extends Phaser.Group {
 
     }
 
-    autoFill(startRow, endRow, startColumn, endColumn){
+    autoFillControl(startRow, endRow, startColumn, endColumn){
 
         if(PiecSettings.tutorialAutoFill !== undefined && PiecSettings.tutorialAutoFill == true){
             //if there's the auto fill tutorial, first lock the input, and auto play the hand
             this.inputLocked = true;
 
             if(startColumn == endColumn){
+
                 var blockNum = Math.abs(startRow-endRow);
                 var animateDelay = this.moveHandDuration / blockNum;
-                for (var row = startRow; row <= blockNum; ) {
+                
+                if(startRow < endRow){
+                    var index = 0;
+                    for (var row = startRow; row <= endColumn; row++) {
 
-                    var block = this.blockArray[row][startColumn];
+                        this.autoFill(row, startColumn, blockNum, animateDelay, index);
+                        index++;
+                    }   
+                }
+                else {
+                    var index = 0;
+                    for (var row = startRow; row >= endColumn; row--) {
 
-                    block.used = true;
+                        this.autoFill(row, startColumn, blockNum, animateDelay, index);
+                        index++;
 
-
-                    var coordinate = {
-                        row: block.row,
-                        column: block.column
-                    }
-
-                    this.tempSelectedBlocksCoordinates.push(coordinate); 
-
-                    
-                    this.game.add.tween(block.children[2]).to({
-                        alpha: 0
-                    }, 10, Phaser.Easing.Linear.None, true, animateDelay * row);
-
-                    this.game.add.tween(block.children[3]).to({
-                        alpha: 0
-                    }, 10, Phaser.Easing.Linear.None, true, animateDelay * row);
-                    
-
-
-                    this.letters += block.key;
-
-                    this.cookieWord.updateBox(this.letters);
-                    
-                    if(startRow > endRow)
-                        row--;
-                    else
-                        row++;
-                }    
-                    
+                    }   
+                }
             }else {
+
                 var blockNum = Math.abs(startColumn-endColumn);
                 var animateDelay = this.moveHandDuration / blockNum;
-                for (var column = startColumn; column <= blockNum;) {
 
-                    var block = this.blockArray[startRow][column];
+                var index = 0;
 
-                    block.used = true;
-
-
-                    var coordinate = {
-                        row: block.row,
-                        column: block.column
+                if(startColumn < endColumn){
+                
+                    for (var column = startColumn; column <= endColumn; column++ ){
+                        this.autoFill(startRow, column, blockNum, animateDelay, index);
+                        index++;
+                        console.log('startColumn < endColumn' + index);
                     }
-
-                    this.tempSelectedBlocksCoordinates.push(coordinate); 
-
                     
-                    this.game.add.tween(block.children[2]).to({
-                        alpha: 0
-                    }, 10, Phaser.Easing.Linear.None, true, animateDelay * column);
-
-                    this.game.add.tween(block.children[3]).to({
-                        alpha: 0
-                    }, 10, Phaser.Easing.Linear.None, true, animateDelay * column);
-                    
-
-
-                    this.letters += block.key;
-
-                    this.cookieWord.updateBox(this.letters);
-                    
-
-                    if(startColumn > endColumn)
-                        column--;
-                    else
-                        column++;
-
-                }    
+                }
+                else{
+                    for (var column = startColumn; column >= endColumn; column--){
+                        this.autoFill(startRow, column, blockNum, animateDelay, index);
+                        index++;
+                        console.log(index);
+                    }
+                
+                 }
             }
 
 
@@ -180,11 +155,46 @@ class CookiePan extends Phaser.Group {
 
                 }, this);
 
+
+                this.letters = '';
+                this.cookieWord.clearLetters();
+                this.tempSelectedBlocksCoordinates = [];
+
+
+
             }, this);
            
            
 
         }
+    }
+
+    autoFill(row, column, blockNum, animateDelay, index){
+        var block = this.blockArray[row][column];
+
+        block.used = true;
+
+
+        var coordinate = {
+            row: block.row,
+            column: block.column
+        }
+
+        this.tempSelectedBlocksCoordinates.push(coordinate); 
+
+        
+        this.game.add.tween(block.children[2]).to({
+            alpha: 0
+        }, 10, Phaser.Easing.Linear.None, true, animateDelay * index);
+
+        this.game.add.tween(block.children[3]).to({
+            alpha: 0
+        }, 10, Phaser.Easing.Linear.None, true, animateDelay * index);
+                
+        this.letters += block.key;
+
+
+        
     }
 
     pressHand(cookie) {
@@ -221,6 +231,10 @@ class CookiePan extends Phaser.Group {
             }, 800, Phaser.Easing.Quadratic.InOut, true, 200)
             .onComplete.add(function(){
                 this.canHandTutorial = true;
+                this.game.time.events.add(1000, function(){
+                     //enable the interaction
+                    this.unlockInput();
+                }, this);
             }, this);
         }, this);
     }
@@ -426,6 +440,8 @@ class CookiePan extends Phaser.Group {
 
     // hands up when Word finished!
     onUp() {
+        if(this.inputLocked)
+            return;
         this.moveStart = false;
 
         if(!this.handTutorial)
@@ -641,6 +657,16 @@ class CookiePan extends Phaser.Group {
         return false;
     }
 
+    lockInput(){
+        
+        this.inputLocked = true;
+    }
+
+
+    unlockInput(){
+        this.inputLocked = false;
+    }
+
  
     //Word started
     onInputDownLetter(letter) {
@@ -649,11 +675,12 @@ class CookiePan extends Phaser.Group {
             //cancel the autoplay timer
             this.game.time.events.remove(this.game.global.idleTimer);
         }
-        if(!this.inputLocked){
 
+        if(!this.inputLocked){
             this.moveStart = true;
-            if(!this.game.global.tutorialCanceled)
+            if(!this.game.global.tutorialCanceled){
                 this.game.global.tutorialCanceled = true;
+            }
             if(this.handTutorial)
                 this.handTutorial = false;
    

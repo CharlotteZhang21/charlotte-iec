@@ -2,7 +2,7 @@ var PiecSettings = PiecSettings || {};
 
 PiecSettings.version = "-";
 
-PiecSettings.autoPlay = 10000;
+PiecSettings.autoPlay = 15000;
 PiecSettings.dynamicLocalisation = true;
 
 PiecSettings.timer = false;

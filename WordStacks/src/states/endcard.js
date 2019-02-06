@@ -79,13 +79,17 @@ class Endcard extends Phaser.State {
         this.game.world.bringToTop(this.winMessage);
         this.game.world.bringToTop(this.logo);
 
-        var waitForAutoplay = 2500;
+        var waitForAutoplay = 2000;
         // if (this.game.global.windowWidth > this.game.global.windowHeight){
         //     waitForAutoplay = 2400;
         // }
+
+        if(PiecSettings.tutorialAutoFill != undefined && PiecSettings.tutorialAutoFill){
+            this.cookiePan.lockInput();
+        }
         this.game.time.events.add(waitForAutoplay, function() {
             if (!this.game.global.tutorialCanceled) {
-                this.cookiePan.handFollowWord(PiecSettings.hint[1]);
+                this.cookiePan.handFollowWord(PiecSettings.hint[0]);
             }
         }, this);
 
@@ -94,6 +98,7 @@ class Endcard extends Phaser.State {
 
         }, this);
 
+
         if(PiecSettings.autoPlay != null)
             this.game.global.idleTimer = this.game.time.events.add(PiecSettings.autoPlay, function() {
                 console.log(PiecSettings.autoPlay);
@@ -101,13 +106,6 @@ class Endcard extends Phaser.State {
             }, this);
 
 
-        if (PiecSettings.timer !== undefined && PiecSettings.timer) {
-            this.game.time.events.add(PiecSettings.timerDuration, function() {
-                document.getElementById("vungle-close").className = "";
-            }, this);
-        }else {
-            document.getElementById("vungle-close").className = "";
-        }
     }
 
     resize() {
@@ -168,11 +166,13 @@ class Endcard extends Phaser.State {
                 this.game.time.events.add(200, function() {
                     this.logo.animate();
                 }, this);
-                if (PiecSettings.asoi !== undefined && PiecSettings.asoi == true) {
-                    this.game.time.events.add(1000, function() {
-                        doSomething('download');
-                    }, this);
-                }
+                // if (PiecSettings.asoi !== undefined && PiecSettings.asoi == true) {
+                //     this.game.time.events.add(1000, function() {
+                //         doSomething('download');
+                //     }, this);
+                // }
+
+                parent.postMessage('complete','*');
             }, this);
         }, this);
         // this.game.time.events.add(600, function() {
@@ -185,6 +185,7 @@ class Endcard extends Phaser.State {
         this.wordGrid.animate();
         this.cookiePan.animate();
         this.cta.animate();
+        parent.postMessage('complete','*');
         this.game.time.events.add(200, function() {
             this.logo.animate();
         }, this);        
