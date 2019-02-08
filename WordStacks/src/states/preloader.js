@@ -26,7 +26,14 @@
      loadResources() {
 
          this.game.load.image('logo', PiecSettings.assetsDir + 'logo.png');
-         this.game.load.image('background', PiecSettings.assetsDir + 'bg.jpg');
+         
+        if (document.body.clientHeight < document.body.clientWidth && PiecSettings.responsiveBg) {
+            this.game.load.image('background', PiecSettings.assetsDir + 'bg-landscape.jpg');   
+        }else{
+            this.game.load.image('background', PiecSettings.assetsDir + 'bg.jpg');
+        }
+
+         
 
          // this.game.load.image('puzzle-solved', PiecSettings.assetsDir + '')
 

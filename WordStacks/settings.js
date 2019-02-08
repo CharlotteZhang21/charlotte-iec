@@ -5,16 +5,12 @@ PiecSettings.version = "-";
 PiecSettings.autoPlay = 15000;
 PiecSettings.dynamicLocalisation = true;
 
-PiecSettings.timer = false;
-PiecSettings.timerDuration = 4000;
-
-PiecSettings.asoi = true;
 
 PiecSettings.fontColor = "#ffffff";
 PiecSettings.fontFamily = "Contemporary"; //Make sure that this font is on the css and that there is a div that uses it. (preload-font div)
 
 PiecSettings.colorPalette = {
-    // default: "0x32b0fd", 
+    wordBoxPlaceHolder: ["0xffffff"], 
     stackDefault: "#32b0fd", // default colour for the stacks
     stackWhenPress: "#ffffff", //font colour change to when inputDown
     wordBoxDefault: ["0xffffff"], // chosen letters box colour
@@ -25,6 +21,7 @@ PiecSettings.ctaBackground = true; // set false when you don't want bg;
 PiecSettings.useAlternativeAssetForSolvedLetters = false; //Can use alternative asset for letters on the board (as opposed to letters on the pan). This will be the letter with "-2" behind
                                                         // E.g.: "a.png" alternative version would be "a-2.png".
 
+PiecSettings.responsiveBg = true; // if it's true then please add in bg-landscape.jpg as the background for landscape
 PiecSettings.hint = [
     {
         start: {r: 0 ,c: 4},

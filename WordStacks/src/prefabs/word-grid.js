@@ -100,9 +100,12 @@ class WordGrid extends Phaser.Group {
                 
                 var background = this.game.add.graphics(0, 0);
                 var backgroundColor = "0xd370e03";
-                // if (PiecSettings.colorPalette !== undefined && PiecSettings.colorPalette.wordBoxDefault !== undefined) {
-                //     backgroundColor = PiecSettings.colorPalette.wordBoxDefault;
-                // }
+                if (PiecSettings.colorPalette !== undefined && PiecSettings.colorPalette.wordBoxPlaceHolder !== undefined) {
+                    backgroundColor = PiecSettings.colorPalette.wordBoxPlaceHolder;
+
+                }
+
+
                 
                 background.beginFill(backgroundColor);
                 background.drawCircle(0, 0, circleSize);
