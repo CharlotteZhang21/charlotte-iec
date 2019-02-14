@@ -180,6 +180,7 @@
 }
 
 #three-sixty{
+    pointer-events: none;
     width: 40vw;
     left: 0;
     right: 0;
@@ -244,6 +245,13 @@
     height: 100%;
 }
 
+
+
+#cta-text {
+    font-family: myFont;
+
+}
+
 @media all and (orientation: landscape) {
     #compass {
         width: 13%;
@@ -275,6 +283,7 @@
     right: auto;
     margin: auto;
 }
+
 
 .logo-container img {
     position: absolute;
