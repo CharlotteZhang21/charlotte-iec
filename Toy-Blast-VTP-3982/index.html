@@ -8,6 +8,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Vungle Endcard</title>
     <script src="vungle.js"></script>
+    <link rel="stylesheet" href="vungle.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="jquery-sakura.css">
 
     <!-- logo strike start -->
     <style>#vungle-footer {display: none !important; }</style>
@@ -20,16 +23,16 @@
             font-weight: normal;
             font-style: normal;
         }
+
         @font-face {
             font-family: "myFont";
-            src: url('font.ttf') format("truetype");
+            src: url('font.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
         }
+
+        
     </style>
-
-
-
-    <link rel="stylesheet" href="vungle.css">
-    <link rel="stylesheet" href="style.css">
         <!-- PRIVACY START CSS -->
 <link rel="stylesheet" href="privacy.css">
 <!-- PRIVACY END CSS -->
@@ -37,7 +40,7 @@
 <body ontouchstart="ontouchstart" class="preload light">
     <div id="abs-container">
         <div id="vungle-header" class="">
-            <a id="vungle-close" class="" href="javascript:void(0)" onclick="doSomething('close');">
+            <a id="vungle-close" class="hide" href="javascript:void(0)" onclick="doSomething('close');">
                 <!-- CLOSE ICON -->
                 <svg version="1.1" id="svg-vungle-ad-close" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 321.2 321" style="enable-background:new 0 0 321.2 321;" xml:space="preserve">
                     <g>
@@ -54,42 +57,69 @@
             </a>
         </div>
         <div id="vungle-footer" class="portrait-light landscape-light portrait-left landscape-left"><span class="footer" data-icon="q"></span></div>
+    
 
-    <!-- IEC Creative starts here-->
-    <div class="logo-container">
-        <img src="logo.png">
-    </div>
-
-    <div class="cta-container">
-        <div id="vungle-cta-button" class="cta-holder">
-                <img id="cta-img" class="cta" src="button_1.png">
-                <p id="cta-text" class="cta">PLAY</p>
-            <!-- </a> -->
+        <!-- IEC Creative starts here-->
+        <div class="logo-container">
+            <img src="logo.png">
         </div>
-    </div>
 
-    <div id="interactive-tooltip-360" class="interactive-tooltip-360">
-        <div id="icon-holder" class="icon-holder show">
-            <div class="pano"></div>
-            <div class="device"></div>
-            <!-- <div class="arrow-left"></div>
-            <div class="arrow-right"></div> -->
-            <div class="finger"></div>
+        <div id="startOverlay" class="overlay">
+                        
+            <div class="text overlayText" id="findObject">
+                <!-- Find the object -->
+            </div>
+        <!--     <div class="objectsContainer">
+
+                <img class="object" src="object1.png"/>
+                <img class="object" src="object2.png"/>
+                <img class="object" src="object3.png"/>
+                
+            </div> -->
+            <div id="tapToPlay" class="text tapAnywhereText">
+                <!-- Tap to play -->
+            </div>
+
+        </div> 
+
+        <div class="item" id="centerScreen"></div>
+
+        <div class="cta-container pulse">
+            <div id="vungle-cta-button" class="cta-holder">
+                    
+                    <img id="cta-img" class=" button1" src="button_1.png">
+                    <img id="cta-img-2" class=" button2" src="button_2.png">
+                    <p id="cta-text" >play</p>
+                <!-- </a> -->
+            </div>
         </div>
-    </div>
 
+        <div id="interactive-tooltip-360" class="interactive-tooltip-360">
+            <div id="icon-holder" class="icon-holder show">
+                <div class="pano"></div>
+                <div class="device"></div>
+                <!-- <div class="arrow-left"></div>
+                <div class="arrow-right"></div> -->
+                <div class="finger"></div>
+            </div>
+        </div>
+
+        <div id="sakuraLayer"></div>
+    </div>
     <!-- <div id="coords">
     </div> -->
+
     <script type="text/javascript" src="image.js"></script>
     <script type="text/javascript" src="image2.js"></script>
-    <script type="text/javascript" src="explode.js"></script>
-    <script type="text/javascript" src="fighting1.js"></script>
-    <script type="text/javascript" src="fighting2.js"></script>
-    <script type="text/javascript" src="dragon.js"></script>
-
+    
     <script src="three.min.js"></script>
+    <script src="TweenMax.min.js"></script>
     <script src="Tween.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="jquery-sakura.js"></script>
+    <script type="text/javascript" src="auto-localisation-util.js"></script>
     <script type="text/javascript" src="DeviceOrientationController.js"></script>
+   <!--  <script type="text/javascript" src="main.js"></script> -->
     <script>
     var gyroPresent = false;
     var orientation = orientationCheck();
@@ -103,12 +133,14 @@
     var insertLogo = document.getElementById('insert-logo');
     var insertSpiral = document.getElementById('insert-spiral');
 
+
+
+
+
     var u = navigator.userAgent;
     var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios check
 
     var camera, controls;
-
-    var FoV = orientationCheck = 'portrait' ? 60 : 40 ;
     var renderer;
     var scene;
     var clock = new THREE.Clock();
@@ -124,51 +156,203 @@
         rotation: 0.5
     };
 
-    var raycaster;
-    var mouse;
+    var raycaster = new THREE.Raycaster();;
+    var mouse = {};
 
     var objects = [];
+    var objectsObj = {};
 
-    var sizee = 3.5;
+    var sizee = 1;
     var horizon = 0;
-
-
-    var dragon1_size = {
-        x: 128/1000 * sizee,
-        y: 77/1000 * sizee,
-        z: 1,
-    };
-
-
-    var dragon1_pos = {
-        x: 5,
-        y: horizon + 1.5,
-        z: 1,
-    };
-
 
     /*===== images ======*/
     var imagesToAdd = [
-    
+    //magic ball
+    // {
+    //     name: 'object1',
+    //     link: object1,
+    //     clickEffect: 'particles1',
+    //     clickable: true,
+    //     // audio: "hand-clap",
+    //     position: [-3.1,  horizon-0.2, .3 + (-1)* 2],
+    //     rotation: {
+    //         x: THREE.Math.degToRad(0),
+    //         y: THREE.Math.degToRad(60),
+    //         z: THREE.Math.degToRad(0),
+    //     },
+    //     size: [267/800 * sizee, 267/800  *sizee, .5],
+    //     // animation: [5, 1, 5, 200, true],
+    // },
+  
+    // // photo
+    // {
+    //     name: 'object2',
+    //     link: object2,
+    //     clickEffect: 'particles2',
+    //     clickable: true,
+    //     position: [-1,  horizon+1.4, .1 + (-1)* 2],
+    //     rotation: {
+    //         x: THREE.Math.degToRad(-30),
+    //         y: THREE.Math.degToRad(0),
+    //         z: THREE.Math.degToRad(0),
+    //     },
+    //     size: [267/800 * sizee, 267/800  *sizee, .5],
+    //     // animation: [5, 1, 5, 180, true],
+    // },
+    // // photo
+    // {
+    //     name: 'object3',
+    //     link: object3,
+    //     clickEffect: 'particles3',
+    //     clickable: true,
+    //     position: [1,  horizon - 0.2, 1 + (-1)* 2],
+    //     rotation: {
+    //         x: THREE.Math.degToRad(0),
+    //         y: THREE.Math.degToRad(0),
+    //         z: THREE.Math.degToRad(0),
+    //     },
+    //     size: [267/900 * sizee, 267/900  *sizee, .5],
+    //     // animation: [5, 1, 5, 180, true],
+    // },
+
+    // // particles
+
+    // {
+    //     name: 'particles1',
+    //     link: particles,
+    //     visible: false,
+    //     animateStart: false, // control whether the animate should start or not
+    //     // animateOnSight: true,
+    //     position: [-3.2,  horizon-0.2, .3 + (-1)* 2],
+    //     rotation: {
+    //         x: THREE.Math.degToRad(0),
+    //         y: THREE.Math.degToRad(60),
+    //         z: THREE.Math.degToRad(0),
+    //     },
+    //     size: [107/200 * sizee, 100/200  *sizee, .5],
+    //     animation: [8, 1, 8, 100, false],
+    // },
+
+    // {
+    //     name: 'particles2',
+    //     link: particles,
+    //     animateStart: false, // control whether the 
+    //     visible: false,
+    //     // animateOnSight: true,
+    //     position: [-1,  horizon+1.4, .1 + (-1)* 2],
+    //     rotation: {
+    //         x: THREE.Math.degToRad(0),
+    //         y: THREE.Math.degToRad(0),
+    //         z: THREE.Math.degToRad(0),
+    //     },
+    //     size: [107/200 * sizee, 100/200  *sizee, .5],
+    //     animation: [8, 1, 8, 100, false],
+    // },
+    // {
+    //     name: 'particles3',
+    //     link: particles,
+    //     animateStart: false, // control whether the 
+    //     visible: false,
+    //     // animateOnSight: true,
+    //     position: [1,  horizon - 0.2, 1 + (-1)* 2],
+    //     rotation: {
+    //         x: THREE.Math.degToRad(0),
+    //         y: THREE.Math.degToRad(0),
+    //         z: THREE.Math.degToRad(0),
+    //     },
+    //     size: [107/300 * sizee, 100/300  *sizee, .5],
+    //     animation: [8, 1, 8, 100, false],
+    // },
     ];
+
+    /*===============
+     *sound
+     *===============*/
+
+    var sounds = {
+       // correct: "chimes",
+       // wrong: 'wrong',
+       // finish: 'win',
+    }
+
+    var audioType;
+    var audio = new Audio();
+    
+    var audioType = ".wav";
+    var muted = false;
+
+    var audios = {};
+    var currentAudio;
+
+    //Function to play the exact file format
+    function playAudio(file){
+        currentAudio = file;
+        if(!muted){
+            currentAudio.play();
+        }
+    }
+
+    function stopAudio() {
+        if(currentAudio!== undefined){
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+        }
+    }
+
+    
+    function generateAudio(){
+        // for(var i=0; i < sounds.length; i++) {
+        //     var audio = new Audio(sounds[i] + audioType);
+        //     audios[sounds[i]] = audio; 
+        // }
+
+        for(var key in sounds) {
+            var audio = new Audio(sounds[key] + audioType);
+            audios[key] = audio;
+        }
+
+    }
+
+    /*===============
+     *sound
+     *===============*/
+
     var addedImages = {} // Reference for tweening 
     var animationInstructions = {};
     var textureReference = {};
 
-    
+    // animationInstructions['dragon1'] = new TWEEN.Tween({
+    //         xPos: dragon1_pos.x,
+    //         yPos: dragon1_pos.y,
+    //         zPos: dragon1_pos.z,
+    //         rotation: -30  
+    //     }).to({
+    //         xPos: -2,
+    //         yPos: [horizon - 0.2, horizon + .4, horizon + 1.5], 
+    //         zPos: [-0.5, -.8, -1],
+    //         rotation: [-10, -20]
+    //     }, 5000)
+    //     .onUpdate(function() {
+    //         addedImages['dragon1'].position.x = this.xPos;
+    //         addedImages['dragon1'].position.y = this.yPos;
+    //         addedImages['dragon1'].position.z = this.zPos;
+    //         addedImages['dragon1'].rotation.y = THREE.Math.degToRad(this.rotation);
+    //            })
+    //     .repeat(Infinity);
+        // .yoyo(true);
 
-    init();
-    animate();
+
 
     function init() {
-
 
         container = document.createElement('div');
         document.body.appendChild(container);
 
         // camera
 
-        camera = new THREE.PerspectiveCamera(FoV, document.body.scrollWidth / document.body.scrollHeight, 1, 1000);
+        var FOV = orientationCheck()=='portrait' ? 65 : 60;
+
+        camera = new THREE.PerspectiveCamera(FOV, document.body.clientWidth / document.body.clientHeight, 1, 1000);
         camera.target = new THREE.Vector3(0,0,0);
         camera.position.z = 1;
 
@@ -187,29 +371,17 @@
             alpha: true
         });
         renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(document.body.scrollWidth, document.body.scrollHeight);
+        renderer.setSize(document.body.clientWidth, document.body.clientHeight);
         container.appendChild(renderer.domElement);
+
+
 
         //
 
         renderer.gammaInput = true;
         renderer.gammaOutput = true;
 
-        window.addEventListener('resize', onWindowResize, false);
-
-
-
-        // var textures = getTexturesFromAtlasFile(" texture.jpg", 6);
-        // var materials = [];
-        // for (var i = 0; i < 6; i++) {
-        //     materials.push(new THREE.MeshBasicMaterial({
-        //         map: textures[i]
-        //     }));
-        // }
-
-        // skyBox = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1), new THREE.MultiMaterial(materials));
-        //  skyBox.applyMatrix(new THREE.Matrix4().makeScale(800, 800, -800));
-        // scene.add(skyBox);
+        
 
 
         /************* 
@@ -239,19 +411,19 @@
          skyBox2.applyMatrix(new THREE.Matrix4().makeScale(800, 800, -800));
         scene.add(skyBox2);
 
-        skyBox.visible = false;
+        skyBox2.visible = false;
 
         setInterval(function(){
-            // console.log('intervale');
-            if(skyBox.visible)
-                skyBox.visible = false;
+            if(skyBox2.visible)
+                skyBox2.visible = false;
             else 
-                skyBox.visible = true;
+                skyBox2.visible = true;
         }, 1e3);
 
 
-
-        // initCube();
+        /************* 
+         * BackgroundEnd
+         *************/
 
         for (var i = 0; i < imagesToAdd.length; i++) {
             addedImages[imagesToAdd[i]['name']] = createImage(imagesToAdd[i], i);
@@ -259,44 +431,12 @@
         }
 
 
-        container.addEventListener('touchstart', function() {
-
-            console.log('here');
-            // parent.postMessage('interacted', '*');
-        });
-
-        // turn off event propagation, it can interfere with above event listener
-        Event.prototype.stopPropagation = function() {}
 
         // animationInstructions["dragon1"].start();
     
     }
 
-    function lensFlareUpdateCallback(object) {
-
-        var f, fl = object.lensFlares.length;
-        var flare;
-        var vecX = -object.positionScreen.x * 2;
-        var vecY = -object.positionScreen.y * 2;
-
-
-        for (f = 0; f < fl; f++) {
-
-            flare = object.lensFlares[f];
-
-            flare.x = object.positionScreen.x + vecX * flare.distance;
-            flare.y = object.positionScreen.y + vecY * flare.distance;
-
-            flare.rotation = 0;
-
-        }
-
-        object.lensFlares[2].y += 0.025;
-        object.lensFlares[3].rotation = object.positionScreen.x * 0.5 + THREE.Math.degToRad(45);
-
-    }
-
-
+    //load the background material texture image
     function getTexturesFromAtlasFile(atlasImgUrl, tilesNum) {
 
         var textures = [];
@@ -327,18 +467,11 @@
             }
 
         };
-
-        imageObj.src = imageSource;
+        imageObj.src = atlasImgUrl;
+        // imageObj.src = imageSource;
 
         return textures;
 
-    }
-
-    function onWindowResize() {
-        initCta();
-        camera.aspect = document.body.clientWidth / document.body.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(document.body.clientWidth, document.body.clientHeight);
     }
 
     function animate(time) {
@@ -393,32 +526,6 @@
 
     }
 
-
-    function initCube() {
-        var runnerTexture = new THREE.ImageUtils.loadTexture(girl);
-        var pushtoArray = new TextureAnimator(runnerTexture, 9, 1, 9, 85, true); // texture, #horiz, #vert, #total, duration.
-        annie.push(pushtoArray);
-        var runnerMaterial = new THREE.MeshBasicMaterial({
-            transparent: true,
-            map: runnerTexture,
-            side: THREE.DoubleSide
-        });
-        var runnerGeometry = new THREE.PlaneGeometry(.45 * .9, 1 * .7, 1 * 2, 1 * 2);
-        runner = new THREE.Mesh(runnerGeometry, runnerMaterial);
-        runner.position.x = .4;
-        runner.position.z = -.4;
-        runner.position.y = .05;
-        runner.rotation.y = -.7;
-        scene.add(runner);
-
-
-        setTimeout(function() {
-            tween.start();
-        }, 100)
-
-
-    }
-
     function createImage(obj, arrayInPosition) {
         var texture = new THREE.ImageUtils.loadTexture(obj.link);
         var delay = obj.delay || 0;
@@ -453,18 +560,14 @@
         entity.rotation.y = obj.rotation.y || 0;
         entity.rotation.z = obj.rotation.z || 0;
         entity.name = obj.name;
+        entity.audio = obj.audio || null;
         entity.clickable = obj.clickable || false;
-        entity.appearRandom = obj.appearRandom || false;
+        entity.visible = obj.visible == undefined? true : false;
+        entity.clickEffect = obj.clickEffect;
         scene.add(entity);
         objects.push(entity);
-       
-
-        // if (obj.hasOwnProperty('tween') && obj.tween === true) {
-        //     setTimeout(function() {
-        //         tween.start();
-        //     }, obj.delay || 100);
-        // }
-
+        objectsObj[obj.name] = entity;
+        
         return entity;
     }
 
@@ -475,6 +578,9 @@
 
         // note: texture passed by reference, will be updated by the update function.
         this.ready = imagesToAdd[arrayInPosition].animateOnSight || 'ready';
+
+        this.animateStart = imagesToAdd[arrayInPosition].animateStart === undefined? true : imagesToAdd[arrayInPosition].animateStart;
+
         this.arrayPos = arrayInPosition;
         this.tilesHorizontal = tilesHoriz;
         this.tilesVertical = tilesVert;
@@ -504,7 +610,7 @@
 
         this.update = function(milliSec) {
             this.ready = imagesToAdd[this.arrayPos].animateOnSight || 'ready';
-            if (this.ready === 'ready') {
+            if (this.ready === 'ready' && objectsObj[imagesToAdd[arrayInPosition].name].animateStart) {
                 if (this.loop || this.loop == false && this.counter < this.numberOfTiles) {
                     this.currentDisplayTime += milliSec;
                     while (this.currentDisplayTime > this.tileDisplayDuration) {
@@ -536,7 +642,7 @@
         onDocumentMouseDown(event);
 
     }
-    var jellyBurstCounter = 0;
+    
 
     function onDocumentMouseDown(event) {
 
@@ -545,28 +651,105 @@
 
         raycaster.setFromCamera(mouse, camera);
 
+        // console.log("mousex : " + mouse.x + "mousY: " + mouse.y);
         var intersects = raycaster.intersectObjects(objects);
-        if (intersects.length > 1) {
+        
+        if (intersects.length > 0) {
             for (var i = 0; i < intersects.length; i++) {
+            
                 if (intersects[i].object.hasOwnProperty('clickable') && intersects[i].object.clickable === true) {
-
-                    console.log(intersects[i]);
-                    spiralAway(intersects[i].object.name);
+                    // updateTexture(intersects[i].object);
+                    
+                    playAudio(audios['correct']);
                     intersects[i].object.clickable = false;
-                    console.log(jellyBurstCounter);
-                    if (jellyBurstCounter >= 3) {
-                        setTimeout(function() {
-                            endgame();
-                            addClass(insertSpiral, 'insert-spiral-animation')
-                            cancelAnimationFrame(reqAnim);
-                        }, 1000);
-                    } else {
-                        jellyBurstCounter++;
-                    }
+                    var onClickEffect = intersects[i].object.clickEffect;
+                    objectsObj[onClickEffect].animateStart = true;
+
+                    objectsObj[onClickEffect].visible = true;
+
+                    showAndAnimate(intersects[i].object, event.clientX, event.clientY);
+
+
+                }else {
+                    console.log('wrong');
+                    playAudio(audios['wrong']);
                 }
             }
 
+        }else {
+            // console.log('wrong');
+            // playAudio(audios['wrong']);
         }
+    }
+
+    var centerScreen = document.getElementById("centerScreen");
+
+    function showAndAnimate(obj, posX, posY) {
+        obj.visible = false;
+
+        var item = document.getElementById('found_' + obj.name);
+        removeClass(item, 'hide');
+        item.style.top = posY + 'px';
+        item.style.left = posX + 'px';
+
+
+        TweenMax.to(item, 1, {
+            top: centerScreen.offsetTop + centerScreen.clientHeight / 2,
+            left: centerScreen.offsetLeft + centerScreen.clientWidth / 2,
+            scale: 2,
+            ease:Quad.easeInOut,
+            onComplete: function(){
+
+                var nextPoint = document.getElementById("dock-" + obj.name);
+
+
+                var targetScale = nextPoint.clientWidth / item.clientWidth;
+
+                var parent = nextPoint.parentNode;
+
+                 TweenMax.to(item, 1, {
+                    top: parent.offsetTop + nextPoint.offsetTop + nextPoint.offsetHeight / 2,
+                    left: parent.offsetLeft + nextPoint.offsetLeft + nextPoint.offsetWidth / 2,
+                    scale: targetScale,
+                    ease: Quad.easeInOut,
+                    onComplete: function(){
+                        
+                        addClass(item, 'hide');                        
+                        addClass(nextPoint, 'fadeInTransition')
+                        nextPoint.src = obj.name + '.png';
+                        //fade in out the dock item 
+                        var container = $('#objectsDock');
+                        var className = "fadeInTransition";
+                        if(checkChildrenHaveClass(container, className)===true){
+                           endgame();
+                        };
+                    }
+                 });
+            },
+        },
+        )
+
+    }
+
+    function checkChildrenHaveClass(container, className) {
+        
+        
+        var childrenGrp = container.children('.object');
+
+        
+
+        if(childrenGrp.length > 0){
+            for (var i = 0; i < childrenGrp.length; i++) {
+                var node = childrenGrp[i];
+                
+                if(node.className.indexOf('fadeInTransition') == -1){
+        
+                    return false;
+                }
+            }
+        }
+        
+        return true;
     }
 
     function spiralAway(obj) {
@@ -591,39 +774,154 @@
     }
 
     function endgame() {
-        addClass(endOverlay, 'show');
+        // addClass(endOverlay, 'show');
+        removeClass(document.getElementById('end-screen'), 'hidden');
+        document.getElementById('end-screen').addEventListener('click', function(){
+
+            stopAudio();
+            doSomething("download");
+        })
+
+        if(ASOI) {
+            setTimeout(function(){
+                stopAudio();
+                doSomething('download');
+            }, 2000);
+        }
+        playAudio(audios['finish']);
     }
 
-
-
+    var debug = false;
+    var startOverlayTimer = null;
 
     document.ontouchmove = function(e) {
         e.preventDefault();
     }
 
+    var dynamicLocal = 'v2';
+    var ASOI = true;
+    var closeButtonTimerDuration = 0; //seconds
+    // var containersToLocalise = [
+    //     'findObjects',
+    //     'tapToPlay',
+    //     'goodJob'
+    // ]
+
     window.onload = function() {
         removeClass(document.body, 'preload');
+        generateAudio();
+        setTimeout(function(){
+            removeClass(document.getElementById('vungle-close'), 'hide');
+        }, closeButtonTimerDuration * 1000);
+
+        if(dynamicLocal !==undefined && dynamicLocal == 'v2'){
+
+            // for (var i = 0; i < containersToLocalise.length; i++) {
+               var findObjectsContainer = document.getElementById('findObject');
+               findObjectsContainer.innerHTML = getLocalisedFindObjects().text;
+               findObjectsContainer.style.font = getLocalisedFindObjects().font;
+
+               var tapToPlayContainer = document.getElementById('tapToPlay');
+               tapToPlayContainer.innerHTML = getLocalisedTapToPlay().text;               
+               tapToPlayContainer.style.font = getLocalisedTapToPlay().font;
+
+
+
+               // var goodJobContainer = document.getElementById('goodJob');
+               // goodJobContainer.innerHTML = getLocalisedGoodJob().text;               
+               // goodJobContainer.style.font = getLocalisedGoodJob().font;
+
+               // var container = document.getElementById('findObjects');
+               // container.innerHTML = getLocalisedFindObjects().text;
+               // container.style.font = getLocalisedFindObjects().font;
+
+            // }
+             
+            
+
+        }
+
+
+        //360 tool tip
         document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled visible";
 
-        setTimeout(function() {
-            document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled";
-        }, 2800);
-
+        //cta
         document.getElementById('vungle-cta-button').addEventListener('click', function(){
+            stopAudio();
             doSomething("download");
         })
         initCta();
+        // var sakuraNewOn = isiOS? 3000 : 1000;
+        console.log(isiOS)
+        // if(!isiOS)
+            $('#centerScreen').sakura();
+        //start overlay
+
+        if(!debug)
+        startOverlayTimer = setTimeout(function(){
+            hideTooltip();
+        }, 3e3);
+
+        document.getElementById('startOverlay').addEventListener('mousedown', function(){
+            hideTooltip();
+        })
+
+        window.addEventListener('resize', onWindowResize, false);
+
+
+
+        init();
+
+        animate();
 
     };
 
-    function initCta() {
-        var fontSize = document.getElementById('cta-img').offsetHeight * 0.4;
-        var fontMarginTop = document.getElementById('cta-img').offsetHeight * 0.3;
+    function hideTooltip() {
+        if(startOverlayTimer != null){
+            clearTimeout(startOverlayTimer);
+        }
+        document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled";
+        addClass(document.getElementById('startOverlay'), 'fadeOut');
+        addClass(document.getElementById('objectsDock'), 'moveDockUp');
+
+        window.addEventListener( 'touchstart', onDocumentTouchStart, true );
+
+    }
+
+    function initCta(){
+        var text = getLocalisedCta().text;
+        var fontFamily = getLocalisedCta().font;
+        var fontSizeMultiplier = getLocalisedCta().fontSizeMultiplier;
+
+        var fontSize = document.getElementById('cta-img').offsetHeight * fontSizeMultiplier;
+
+        document.getElementById('cta-text').innerHTML = text;
+
+        // var fontMarginTop = orientationCheck()=='portrait'? document.getElementById('cta-img').offsetHeight * 0.05 : document.getElementById('cta-img').offsetHeight * 0.3;
+
+
+
         document.getElementById('cta-text').style.fontSize = fontSize + 'px';
-        document.getElementById('cta-text').style.top = fontMarginTop + 'px';
+        // document.getElementById('cta-text').style.top = fontMarginTop + 'px';
+
+        // document.getElementById('cta-text').offsetWidth = document.getElementById('cta-img').offsetWidth * 0.8;
+        
+
         document.getElementById('cta-text').style.opacity = 1;
+
           
     }
+
+
+    function onWindowResize() {
+        initCta();
+        camera.aspect = document.body.clientWidth / document.body.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(document.body.clientWidth, document.body.clientHeight);
+    }
+
+
+
     </script>
       <!-- PRIVACY START HTML -->
     <div id="privacy-wrapper">
