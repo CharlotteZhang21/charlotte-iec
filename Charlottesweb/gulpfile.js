@@ -82,13 +82,7 @@ function build() {
             paths: [path.join(__dirname, 'src')],
             entries: ENTRY_FILE,
             debug: true,
-            transform: [
-                [
-                    babelify, {
-                        presets: ["es2015"]
-                    }
-                ]
-            ]
+            transform: 'reactify'
         })
         .transform(babelify)
         .bundle().on('error', function(error) {
@@ -155,5 +149,5 @@ gulp.task('serve', ['build', 'sass', 'html', 'copyStatic'], serve);
 gulp.task('watch-js', ['fastBuild'], browserSync.reload); // Rebuilds and reloads the project when executed.
 gulp.task('sass', buildSass);
 gulp.task('html', buildHtml);
-gulp.task('watch-static', browserSync.reload);
+gulp.task('watch-static', ['copyStatic'], browserSync.reload);
 gulp.task('default', ['serve']);
