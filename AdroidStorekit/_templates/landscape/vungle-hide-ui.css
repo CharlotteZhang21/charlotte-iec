@@ -1,0 +1,4 @@
+/* remove old inline vungle headers and privacy */
+#vungle-header, #privacy-wrapper, #bdgrzdjf-privacy-wrapper, #vungle-vid {
+	display: none !important;
+}

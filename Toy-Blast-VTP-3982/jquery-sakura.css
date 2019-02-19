@@ -788,9 +788,18 @@
     }
 }
 
+.red {
+    background: url('red_block.png') no-repeat;
+}
+.blue {
+    background: url('blue_block.png') no-repeat;
+}
+.yellow {
+    background: url('yellow_block.png') no-repeat;
+}
 .sakura {
   /*background-image: url('snowflake.png') */
-    background: url('snowflake.png') no-repeat;
+    
     background-size: 100% auto;;
 /*
     background: -webkit-linear-gradient(120deg, rgba(255, 183, 197, 0.9), rgba(255, 197, 208, 0.9));

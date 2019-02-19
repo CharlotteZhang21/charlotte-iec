@@ -67,8 +67,10 @@
         // Declarations.
         var documentHeight = $(document).height();
         var documentWidth = $(document).width();
-        var sakura = $('<div class="' + options.className + '" />');
-
+        
+        var sakura = $('<div class="sakura" />');
+        sakura.addClass(options.className[ parseInt(2 * Math.random())]);
+        
         // Set the overflow-x CSS property on the body to prevent horizontal scrollbars.
         $('body').css({ 'overflow-x': 'hidden' });
 
@@ -86,9 +88,17 @@
             var animations = 'fall ' + fallTime + 's linear 0s 1' + ', ' +
                 blowAnimation + ' ' + (((fallTime > 30 ? fallTime : 30) - 20) + getRandomInt(0, 20)) + 's linear 0s infinite' + ', ' +
                 swayAnimation + ' ' + getRandomInt(2, 4) + 's linear 0s infinite';
+
             var petal = sakura.clone();
+
+            petal.removeClass().addClass('sakura').addClass(options.className[ parseInt(3 * Math.random())]);
+
+
+
             var size = getRandomInt(options.minSize, options.maxSize);
+
             var startPosLeft = Math.random() * documentWidth - 100;
+
             var startPosTop = -((Math.random() * 20) + 15);
 
             // Apply Event Listener to remove petals that reach the bottom of the page.

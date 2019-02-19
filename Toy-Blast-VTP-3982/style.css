@@ -55,6 +55,32 @@
     z-index: -100;
 }
 
+#background_2D {
+    width: auto;
+    height: 100%;
+}
+
+#board_2D {
+    width: 100%;
+    height: auto;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.zoomOut {
+    transform: scale(5);
+    transition: transform 0.5s ease-in-out;
+/*    animation: zoomOut 1s ease-in-out;
+    -webkit-animation: zoomOut 1s ease-in-out;*/
+}
+
+.fade {
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
 .text {
     font-family: 'myFont';
     /*top: 50%;
@@ -82,20 +108,6 @@
     font-size: 6vw;
     color: #fff;
 }
-#character {
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    height: 55%;
-}
-
-#goodJob {
-    left: 50%;
-    top: 26%;
-    font-size: 9vw;
-}
-
 #continueStory {
     width: 80%;
 }
@@ -147,41 +159,57 @@
     margin: 0 1.5%;
 }
 
+#tntProgress{
 
-.dockBG {
-    width: auto;
-    height: 100%;
-    left: 50%;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    z-index: 4;
+    border: 0;
+    width: 60%;
+    height: 5%;
+    left: 0;
+    right: 0;
+    top: 60%;
+    border-radius: 50px;
+    pointer-events: none;
+    transition: opacity 1s ease-in-out;
 }
 
-#found_object1 {
-    width: 18vw;
-    height: 18vw;
-    opacity: 1;
-    z-index: 10;
-    transform: translate(-50%, -50%);
+#tntProgress[value]::-webkit-progress-bar {
+
+    background-color: #1d2f42;
+    /*background: url('progressBar_bg.png');*/
+    /*background-size: auto;*/
+    border-radius: 50px;
+
+    border: 1px solid #386083;
+
+    box-shadow: #333 0px 2px 15px;
+}
+
+#tntProgress[value]::-webkit-progress-value {
+  background-image:
+       -webkit-linear-gradient(-45deg, 
+                               transparent 33%, rgba(0, 0, 0, .1) 33%, 
+                               rgba(0,0, 0, .1) 66%, transparent 66%),
+       -webkit-linear-gradient(top, 
+                               rgba(255, 255, 255, .25), 
+                               rgba(0, 0, 0, .25)),
+       -webkit-linear-gradient(left, #8fd73f, #4198eb, #bd2e1f);
+
+    border-radius: 50px; 
+    background-size: 35px 120%, 100% 100%, 100% 100%;
+    transition: all 0.5s ease-in-out;
 }
 
 
-#found_object2 {
-    width: 18vw;
-    height: 18vw;
-    opacity: 1;
-    z-index: 10;
-    transform: translate(-50%, -50%);
+#tntProgress.hide{
+    opacity: 0;
+
 }
 
-
-#found_object3 {
-    width: 20vw;
-    height: 20vw;
-    opacity: 1;
-    z-index: 10;
-    transform: translate(-50%, -50%);
+#tntBar{
+    pointer-events: none;
+    width: 1%;
+    height: 30px;
+    background-color: green;
 }
 
 #centerScreen {
@@ -193,6 +221,11 @@
     bottom: 0;
 }
 
+/*
+#explosion-animation {
+    background: url('explosion.png');
+    animation: explosion 1s steps(15);
+}*/
 
 #end-screen {
     opacity: 1
@@ -203,29 +236,23 @@
     pointer-events: none;
 }
 
-#found_object1.hide, #found_object2.hide, #found_object3.hide {
-    opacity: 0;
-}
-
-.logo-container {
-    position: absolute;
-    top: 2%;
-    width: 42%;
-    height: 14vh;
-    z-index: 200;
-    left: 4vw;
-    right: auto;
-    margin: auto;
-}
-
-.logo-container img {
-    position: absolute;
-    max-width: 100%;
-    max-height: 100%;
-    top: 0;
+#logo {
+    /*top: 2%;*/
+    top: -50%;
     left: 0;
     right: 0;
-    margin: auto;
+    width: 50%;
+    z-index: 200;
+ 
+}
+
+#character {
+    top: 200%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 201;
+    /*transform: translate(0, 200%);*/
 }
 
 .cta-container a:active {
@@ -233,14 +260,18 @@
 }
 
 .cta-holder p{
-    color: #333;
+    color: #fff;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #28a55b;
     opacity: 0;
     transition: opacity .5s ease-in-out;
     z-index: 999;
     font-family: 'myFont';
     width: 100%;
     height: 50%;
-    margin: 6.5% auto;
+    margin: auto;
+    top: 0;
+    bottom: 0;
     display: block;
     position: absolute;
     text-align: center;
@@ -253,16 +284,15 @@
 }
 
 .cta-container {
-    position: absolute;
+
     bottom: 2.5vh;
     top:auto;
-    width: 80vw;
-    right: 10vw;
-    left: auto;
+    width: 60%;
+    left: 0;
+    right: 0;
     height: 10vh;
     z-index: 500;
 }
-
 
 
 .button1,
@@ -875,4 +905,34 @@
     100% {
         opacity: 1;
     }
+}
+
+@-webkit-keyframes zoomOut {
+    0% {
+        -webkit-transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        -webkit-transform: scale(5);
+    }
+    100%{
+        opacity: 0;
+    }
+
+    }
+}
+
+@keyframes zoomOut {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(5);
+    }
+    100%{
+        transform: scale(5);
+        opacity: 0;
+    }
+
 }

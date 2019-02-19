@@ -1,0 +1,135 @@
+<!-- ==================================================================== -->
+<!-- ========================= READ THIS FIRST ========================== -->
+<!-- This is the index.html file.
+
+     The only thing you need to tweak here is the containers.
+     Containers will later be used by the PIEC overlay to know where to place things (HUD elements, buttons, etc.).
+
+     A container will look like:
+
+     <div class="layout-item" id="name-of-your-container"></div>
+
+     Don't forget to style it inside main.css!!!
+
+<!   ==================================================================== -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0, user-scalable=no" />
+    <title>Vungle Endcard</title>
+    <link rel="stylesheet" href="main.css">
+    <style>
+    @font-face {
+        font-family: "vungle-fonticon";
+        src: url("vungle-fonticon.eot");
+        src: url("vungle-fonticon.eot?#iefix") format("embedded-opentype"), url("vungle-fonticon.woff") format("woff"), url("vungle-fonticon.ttf") format("truetype"), url("vungle-fonticon.svg#vungle-fonticon") format("svg");
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    /* Custom fonts*/
+    /*@font-face {
+        font-family: 'Agu Sans';
+        src: url('DR Agu Sans Black Black.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }*/
+
+    /* Generic font for autolocalised texts! */
+    @font-face {
+        font-family: 'Noto Sans';
+        src: url('NotoSans-ExtraBold.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    </style>
+    <!-- logo strike start -->
+    <style>
+    #vungle-footer {
+        display: none !important;
+    }
+    </style>
+    <!-- logo strike end -->
+<link rel="stylesheet" type="text/css" href="vungle-hide-ui.css"></head>
+
+<body class="preload light">
+
+    <div id="wrap">
+        <video preload playsinline muted autoplay id='videoBg'></video>
+        <!-- VPIEC WRAPPER -->
+        <!-- select aspect ratio from '16-9', '4-3'-->
+        <div id="vpiec-wrap">
+            <!-- ==================================================================== -->
+            <!-- ==================================================================== -->
+            <!-- ================== ADD VPIEC CONTAINERS HERE ======================= -->
+            
+            <div class="layout-item" id="badge-portrait">
+            </div>
+            <div class="layout-item" id="badge-landscape">
+            </div>
+
+            <div class="layout-item" id="skip-button-portrait">
+            </div>
+
+            <div class="layout-item" id="skip-button-landscape">
+            </div>
+
+
+            <div class="layout-item" id="cta-container-text-portrait">
+            </div>
+            <div class="layout-item" id="cta-container-text-landscape">
+            </div>
+
+
+            <div class="layout-item" id="screen-shot-container-portrait"></div>
+            <div class="layout-item" id="screen-shot-container-landscape"></div>
+
+
+            <div class="layout-item" id="full-screen">
+            </div>
+
+
+            <div class="layout-item" id="cta-container-final">
+            </div>
+
+            <!-- ================== END VPIEC CONTAINERS HERE ======================= -->
+            <!-- ==================================================================== -->
+
+
+
+
+
+
+
+
+            <!-- ==================================================================== -->
+        </div>
+        <!-- End of VPIEC WRAPPER -->
+        <div id="game">
+        </div>
+    </div>
+    <!-- IEC Creative ends here -->
+    <!-- phaser requires fonts to be preloaded before they can be used "in game" -->
+    <!-- note: you can add more fonts below -->
+    <div class="preload-font" style="font-family: Agu Sans;">.</div>
+    <div class="preload-font" style="font-family: Noto Sans;">.</div>    <script src="phaser.min.js"></script>
+    <script src="settings.js"></script>    <script src="bundle.min.js"></script>
+    <script>
+
+    window.onload = function() {
+        var VPIECwrapper = document.getElementById("vpiec-wrap");
+        
+    };
+
+    window.addEventListener('resize', function(e) {
+        piec.onSDKCall();
+        piec.onResize();
+    });
+
+    var piec = piec || {};
+    </script>
+<script src="vungle-map-clicks.js"></script></body>
+
+</html>
