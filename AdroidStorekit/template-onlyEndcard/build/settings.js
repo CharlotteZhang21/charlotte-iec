@@ -27,13 +27,13 @@ PiecSettings.hudElements = {
         effects: 'fadeIn',
     },
     'googleStoreScreenShot-portrait': {
-        src: ['googleStoreScreenShot-portrait.png'],
+        src: ['GSTORE_portrait.png'],
         htmlTag: 'screen-shot-container',
         anchor: { x: 0, y: 0},
         effects: 'slideInUp',
     },
     'googleStoreScreenShot-landscape': {
-        src: ['googleStoreScreenShot-landscape.png'],
+        src: ['GSTORE_landscape.png'],
         htmlTag: 'screen-shot-container',
         anchor: { x: 0, y: 0},
         effects: 'slideInUp',
@@ -44,7 +44,12 @@ PiecSettings.hudElements = {
         anchor: { x: 0.5, y: 0.5 },
         type: 'cta',
     },
-
+    'cta-bg': {
+        src: 'cta.png',
+        htmlTag: 'cta-container',
+        anchor: {x: 0.5, y: 0.5},
+        effects: 'fadeIn',
+    },
     'download-text': {                  //Autolocalised text
         text: 'Install',
         autolocalise: true,

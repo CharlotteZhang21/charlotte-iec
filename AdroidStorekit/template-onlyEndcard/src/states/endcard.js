@@ -56,11 +56,12 @@ class Endcard extends Phaser.State {
             var googleStoreName = 'googleStoreScreenShot-';
             googleStoreName += Util.isPortrait() ? 'portrait' : 'landscape';
 
-            console.log(googleStoreName)
             this.animate(this.hudObjects[googleStoreName], PiecSettings.hudElements[googleStoreName].effects);            
+
 
             this.game.time.events.add(300, function(){
                 this.animate(this.hudObjects['download-text'], PiecSettings.hudElements['download-text'].effects);            
+                this.animate(this.hudObjects['cta-bg'], PiecSettings.hudElements['cta-bg'].effects);
             },this);
         
         }, this);           
