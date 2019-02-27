@@ -38,8 +38,8 @@
     background-color: rgba(39, 25, 0, 0.8);
     position: absolute;
     top: 0px;
-    box-shadow: 0 0 200px rgba(0, 0, 0, 0.9) inset;
     z-index: 10;
+    box-shadow: 0 0 200px rgba(0, 0, 0, 0.9) inset;
     transition: opacity 0.5s ease-in-out;
 }
 
@@ -95,12 +95,14 @@
 
 .overlayText {
     font-family: 'myFont';
-    width: 90%;
-    top: 40%;
+    width: 100%;
+    top: 65%;
     left: 0;
     right: 0;
     font-size: 7vw;
     color: #fff;
+    z-index: 10;
+    opacity: 0;
 }
 .tapAnywhereText {
     width: 50%;
@@ -123,6 +125,30 @@
     transform: translate(-50%, -50%);
 }
 
+#smoke-1, #smoke-1-final {
+    width: 60%;
+    height: auto;
+    left: 0;
+    bottom: 1%;
+    opacity: 0;
+}
+
+#smoke-1-final {
+    bottom: 80%;
+}
+
+#smoke-2, #smoke-2-final {
+    width: 80%;
+    height: auto;
+    right: 0;
+    bottom: 2%;
+    opacity: 0;
+}
+
+#smoke-2-final {
+    bottom: 60%;
+}
+
 #explosion-layer-1 {
     width: 10%;
     height: auto;
@@ -131,6 +157,7 @@
     top: 50%;
     opacity: 0;
     z-index: 10;
+    pointer-events: none;
 }
 
 #explosion-layer-2 {
@@ -141,6 +168,7 @@
     top: 50%;
     opacity: 0;
     z-index: 9;
+    pointer-events: none;
 
 }
 
@@ -242,7 +270,7 @@
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: 1;
+    pointer-events: none;
 }
 
 /*
@@ -267,6 +295,7 @@
     right: 0;
     width: 50%;
     z-index: 200;
+    pointer-events: none;
  
 }
 
@@ -274,20 +303,6 @@
     top: 10%;
 }
 
-#finger {
-
-    width: 108px;
-    height: 191px;
-    /*background: red;*/
-    top: 40%;
-    left: 0;
-    right: 0;
-
-    pointer-events: none;
-    background-image: url('hand_anim.png');
-    background-position: 0 0;
-
-}
 
 #hand {
     width: 20%;
@@ -296,14 +311,14 @@
     pointer-events: none;
     /*right: 0;*/
     top: 45%;
-    opacity: 0;
+    opacity: 1;
     z-index: 100;
 }
 
 #hand.animate {
     opacity: 1;
     transition: opacity 0.5s ease-in-out;
-    animation: finger 0.7s ease-in-out 2;
+    animation: finger 1.4s ease-in-out;
     animation-delay: 0.5s;
 }
 
@@ -313,6 +328,7 @@
     right: 0;
     width: 100%;
     z-index: 201;
+    pointer-events: none;
     /*transform: translate(0, 200%);*/
 }
 
@@ -326,16 +342,16 @@
 
 .cta-holder p{
     color: #fff;
-    -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: #28a55b;
     opacity: 0;
     transition: opacity .5s ease-in-out;
     z-index: 999;
     font-family: 'myFont';
-    width: 100%;
+    width: 80%;
     height: 50%;
     margin: auto;
     top: 0;
+    left: 0;
+    right: 0;
     bottom: 0;
     display: block;
     position: absolute;
@@ -462,47 +478,24 @@
 }
 
 @media all and (min-width: 768px) and (orientation: portrait) {
-     
-    #objectsDock {
-        width: 60%;
-    } 
+    #background_2D {
+        width: 100%;
+        height: auto;
+    }
 
-    #objectsDock.moveDockUp {
-        bottom: 15%;
+    #logo, #logo-final {
+        width: 30%;
     }
-    #character {
-        height: 68%;
-        width: 80%;
 
+    #character-final {
+        top: 30%;
     }
-    #goodJob {
-        font-size: 7vw;
-    }
-    .cta-container {
-        width: 55%;
-        left: 0;
-        right: 0;
-        margin: auto;
-    }
+
 }
 
 
 @media all and (min-height: 768px) and (orientation: landscape) {
       
-    .cta-holder p{
-        margin: 27% auto;
-    }
-    .cta-container {
-        bottom: 2%;
-    }
-    #character {
-        left: 8%;
-        height: 84%;
-        width: 52%;
-    }
-    #goodJob {
-        left: 32%;
-    }
 }
 
 /*iPhone X portrait*/
@@ -513,29 +506,6 @@
 /*iPhone X landscape*/
 @media (min-aspect-ratio: 724/354) and (orientation: landscape){   
 
-    .cta-container {
-        width: 35%;
-        /*right: 5%;*/
-    }
-    .cta-holder p{
-        margin: 11% auto;
-    }
-    .interactive-tooltip-360 {
-        top: -4%;
-    }
-    #findObject {
-        top: 43%;
-    }
-    .objectsContainer {
-        top: 65%;
-    }
-    .tapAnywhereText {
-        top: 80%;
-    }
-
-    #objectsDock {
-        bottom: -32%;
-    }
 }
 
 
@@ -687,74 +657,58 @@
 }
 
 @-webkit-keyframes finger {
-    /*0% {
-        -webkit-opacity: 0;
-        opacity: 0;
-    }
-*/
     0% {
         /*opacity: 1;*/
          -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
     }
 
-    40% {
+    30% {
         -webkit-transform: rotate(-45deg);
         transform: rotate(-45deg);
     }
-    100% {
+
+    60% {
+        /*opacity: 1;*/
+         -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    90% {
+     
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
+    }
+    100% {
+        opacity: 0;
     }
 
 }
 
 @keyframes finger {
-    /*0% {
-        -webkit-opacity: 0;
-        opacity: 0;
-    }
-
-    10% {
-        opacity: 1;
-         -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-
-    20% {
-        -webkit-transform: rotate(-45deg);
-        transform: rotate(-45deg);
-    }
-    25% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-    30% {
-        -webkit-opacity: 1;
-        opacity: 1;
-    }
-    35% {
-        -webkit-opacity: 0;
-        opacity: 0;
-    }
-    100% {
-        -webkit-opacity: 0;
-        opacity: 0;
-    }
-    */
+  
     0% {
         /*opacity: 1;*/
          -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
     }
 
-    40% {
+    30% {
         -webkit-transform: rotate(-45deg);
         transform: rotate(-45deg);
     }
-    100% {
+
+    60% {
+        /*opacity: 1;*/
+         -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    90% {
+     
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
+    }
+    100% {
+        opacity: 0;
     }
 }
 @-webkit-keyframes pano {

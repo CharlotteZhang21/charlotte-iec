@@ -38,30 +38,19 @@ function getLocalisedLogo() {
 function getLocalisedFindObjects() {
  if(language == null)
         language = getBrowserLanguage();
-    var text = 'Find the objects';
+    var text = 'Tap to explode TNT';
     var font = 'myFont';
     switch ( language) {
         case 'en':
             break;
-        case 'ja':
-            text = '隠れたアイテムを探そう';
-            font = 'asian';
-            break;
-        case "ko":
-            text = "숨겨진 모든 물체를 찾으세요!";
-            break;
+        
         case "zh":
-            text = "寻找隐藏物品";
+            text = "点击爆炸";
             font = 'asian';
             break;
-        case "de":
-            text = "Finden Sie alle versteckten Objekte!";
-            break;
-        case "fr":
-            text = "Trouvez les objets cachés";
-            break;
+       
         default:
-            text = 'Find the objects'
+            text = 'Tap to explode TNT'
     }
     return {'text' : text.toUpperCase(), 'font' : font};
    
@@ -151,7 +140,7 @@ function getLocalisedCta() {
         case "zh":
             downloadText = "立即安装";
             font = 'asian';
-            fontSizeMultiplier = 0.3;
+            fontSizeMultiplier = 0.25;
             break;
         case "de":
             downloadText = "Herunterladen";

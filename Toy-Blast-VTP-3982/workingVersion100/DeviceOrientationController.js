@@ -45,9 +45,10 @@ var DeviceOrientationController = function(object) {
     //Portrait
     this.minLonPort = -25;
     this.maxLonPort = 25;
+    
     //Landscape
-    this.minLonLands = -10;
-    this.maxLonLands = 10;
+    this.minLonLands = -8;
+    this.maxLonLands = 8;
     //motion sensitivity of ios / android
     this.mobileVibrationValue = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ? 0.022 : 0.022;
 

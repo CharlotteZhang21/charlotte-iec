@@ -70,25 +70,25 @@
 
         <div id="startOverlay" class="overlay">
                         
-            <!-- <div class="text overlayText" id="findObject"> -->
-                <!-- Find the object -->
-            <!-- </div> -->
+            <div class="text overlayText" id="findObject">
+                Tap to explode TNT
+            </div>
             <img class="item" id="background_2D" src="background.jpg" />
             <img class="item" id="board_2D" src="board.png" />
-
-            <div id="tapToPlay" class="text tapAnywhereText">
-                <!-- Tap to play -->
-            </div>
-
         </div> 
 
         <img class="item" id="explosion-layer-1" src="explosion-1.png" />
         <img class="item" id="explosion-layer-2" src="explosion-2.png" />
 
+
+        <img class="item" id="smoke-1" src="smoke.png" />
+        <img class="item" id="smoke-2" src="smoke.png" />
+
+        <div class="item" id="smoke-1-final"></div>
+        <div class="item" id="smoke-2-final"></div>
+
         <div class="item" id="centerScreen"></div>
-<!-- 
-        <div id="finger" class="item animate">
-        </div> -->
+
         <img id="hand" class="item" src="hand.png" />
 
         <div id="cta-container" class="cta-container item pulse">
@@ -97,25 +97,12 @@
                     <img id="cta-img" class=" button1" src="button_1.png">
                     <img id="cta-img-2" class=" button2" src="button_2.png">
                     <p id="cta-text" >play</p>
-                <!-- </a> -->
-            </div>
-        </div>
-
- <!--        <div id="tntProgress">
-          <div id="tntBar"></div>
-        </div>
- -->    
-
-        <progress id="tntProgress" class="item" value="0" max="100"></progress>
-        <div id="interactive-tooltip-360" class="interactive-tooltip-360">
-            <div id="icon-holder" class="icon-holder show">
-                <!-- <div class="pano"></div>
-                <div class="device"></div> -->
-                <!-- <div class="arrow-left"></div>
-                <div class="arrow-right"></div> -->
                 
             </div>
         </div>
+
+        <progress id="tntProgress" class="item" value="0" max="100"></progress>
+      
 
         <div id="sakuraLayer"></div>
     </div>
@@ -146,13 +133,15 @@
     <script type="text/javascript" src="back2.js"></script>
 
     
-    <script src="three.js"></script>
-    <!-- <script src="three.min.js"></script> -->
+    <!-- <script src="three.js"></script> -->
+    <script src="three.min.js"></script>
     <script src="GLTFLoader.js"></script>
     <script src="TweenMax.min.js"></script>
     <script src="Tween.js"></script>
     <script src="jquery.min.js"></script>
     <script src="jquery-sakura.js"></script>
+    <script src="gyronorm.complete.min.js"></script>
+    <script src="gyrogroup.js"></script>
     <script type="text/javascript" src="auto-localisation-util.js"></script>
     <script type="text/javascript" src="DeviceOrientationController.js"></script>
    <!--  <script type="text/javascript" src="main.js"></script> -->

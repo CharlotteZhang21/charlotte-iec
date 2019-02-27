@@ -1,12 +1,11 @@
-
 /*===============
  *sound
  *===============*/
 
 var sounds = {
-   pop: "pop",
-   explosion: 'explosion',
-   // finish: 'win',
+    pop: "pop",
+    explosion: 'explosion',
+    // finish: 'win',
 }
 
 var audioType;
@@ -19,28 +18,28 @@ var audios = {};
 var currentAudio;
 
 //Function to play the exact file format
-function playAudio(file){
+function playAudio(file) {
     currentAudio = file;
-    if(!muted){
+    if (!muted) {
         currentAudio.play();
     }
 }
 
 function stopAudio() {
-    if(currentAudio!== undefined){
+    if (currentAudio !== undefined) {
         currentAudio.pause();
         currentAudio.currentTime = 0;
     }
 }
 
 
-function generateAudio(){
+function generateAudio() {
     // for(var i=0; i < sounds.length; i++) {
     //     var audio = new Audio(sounds[i] + audioType);
     //     audios[sounds[i]] = audio; 
     // }
 
-    for(var key in sounds) {
+    for (var key in sounds) {
         var audio = new Audio(sounds[key] + audioType);
         audios[key] = audio;
     }
@@ -61,13 +60,7 @@ var gyroPresent = false;
 var orientation = orientationCheck();
 var lockView = true; // this restricts viewing the bottom of the 360 view with the gyroscope.
 
-var overlay = document.getElementById('overlay-id');
-var endOverlay = document.getElementById('end-overlay');
-var hand = document.getElementById('hand-id');
-
 // Inserting base64 data to save space.
-var insertLogo = document.getElementById('insert-logo');
-var insertSpiral = document.getElementById('insert-spiral');
 
 var u = navigator.userAgent;
 var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios check
@@ -100,30 +93,11 @@ var horizon = 0;
 /*===== images ======*/
 var imagesToAdd = [
 
-    // {
-    //     name: 'explosion',
-    //     link: explosion,
-    //     // clickEffect: 'particles1',
-    //     clickable: false,
-    //     visible: false,
-    //     animateStart: false, // control whether the animate should start or not
-    //     audio: "explosion",
-    //     position:  [10,  horizon, 0],// [-3.5,  horizon, 0.5],
-    //     rotation: {
-    //         x: THREE.Math.degToRad(0),
-    //         y: THREE.Math.degToRad(90),
-    //         z: THREE.Math.degToRad(0),
-    //     },
-    //     size: [256/50 * sizee, 256/50  *sizee, .5],
-    //     animation: [5, 3, 15, 60, true],
-    // },
-
 ];
 
 var addedImages = {} // Reference for tweening 
 var animationInstructions = {};
 var textureReference = {};
-
 
 function initScene() {
 
@@ -132,13 +106,10 @@ function initScene() {
 
     // camera
 
-    var FOV = orientationCheck()=='portrait' ? 65 : 80;
-    // var    FOV = 100;
-
-
+    var FOV = orientationCheck() == 'portrait' ? 65 : 70;
 
     camera = new THREE.PerspectiveCamera(FOV, document.body.clientWidth / document.body.clientHeight, 1, 1000);
-    camera.target = new THREE.Vector3(0,0,0);
+    camera.target = new THREE.Vector3(0, 0, 0);
     camera.position.z = 1;
 
 
@@ -167,48 +138,12 @@ function initScene() {
     renderer.gammaInput = true;
     renderer.gammaOutput = true;
 
-    
+
 
 
     /************* 
      * Use 2 background images, animating the background
      *************/
-    var textures = getTexturesFromAtlasFile(imageSource, 6);
-    var textures2 = getTexturesFromAtlasFile(imageSource2, 6);
-    // var textures3 = getTexturesFromAtlasFile(imageSource3, 6);
-
-    var materials = [], materials2 = [], materials3 = [];
-    for (var i = 0; i < 6; i++) {
-        materials.push(new THREE.MeshBasicMaterial({
-            map: textures[i]
-        }));
-    }
-
-    for (var i = 0; i < 6; i++) {
-        materials2.push(new THREE.MeshBasicMaterial({
-            map: textures2[i]
-        }));
-    }
-
-
-    // skyBox = new THREE.CubeTextureLoader().setPath('').load([
-    //     panoright,
-    //     panoleft,
-    //     panotop,
-    //     panobottom,
-    //     panofront,
-    //     panoback,
-    // ]);
-
-
-    // skyBox2 = new THREE.CubeTextureLoader().setPath('').load([
-    //     right2,
-    //     left2,
-    //     top2,
-    //     bottom2,
-    //     front2,
-    //     back2,
-    // ]);
 
     skyBox = new THREE.CubeTextureLoader().setPath('').load([
         panoleft,
@@ -230,90 +165,9 @@ function initScene() {
     ]);
     scene.background = skyBox2;
     scene.background.rotation = 180;
-    // camera.rotation.x = 180 * Math.PI/180;
-
-    // scene.background
-    // for (var i = 0; i < 6; i++) {
-    //     materials3.push(new THREE.MeshBasicMaterial({
-    //         map: textures3[i]
-    //     }));
-    // }
-
-    // skyBox = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1), materials);
-    //  // skyBox.applyMatrix(new THREE.Matrix4().makeScale(800, 800, -800));
-    // scene.add(skyBox);
-
-    // skyBox2 = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1), materials2);
-    //  // skyBox2.applyMatrix(new THREE.Matrix4().makeScale(800, 800, -800));
-    // scene.add(skyBox2);
-
-    // skyBox_explosion = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1), materials3);
-    // // skyBox_explosion.applyMatrix(new THREE.Matrix4().makeScale(800, 800, -800));
-    // scene.add(skyBox_explosion);
-
-    // skyBox.visible = false;
-    // skyBox2.visible = false;
-    // skyBox_explosion.visible = false;
-    // setInterval(function(){
-    //     if(skyBox2.visible)
-    //         skyBox2.visible = false;
-    //     else 
-    //         skyBox2.visible = true;
-    // }, 1e3);
-
-
-    /************* 
-     * BackgroundEnd
-     *************/
-
-    // for (var i = 0; i < imagesToAdd.length; i++) {
-    //     addedImages[imagesToAdd[i]['name']] = createImage(imagesToAdd[i], i);
-
-    // }
-
-
-
-    // animationInstructions["dragon1"].start();
 
 }
 
-//load the background material texture image
-function getTexturesFromAtlasFile(atlasImgUrl, tilesNum) {
-
-    var textures = [];
-
-    for (var i = 0; i < tilesNum; i++) {
-
-        textures[i] = new THREE.Texture();
-
-    }
-
-    var imageObj = new Image();
-
-
-    imageObj.onload = function() {
-
-        var canvas, context;
-        var tileWidth = imageObj.height;
-
-        for (var i = 0; i < textures.length; i++) {
-
-            canvas = document.createElement('canvas');
-            context = canvas.getContext('2d');
-            canvas.height = tileWidth;
-            canvas.width = tileWidth;
-            context.drawImage(imageObj, tileWidth * i, 0, tileWidth, tileWidth, 0, 0, tileWidth, tileWidth);
-            textures[i].image = canvas
-            textures[i].needsUpdate = true;
-        }
-
-    };
-    imageObj.src = atlasImgUrl;
-    // imageObj.src = imageSource;
-
-    return textures;
-
-}
 
 function animate(time) {
 
@@ -336,8 +190,8 @@ function animate(time) {
             ) {
                 imagesToAdd[i].animateOnSight = 'ready';
 
-            }     
-           
+            }
+
         }
     }
 
@@ -351,7 +205,7 @@ function animate(time) {
     if (this.vector.x < 0) {
         multiplier = -1;
     }
-    var angle = Math.acos(this.vector.z/Math.sqrt(this.vector.x * this.vector.x + this.vector.y * this.vector.y + this.vector.z * this.vector.z)) * 180/Math.PI * multiplier + 180;
+    var angle = Math.acos(this.vector.z / Math.sqrt(this.vector.x * this.vector.x + this.vector.y * this.vector.y + this.vector.z * this.vector.z)) * 180 / Math.PI * multiplier + 180;
 
     if (angle > 180) {
         angle -= 270;
@@ -363,117 +217,13 @@ function animate(time) {
 
     TWEEN.update(time);
 
-
-
-}
-
-function createImage(obj, arrayInPosition) {
-    var texture = new THREE.TextureLoader().load(obj.link);
-    var delay = obj.delay || 0;
-    if (obj.hasOwnProperty('spritesheetData')) {
-        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(obj.spritesheetData[2]/498, obj.spritesheetData[3]/1265);
-        texture.offset.x = (obj.spritesheetData[0])/498;
-        texture.offset.y = (1265 - obj.spritesheetData[1] - obj.spritesheetData[3])/1265;
+    // show my 3D model
+    if (this.myGltf) {
+        updateAndShow();
     }
-    if (obj.hasOwnProperty('animation')) {
-        // var delay = obj.animationDelay || 0;
-        var pushtoArray = new TextureAnimator(texture, obj.animation[0], obj.animation[1], obj.animation[2], obj.animation[3], arrayInPosition, obj.animation[4], obj.position[0], obj.position[2]); // texture, #horiz, #vert, #total, duration.
-        // pushtoArray.delay = delay;
-        annie.push(pushtoArray);
-    }
-    var material = new THREE.MeshBasicMaterial({
-        transparent: true,
-        map: texture,
-        side: THREE.DoubleSide
-    });
-
-    material.opacity = typeof(obj.opacity) === 'undefined' ? 1 : obj.opacity;
-
-    textureReference[obj.name] = material;
-
-    var geometry = new THREE.PlaneGeometry(obj.size[0], obj.size[1], obj.size[2]);
-    entity = new THREE.Mesh(geometry, material);
-    entity.position.x = obj.position[0];
-    entity.position.y = obj.position[1];
-    entity.position.z = obj.position[2];
-    entity.rotation.x = obj.rotation.x || 0;
-    entity.rotation.y = obj.rotation.y || 0;
-    entity.rotation.z = obj.rotation.z || 0;
-    entity.name = obj.name;
-    entity.audio = obj.audio || null;
-    entity.clickable = obj.clickable || false;
-    entity.visible = obj.visible == undefined? true : false;
-    entity.clickEffect = obj.clickEffect;
-    scene.add(entity);
-    objects.push(entity);
-    objectsObj[obj.name] = entity;
-    
-    return entity;
 }
 
 
-
-function TextureAnimator(texture, tilesHoriz, tilesVert, numTiles, tileDispDuration, arrayInPosition, loop, x, z) {
-
-
-    // note: texture passed by reference, will be updated by the update function.
-    this.ready = imagesToAdd[arrayInPosition].animateOnSight || 'ready';
-
-    this.animateStart = imagesToAdd[arrayInPosition].animateStart === undefined? true : imagesToAdd[arrayInPosition].animateStart;
-
-    this.arrayPos = arrayInPosition;
-    this.tilesHorizontal = tilesHoriz;
-    this.tilesVertical = tilesVert;
-    this.xPos = x;
-    this.zPos = z;
-    // how many images does this spritesheet contain?
-    //  usually equals tilesHoriz * tilesVert, but not necessarily,
-    //  if there at blank tiles at the bottom of the spritesheet. 
-    this.numberOfTiles = numTiles;
-    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(1 / this.tilesHorizontal, 1 / this.tilesVertical);
-
-    // how long should each image be displayed?
-    this.tileDisplayDuration = tileDispDuration;
-
-    // how long has the current image been displayed?
-    this.currentDisplayTime = 0;
-
-    // which image is currently being displayed?
-    this.currentTile = 0
-
-    this.loop = loop;
-    this.counter = 0;
-
-    texture.offset.x = 0;
-    texture.offset.y = 1/this.tilesVertical;
-
-    this.update = function(milliSec) {
-        this.ready = imagesToAdd[this.arrayPos].animateOnSight || 'ready';
-        if (this.ready === 'ready' && objectsObj[imagesToAdd[arrayInPosition].name].animateStart) {
-            if (this.loop || this.loop == false && this.counter < this.numberOfTiles) {
-                this.currentDisplayTime += milliSec;
-                while (this.currentDisplayTime > this.tileDisplayDuration) {
-                    this.currentDisplayTime -= this.tileDisplayDuration;
-                    this.currentTile++;
-                    if (this.currentTile == this.numberOfTiles && loop)
-                        this.currentTile = 0;
-                    if (this.currentTile == this.numberOfTiles && !loop) {
-                        scene.remove(objects[this.arrayPos]);
-                    }
-                    var currentColumn = this.currentTile % this.tilesHorizontal;
-                    texture.offset.x = currentColumn / this.tilesHorizontal;
-                    var currentRow = Math.floor(this.currentTile / this.tilesHorizontal);
-                    texture.offset.y = Math.abs( 1 - currentRow / this.tilesVertical) - 1/this.tilesVertical;
-                    if (!this.loop) {
-                        this.counter++;
-                    }
-                }
-            }
-        }
-    };
-}
 
 
 function onDocumentTouchStart(event) {
@@ -494,31 +244,23 @@ function onDocumentMouseDown(event) {
     raycaster.setFromCamera(mouse, camera);
 
     // console.log("mousex : " + mouse.x + "mousY: " + mouse.y);
-    var intersects = raycaster.intersectObjects(objects);
-    
+    var intersects = raycaster.intersectObjects(objects, true);
+
     if (intersects.length > 0) {
         for (var i = 0; i < intersects.length; i++) {
-        
+
             if (intersects[i].object.hasOwnProperty('clickable') && intersects[i].object.clickable === true) {
                 // updateTexture(intersects[i].object);
-                
-                playAudio(audios['correct']);
-                intersects[i].object.clickable = false;
-                var onClickEffect = intersects[i].object.clickEffect;
-                objectsObj[onClickEffect].animateStart = true;
 
-                objectsObj[onClickEffect].visible = true;
-
-                showAndAnimate(intersects[i].object, event.clientX, event.clientY);
-
-
-            }else {
+                playAudio(audios['pop']);
+                TNTClick();
+            } else {
                 console.log('wrong');
                 playAudio(audios['wrong']);
             }
         }
 
-    }else {
+    } else {
         // console.log('wrong');
         // playAudio(audios['wrong']);
     }
@@ -539,8 +281,8 @@ function showAndAnimate(obj, posX, posY) {
         top: centerScreen.offsetTop + centerScreen.clientHeight / 2,
         left: centerScreen.offsetLeft + centerScreen.clientWidth / 2,
         scale: 2,
-        ease:Quad.easeInOut,
-        onComplete: function(){
+        ease: Quad.easeInOut,
+        onComplete: function() {
 
             var nextPoint = document.getElementById("dock-" + obj.name);
 
@@ -549,48 +291,47 @@ function showAndAnimate(obj, posX, posY) {
 
             var parent = nextPoint.parentNode;
 
-             TweenMax.to(item, 1, {
+            TweenMax.to(item, 1, {
                 top: parent.offsetTop + nextPoint.offsetTop + nextPoint.offsetHeight / 2,
                 left: parent.offsetLeft + nextPoint.offsetLeft + nextPoint.offsetWidth / 2,
                 scale: targetScale,
                 ease: Quad.easeInOut,
-                onComplete: function(){
-                    
-                    addClass(item, 'hide');                        
+                onComplete: function() {
+
+                    addClass(item, 'hide');
                     addClass(nextPoint, 'fadeInTransition')
                     nextPoint.src = obj.name + '.png';
                     //fade in out the dock item 
                     var container = $('#objectsDock');
                     var className = "fadeInTransition";
-                    if(checkChildrenHaveClass(container, className)===true){
-                       endgame();
+                    if (checkChildrenHaveClass(container, className) === true) {
+                        endgame();
                     };
                 }
-             });
+            });
         },
-    },
-    )
+    }, )
 
 }
 
 function checkChildrenHaveClass(container, className) {
-    
-    
+
+
     var childrenGrp = container.children('.object');
 
-    
 
-    if(childrenGrp.length > 0){
+
+    if (childrenGrp.length > 0) {
         for (var i = 0; i < childrenGrp.length; i++) {
             var node = childrenGrp[i];
-            
-            if(node.className.indexOf('fadeInTransition') == -1){
-    
+
+            if (node.className.indexOf('fadeInTransition') == -1) {
+
                 return false;
             }
         }
     }
-    
+
     return true;
 }
 
@@ -616,9 +357,11 @@ function spiralAway(obj) {
 }
 
 function endgame() {
-    
+    setTimeout(function() {
+        this.myGltf.scene.visible = false;
+    }, 500);
 
-    TweenMax.set($('#logo'), {transformOrigin: "50% 50% 0"});
+    TweenMax.set($('#logo'), { transformOrigin: "50% 50% 0" });
     TweenMax.to($('#logo'), 2, {
         top: $('#logo-final').position().top,
         scale: 1.4,
@@ -638,8 +381,8 @@ function endgame() {
 
     // })
 
-    if(ASOI) {
-        setTimeout(function(){
+    if (ASOI) {
+        setTimeout(function() {
             stopAudio();
             doSomething('download');
         }, 3000);
@@ -673,101 +416,148 @@ document.ontouchmove = function(e) {
 var dynamicLocal = 'v2';
 var ASOI = true;
 var closeButtonTimerDuration = 0; //seconds
-// var containersToLocalise = [
-//     'findObjects',
-//     'tapToPlay',
-//     'goodJob'
-// ]
+var containersToLocalise = [
+    'findObjects',
+    // 'tapToPlay',
+    // 'goodJob'
+]
 
+
+var pBar = $('#tntProgress')[0];
+var tntCharged = pBar.value;
+
+var tntEverTap = 20; // how much does one tap charge the tnt
+
+var handTween = null;
+var handTween2 = null;
 window.onload = function() {
     removeClass(document.body, 'preload');
     generateAudio();
-    setTimeout(function(){
+
+
+    /*===start tutorial animation===*/
+    handTween = TweenMax.to($('#hand'), 0.5, {
+        rotation: -15,
+        ease: Expo.easeInOut,
+        yoyo: true, 
+        repeat:3,
+        delay: 0.5,
+        onComplete: function() {
+            TweenMax.to($('#hand'), 0.5, {
+                opacity: 0,
+                ease: Linear.None
+            })
+            handTween.kill();
+        }
+    });
+
+    setTimeout(function() {
         removeClass(document.getElementById('vungle-close'), 'hide');
     }, closeButtonTimerDuration * 1000);
 
-    // loadTNT();
-
-    if(dynamicLocal !==undefined && dynamicLocal == 'v2'){
-
-        // for (var i = 0; i < containersToLocalise.length; i++) {
-           // var findObjectsContainer = document.getElementById('findObject');
-           // findObjectsContainer.innerHTML = getLocalisedFindObjects().text;
-           // findObjectsContainer.style.font = getLocalisedFindObjects().font;
-
-           // var tapToPlayContainer = document.getElementById('tapToPlay');
-           // tapToPlayContainer.innerHTML = getLocalisedTapToPlay().text;               
-           // tapToPlayContainer.style.font = getLocalisedTapToPlay().font;
+    this.lastFrameTime = 0;
 
 
+    // document.addEventListener('keydown', checkKey.bind(this), false);
 
-           // var goodJobContainer = document.getElementById('goodJob');
-           // goodJobContainer.innerHTML = getLocalisedGoodJob().text;               
-           // goodJobContainer.style.font = getLocalisedGoodJob().font;
+    // function checkKey(e) {
 
-           // var container = document.getElementById('findObjects');
-           // container.innerHTML = getLocalisedFindObjects().text;
-           // container.style.font = getLocalisedFindObjects().font;
+    //     var inc = 0.1;
 
-        // }
-         
-        
+    //     e = e || window.event;
+
+    //     if (e.keyCode == '38') {
+    //         // up arrow
+    //         this.myGltf.scene.position.x += inc;
+    //         console.log(this.myGltf.scene.position.x);
+
+    //         localStorage.setItem('x', this.myGltf.scene.position.x);
+    //     } else if (e.keyCode == '40') {
+    //         // down arrow
+    //         this.myGltf.scene.position.x -= inc;
+    //         console.log(this.myGltf.scene.position.x);
+    //         localStorage.setItem('x', this.myGltf.scene.position.x);
+    //     } else if (e.keyCode == '37') {
+    //         // left arrow
+    //         this.myGltf.scene.position.z -= inc;
+    //         localStorage.setItem('z', this.myGltf.scene.position.z);
+    //     } else if (e.keyCode == '39') {
+    //         // right arrow
+    //         this.myGltf.scene.position.z += inc;
+    //         localStorage.setItem('z', this.myGltf.scene.position.z);
+    //     }
+    // }
+
+    if (dynamicLocal !== undefined && dynamicLocal == 'v2') {
+
+        for (var i = 0; i < containersToLocalise.length; i++) {
+            var findObjectsContainer = document.getElementById('findObject');
+            findObjectsContainer.innerHTML = getLocalisedFindObjects().text;
+            findObjectsContainer.style.font = getLocalisedFindObjects().font;
+            TweenMax.to($('#findObject'), 0.5, {
+                opacity: 1,
+                ease: Linear.None
+            });
+
+        }
+
+
 
     }
 
-
-    //360 tool tip
-    // document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled visible";
-
     //cta
-    document.getElementById('vungle-cta-button').addEventListener('click', function(){
+    document.getElementById('vungle-cta-button').addEventListener('click', function() {
         stopAudio();
         doSomething("download");
     })
 
 
     //listen to the first tap
-    
-    $('#board_2D').click(function(){
+
+    $('#startOverlay').on('touchstart', function() {
         // skyBox.visible = true;
-        $('#hand').addClass('animate');
+
+        loadTNT();
+
+        window.addEventListener('touchstart', onDocumentTouchStart, true);
+        
+        if (handTween != null) {
+            handTween.kill();
+            TweenMax.to($('#hand'), 0.5, {
+                opacity: 0,
+                ease: Linear.None,
+                onComplete: function() {
+                    $('#hand').css({'opacity': 1, transform: 'rotate(0deg)'});
+
+                    handTween2 = TweenMax.to($('#hand'), 0.5, {
+                        rotation: -15,
+                        ease: Expo.easeInOut,
+                        yoyo: true,
+                        repeat: 3,
+                        delay: 0.5,
+                        onComplete: function() {
+                            TweenMax.to($('#hand'), 0.5, {
+                                opacity: 0,
+                                ease: Linear.None,
+                                onComplete: function(){
+                                    handTween2.kill();
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        }
         $('#startOverlay').addClass('fade');
         $('#board_2D').addClass('zoomOut');
-        setTimeout(function(){
+        setTimeout(function() {
             $('#board_2D').addClass('fade');
         }, 400)
 
-        setTimeout(function(){
+        setTimeout(function() {
             $('#hand').removeClass('animate');
         }, 2000);
-    
 
-        
-    })
-
-    var pBar = $('#tntProgress')[0];
-    var tntCharged = pBar.value;
-    
-    var tntEverTap = 20; // how much does one tap charge the tnt
-    $('#centerScreen').click(function(){
-        
-       if($('#hand').hasClass('animate')){
-            $('#hand').removeClass('animate');
-       }
-        tntCharged += tntEverTap;
-        
-        if(tntCharged < pBar.max){
-            pBar.value = tntCharged;
-        }else {
-            pBar.value = pBar.max;
-            console.log(pBar.value)
-            // setTimeout(function(){
-                explodeTNT();
-
-            // }, 500);
-        }
-
-        playAudio(audios['pop']);
     })
 
     initCta();
@@ -777,16 +567,10 @@ window.onload = function() {
 
     // if(!debug)
     // startOverlayTimer = setTimeout(function(){
-        // hideTooltip();
+    // hideTooltip();
     // }, 3e3);
 
-    document.getElementById('startOverlay').addEventListener('mousedown', function(){
-        // hideTooltip();
-    })
-
     window.addEventListener('resize', onWindowResize, false);
-
-
 
     initScene();
 
@@ -794,72 +578,125 @@ window.onload = function() {
 
 };
 
+
+
+function TNTClick() {
+    if(handTween2 != null) {
+        TweenMax.to($('#hand'), 0.5, {
+                opacity: 0,
+                ease: Linear.None
+            })
+        handTween2.kill();
+    }
+    tntCharged += tntEverTap;
+
+    if (tntCharged < pBar.max) {
+
+        pBar.value = tntCharged;
+
+    } else {
+
+        pBar.value = pBar.max;
+
+        explodeTNT();
+
+    }
+
+    playAudio(audios['pop']);
+
+    this.myGltfAction.reset();
+    this.myGltfAction.play();
+
+}
+
 function explodeTNT() {
-    // cancel the click event
-    $('#centerScreen').off("click"); 
-    
 
-
-    TweenMax.to($('#explosion-layer-2'), 0.5, {    
-        scale: 100,
-        // width: width * 1.5,
-        // height: height* 1.5,
+    scene.background = skyBox;
+    TweenMax.to($('#explosion-layer-2'), 0.2, {
         opacity: 1,
+        ease: Linear.None
+    });
+    TweenMax.to($('#explosion-layer-2'), 0.5, {
+        scale: 100,
         // rotation: 360,
-        delay: 0,
-        ease: Expo.easeIn,
-        onComplete: function(){
-            TweenMax.to($('#explosion-layer-2'), 0.5, {
+        delay: 0.1,
+        ease: Linear.easeIn,
+        onComplete: function() {
+            TweenMax.to($('#explosion-layer-2'), 0.3, {
                 opacity: 0,
-                ease: Expo.easeIn
+                ease: Linear.None
             });
+
         }
     });
-    TweenMax.to($('#explosion-layer-1'), 0.5, {    
-        scale: 100,
-        // width: width * 1.5,
-        // height: height* 1.5,
-        opacity: 1,
-        // rotation: 360,
-        delay: 0.3,
-        ease: Expo.easeIn,
-        onComplete: function(){
-            TweenMax.to($('#explosion-layer-1'), 0.5, {
-                opacity: 0,
-                ease: Expo.easeIn
-            });
-            scene.background = skyBox;
 
-            var sakuraNewOn = 100;
-            var block_colours = ["red", "blue", "yellow"];
-            $('#centerScreen').sakura({
-                className: block_colours,
-                maxSize: 50,
-                minSize: 30,
-                fallSpeed: 0.1, 
-                newOn: sakuraNewOn
+    TweenMax.to($('#explosion-layer-1'), 0.5, {
+        scale: 100,
+        opacity: 1,
+        delay: 0.5,
+        ease: Linear.easeIn,
+        onComplete: function() {
+            TweenMax.to($('#explosion-layer-1'), 1, {
+                opacity: 0,
+                ease: Linear.None
             });
+            
         }
     });
-    
 
-        // skyBox.visible = false;
 
-    // setTimeout(function(){
-    //     skyBox_explosion.visible = true;
-    // }, 200);
-    
 
-    // setTimeout(function(){
-        // skyBox_explosion.visible = false;
-        // skyBox2.visible = true;
-    // }, 200);
+    TweenMax.to($('#smoke-1'), 0.2, {
+        opacity: 1,
+        top: $('#smoke-1-final').position().top,
+        scale: 2,
+        ease: Linear.None
+    });
+    TweenMax.to($('#smoke-2'), 0.2, {
+        opacity: 1,
+        top: $('#smoke-2-final').position().top,
+        scale: 6,
+        ease: Linear.None
+    });
+
+
+    TweenMax.to($('#smoke-1'), 3, {
+        top: '-100%',
+        scale: 3,
+        ease: Linear.None,
+        onComplete: function(){
+            TweenMax.to($('smoke-2'), 0.5, {
+                opacity: 0
+            })
+        }
+    });
+
+    TweenMax.to($('#smoke-2'), 5, {
+        top: '-100%',
+        scale: 1.5,
+        ease: Linear.None,
+        onComplete: function(){
+            TweenMax.to($('smoke-2'), 0.5, {
+                opacity: 0
+            })
+        }
+    });
+
+    var sakuraNewOn = 100;
+    var block_colours = ["red", "blue", "yellow"];
+    setTimeout(function() {
+        $('#centerScreen').sakura({
+            className: block_colours,
+            maxSize: 50,
+            minSize: 30,
+            fallSpeed: 0.1,
+            newOn: sakuraNewOn
+        });
+
+    }, 1000);
+
+
     $('#tntProgress').addClass("fade");
-
-    //playExplosionAnimation
-    // objectsObj['explosion'].animateStart = true;
-    // objectsObj['explosion'].visible = true;
-
 
     playAudio(audios['explosion']);
 
@@ -867,18 +704,18 @@ function explodeTNT() {
 }
 
 function hideTooltip() {
-    if(startOverlayTimer != null){
+    if (startOverlayTimer != null) {
         clearTimeout(startOverlayTimer);
     }
     document.getElementById("interactive-tooltip-360").className = "interactive-tooltip-360 gyro-enabled";
     addClass(document.getElementById('startOverlay'), 'fadeOut');
     addClass(document.getElementById('objectsDock'), 'moveDockUp');
 
-    window.addEventListener( 'touchstart', onDocumentTouchStart, true );
+
 
 }
 
-function initCta(){
+function initCta() {
     var text = getLocalisedCta().text;
     var fontFamily = getLocalisedCta().font;
     var fontSizeMultiplier = getLocalisedCta().fontSizeMultiplier;
@@ -887,19 +724,17 @@ function initCta(){
 
     document.getElementById('cta-text').innerHTML = text;
 
-    // var fontMarginTop = orientationCheck()=='portrait'? document.getElementById('cta-img').offsetHeight * 0.05 : document.getElementById('cta-img').offsetHeight * 0.3;
-
 
 
     document.getElementById('cta-text').style.fontSize = fontSize + 'px';
     // document.getElementById('cta-text').style.top = fontMarginTop + 'px';
 
     // document.getElementById('cta-text').offsetWidth = document.getElementById('cta-img').offsetWidth * 0.8;
-    
+
 
     document.getElementById('cta-text').style.opacity = 1;
 
-      
+
 }
 
 
@@ -912,32 +747,90 @@ function onWindowResize() {
 
 
 function loadTNT() {
-    
-    let gltfs = [];
-    let urls = ['TNT.gltf'];
 
-    var newScale = 100;
-    
-    // let urls = []
-    let loader = new THREE.GLTFLoader();
+    this.myGltf;
+    this.myGltfAction;
+
+    var urls = ['TNT.gltf'];
+
+    var newScale = orientationCheck() == 'portrait'? 0.65 : 1;
+
+    // var urls = []
+    var loader = new THREE.GLTFLoader();
     // loader.setDRACOLoader(new THREE.DRACOLoader());
-    let self = this;
-    for (let i = 0; i < urls.length; i++) {
+    var self = this;
+    for (var i = 0; i < urls.length; i++) {
 
         loader.parse(ASSETS[urls[i]], urls[i], function(gltf) {
 
 
-            if(gltf.parser.options.path === 'TNT.gltf') {
+            if (gltf.parser.options.path === 'TNT.gltf') {
 
                 gltf.scene.scale.x = newScale;
                 gltf.scene.scale.y = newScale;
                 gltf.scene.scale.z = newScale;
+
+                gltf.scene.position.x = 0;
+                gltf.scene.position.y = 0;
+                gltf.scene.position.z = -1.55;
+
+                gltf.scene.rotation.x = THREE.Math.degToRad(15);
+                gltf.scene.rotation.y = THREE.Math.degToRad(0);
+                gltf.scene.rotation.z = 0;
             }
-            console.log(gltf);
-            gltfs[i] = gltf;
+
+
+
+            // objects.push(this.myGltf);
+            gltf.scene.traverse(function(object) {
+
+                if (object.isMesh) {
+                    object.clickable = true;
+                    objects.push(object);
+                }
+
+            });
+
+            this.myGltf = gltf;
+
+            // Remove the old character before adding the new one.
+            var gyroGroup = new GyroGroup();
+            gyroGroup.add(gltf.scene);
+            this.scene.add(gyroGroup);
+            this.mixer = new THREE.AnimationMixer(gltf.scene);
+            // The first animation seems to be always idle.
+            var clip = gltf.animations[0];
+
+            this.myGltfAction = this.mixer.clipAction(clip);
+
+            this.myGltfAction.setLoop(THREE.LoopOnce)
+
+
         });
         // loader.load(urls[i], function (gltf) {
-            // self.gltfs[i] = urls[i];
+        // self.gltfs[i] = urls[i];
         // });
+    }
+}
+
+function updateAndShow() {
+    if (this.mixer != null) {
+        var frameTime = window.performance.now() * 1.0e-3;
+        var deltaTime = 0;
+        if (this.lastFrameTime !== 0) {
+            deltaTime = frameTime - this.lastFrameTime;
+        }
+        this.lastFrameTime = frameTime;
+        // Animate the character model.
+        this.mixer.update(deltaTime);
+        // Add gyro rotation to the background.
+        // this.background.update(this.camera.position);
+        this.renderer.clearDepth();
+        // Render the background.
+        // this.renderer.render(this.backgroundScene, this.backgroundCamera);
+        // Don't clear the buffers and render the foreground.
+        this.renderer.render(this.scene, this.camera);
+        // Give orbit controls a chance to damp the rotation if needed.
+        this.controls.update();
     }
 }
