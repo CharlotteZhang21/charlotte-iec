@@ -1,0 +1,147 @@
+<!-- ==================================================================== -->
+<!-- ========================= READ THIS FIRST ========================== -->
+<!-- This is the index.html file.
+
+     The only thing you need to tweak here is the containers.
+     Containers will later be used by the PIEC overlay to know where to place things (HUD elements, buttons, etc.).
+
+     A container will look like:
+
+     <div class="layout-item" id="name-of-your-container"></div>
+
+     Don't forget to style it inside main.css!!!
+
+<!   ==================================================================== -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0, user-scalable=no" />
+    <title>Vungle Endcard</title>
+    <!-- build:css main.css -->
+    <link rel="stylesheet" href="css/main.css">
+    <!-- /build -->
+    <style>
+    @font-face {
+        font-family: "vungle-fonticon";
+        src: url("vungle-fonticon.eot");
+        src: url("vungle-fonticon.eot?#iefix") format("embedded-opentype"), url("vungle-fonticon.woff") format("woff"), url("vungle-fonticon.ttf") format("truetype"), url("vungle-fonticon.svg#vungle-fonticon") format("svg");
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'Contemporary';
+        src: url('Contemporary.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    /* Generic font for autolocalised texts! */
+    @font-face {
+        font-family: 'Noto Sans';
+        src: url('NotoSans-ExtraBold.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+
+    @font-face {
+        font-family: "vungle-fonticon";
+        src: url("vungle-fonticon.eot");
+        src: url("vungle-fonticon.eot?#iefix") format("embedded-opentype"), url("vungle-fonticon.woff") format("woff"), url("vungle-fonticon.ttf") format("truetype"), url("vungle-fonticon.svg#vungle-fonticon") format("svg");
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    </style>
+    <!-- logo strike start -->
+    <style>
+    #vungle-footer {
+        display: none !important;
+    }
+    </style>
+    <!-- logo strike end -->
+</head>
+
+<body class="preload light">
+    <div id="wrap">
+        <!-- PIEC WRAPPER --
+        <div id="vpiec-wrap">
+            <!-- ==================================================================== -->
+            <!-- ==================================================================== -->
+            <!-- ================== ADD VPIEC CONTAINERS HERE ======================= -->
+            <!-- 
+            <div class="layout-item" id="badge">
+            </div> -->
+<!-- 
+            <div class="layout-item" id="skip-button-portrait">
+            </div>
+
+            <div class="layout-item" id="skip-button-landscape">
+            </div>
+ -->
+
+            <div class="layout-item" id="cta-container-text">
+            </div>
+
+
+            <div class="layout-item" id="cta-container">
+            </div>
+
+
+            <div class="layout-item" id="screen-shot-container"></div>
+
+
+            <div class="layout-item" id="full-screen">
+            </div>
+
+
+            <div class="layout-item" id="cta-container-final">
+            </div>
+
+
+            <!-- ================== END VPIEC CONTAINERS HERE ======================= -->
+            <!-- ==================================================================== -->
+
+            <!-- ==================================================================== -->
+        </div>
+        <!-- End of VPIEC WRAPPER -->
+        <div id="game">
+        </div>
+    </div>
+    <!-- IEC Creative ends here -->
+    <!-- phaser requires fonts to be preloaded before they can be used "in game" -->
+    <!-- note: you can add more fonts below -->
+    
+    <div class="preload-font" style="font-family: Noto Sans;">.</div>
+    <div class="preload-font" style="font-family: Contemporary;">.</div>
+    <!-- build:remove -->
+    <script src="http://localhost:35729/livereload.js"></script>
+    <!-- /build -->
+    <!-- build:js phaser.min.js -->
+    <script src="node_modules/phaser/build/custom/phaser-no-physics.js"></script>
+    <!-- /build -->
+    <!-- build:js settings.js -->
+    <script src="settings.js"></script>
+    <!-- /build -->
+    <!-- build:remove -->
+    <script src="src/settings-overide.js"></script>
+    <!-- /build -->
+    <!-- build:js bundle.min.js -->
+    <script src="bundle.js"></script>
+    <!-- /build -->
+    <script>
+
+
+    window.addEventListener('resize', function(e) {
+        piec.onSDKCall();
+        piec.onResize();
+    });
+
+    var piec = piec || {};
+    </script>
+</body>
+
+</html>
