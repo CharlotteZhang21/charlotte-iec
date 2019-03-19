@@ -44,15 +44,13 @@ async function convert() {
 
         if(currentFile.indexOf('landscape')!== -1){
             appName = await currentFile.replace(landscapeFolder, '').replace('/GSTORE_landscape_', '').replace('landscape.psd', '');    
-            newFileName = 'landscape';
+            newFileName = appName + '_landscape';
         }else if(currentFile.indexOf('GSTORE_portrait')!== -1) {
             appName = await currentFile.replace(portraitFolder, '').replace('/GSTORE_portrait_', '').replace('portrait.psd', '');    
-            newFileName = 'portrait';
+            newFileName = appName + '_portrait';
         }
 
-        await fs.ensureDir(outputDir + '/' + appName);
-        
-        var newPath = outputDir + '/' + appName + '/' + newFileName + '.png';
+        var newPath = outputDir + '/' + newFileName + '.png';
 
         await PSD.open(currentFile).then(function(psd) {
 
@@ -68,8 +66,8 @@ async function convert() {
     }
 
 
-    await zipAll.zipAll(outputDir, outputBundleDir);
+    // await zipAll.zipAll(outputDir, outputBundleDir);
 
-    await fs.remove(outputDir);
+    // await fs.remove(outputDir);
 
 }

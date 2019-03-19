@@ -23,7 +23,7 @@ module.exports.zipAll = async function(originaldir, outputBundleDir){
 	var folder;
 	for (var i = 0; i < folders.length; i++) {
 		folder = folders[i];
-		
+
 		bundleName = folder.replace(originaldir+'/', '').replace('.zip', '');
 			
 		await fs.ensureDir(tempDir);

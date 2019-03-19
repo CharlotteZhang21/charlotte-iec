@@ -128,3 +128,4 @@ PiecSettings.translations = {
         lv: "Uzstādīt" ,
     }
 };
+PiecSettings.version = '-';

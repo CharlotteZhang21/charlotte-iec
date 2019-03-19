@@ -118,6 +118,22 @@ function initScene() {
 
     scene = new THREE.Scene();
 
+    // Lights
+    // var directionalLight = new THREE.DirectionalLight(0x111111, 1);
+    // directionalLight.position.set(0, 0, 1).normalize();
+    // directionalLight.scale.set(0.1, 0.1, 0.1).normalize();
+    
+    // scene.add(directionalLight);
+var width = 10;
+var height = 10;
+var intensity = 1;
+var rectLight = new THREE.RectAreaLight( 0xffffff, intensity,  width, height );
+rectLight.position.set( 5, 5, 0 );
+rectLight.lookAt( 0, 0, 0 );
+scene.add( rectLight )
+
+rectLightHelper = new THREE.RectAreaLightHelper( rectLight );
+rectLight.add( rectLightHelper );
 
     var textureLoader = new THREE.TextureLoader();
 
@@ -162,7 +178,17 @@ function initScene() {
         bottom2,
         back2,
         front2,
-    ]);
+    ], function ( texture ) {
+                    var pmremGenerator = new THREE.PMREMGenerator( texture );
+                    pmremGenerator.update( renderer );
+                    var pmremCubeUVPacker = new THREE.PMREMCubeUVPacker( pmremGenerator.cubeLods );
+                    pmremCubeUVPacker.update( renderer );
+                    var envMap = pmremCubeUVPacker.CubeUVRenderTarget.texture;
+                
+                    pmremGenerator.dispose();
+                    pmremCubeUVPacker.dispose();
+                    // scene.background = texture;
+                } );
     scene.background = skyBox2;
     scene.background.rotation = 180;
 
@@ -335,6 +361,43 @@ function checkChildrenHaveClass(container, className) {
     return true;
 }
 
+// multiplier is to define the shaking range
+function rotateModel(obj, duration = 500, multiplier = 1) {
+
+    var x = obj.scene.rotation.x,
+        y = obj.scene.rotation.y,
+        z = obj.scene.rotation.z;
+   
+    var coords = {
+        
+        rotation_x: x,
+        rotation_y: y,
+        rotation_z: z,
+
+    }
+
+    var targetcoords = {
+        rotation_x: 2 * (0.5 - Math.random()),
+        rotation_y: 2 * (0.5 - Math.random()),
+        rotation_z: 2 * (0.5 - Math.random())
+    }
+    var rotate = new TWEEN.Tween(coords)
+        .to({
+            rotation_x: [x - targetcoords.rotation_x, x + targetcoords.rotation_x, x],
+            rotation_y: [y - targetcoords.rotation_y, y + targetcoords.rotation_y, y],
+            rotation_z: [z - targetcoords.rotation_z, z + targetcoords.rotation_z, z],
+        }, duration)
+        .onUpdate(function() {
+            obj.scene.rotation.x = this.rotation_x * multiplier;
+            obj.scene.rotation.y = this.rotation_y * multiplier;
+            obj.scene.rotation.z = this.rotation_z * multiplier;
+            
+            
+        })
+    rotate.interpolation(TWEEN.Interpolation.Bezier);
+    rotate.start();
+}
+
 function spiralAway(obj) {
     console.log(obj);
     var coords = {
@@ -426,7 +489,7 @@ var containersToLocalise = [
 var pBar = $('#tntProgress')[0];
 var tntCharged = pBar.value;
 
-var tntEverTap = 20; // how much does one tap charge the tnt
+var tntEverTap = 10; // how much does one tap charge the tnt
 
 var handTween = null;
 var handTween2 = null;
@@ -593,12 +656,25 @@ function TNTClick() {
     if (tntCharged < pBar.max) {
 
         pBar.value = tntCharged;
+        
+        if(this.myGltf){
 
+            rotateModel(this.myGltf, 500, Math.random() * 2);
+        }
+        
     } else {
 
         pBar.value = pBar.max;
+        
+        if(this.myGltf){
+            rotateModel(this.myGltf, 1500, 2);
+        }
+        setTimeout(function(){
+            
 
-        explodeTNT();
+            explodeTNT();
+
+        }, 2000);
 
     }
 
@@ -753,7 +829,8 @@ function loadTNT() {
 
     var urls = ['TNT.gltf'];
 
-    var newScale = orientationCheck() == 'portrait'? 0.65 : 1;
+    // var newScale = orientationCheck() == 'portrait'? 0.65 : 1;
+    var newScale = orientationCheck() == 'portrait'? 0.01 : 1;
 
     // var urls = []
     var loader = new THREE.GLTFLoader();
@@ -778,6 +855,14 @@ function loadTNT() {
                 gltf.scene.rotation.y = THREE.Math.degToRad(0);
                 gltf.scene.rotation.z = 0;
             }
+
+            // var pmremGenerator = new THREE.PMREMGenerator( texture );
+            // pmremGenerator.update( renderer );
+            // var pmremCubeUVPacker = new THREE.PMREMCubeUVPacker( pmremGenerator.cubeLods );
+            // pmremCubeUVPacker.update( renderer );
+
+            // pmremGenerator.dispose();
+            // pmremCubeUVPacker.dispose();
 
 
 
@@ -811,6 +896,10 @@ function loadTNT() {
         // self.gltfs[i] = urls[i];
         // });
     }
+
+
+
+
 }
 
 function updateAndShow() {
