@@ -3,8 +3,8 @@
  *===============*/
 
 var sounds = {
-    pop: "pop",
-    explosion: 'explosion',
+    pop: "pop.wav",
+    explosion: 'explosion.mp3',
     // finish: 'win',
 }
 
@@ -34,13 +34,9 @@ function stopAudio() {
 
 
 function generateAudio() {
-    // for(var i=0; i < sounds.length; i++) {
-    //     var audio = new Audio(sounds[i] + audioType);
-    //     audios[sounds[i]] = audio; 
-    // }
 
     for (var key in sounds) {
-        var audio = new Audio(sounds[key] + audioType);
+        var audio = new Audio(sounds[key]);
         audios[key] = audio;
     }
 
@@ -84,6 +80,8 @@ var coords = {
 var raycaster = new THREE.Raycaster();;
 var mouse = {};
 
+var endFlag = false;
+
 var objects = [];
 var objectsObj = {};
 
@@ -119,18 +117,13 @@ function initScene() {
     scene = new THREE.Scene();
 
     // Lights
-    // var directionalLight = new THREE.DirectionalLight(0x111111, 1);
-    // directionalLight.position.set(0, 0, 1).normalize();
-    // directionalLight.scale.set(0.1, 0.1, 0.1).normalize();
-    
-    // scene.add(directionalLight);
-var width = 10;
-var height = 10;
-var intensity = 1;
-var rectLight = new THREE.RectAreaLight( 0xffffff, intensity,  width, height );
-rectLight.position.set( 5, 5, 0 );
-rectLight.lookAt( 0, 0, 0 );
-scene.add( rectLight )
+    var width = 10;
+    var height = 10;
+    var intensity = 1;
+    var rectLight = new THREE.RectAreaLight( 0xffffff, intensity,  width, height );
+    rectLight.position.set( 5, 5, 0 );
+    rectLight.lookAt( 0, 0, 0 );
+    scene.add( rectLight )
 
 rectLightHelper = new THREE.RectAreaLightHelper( rectLight );
 rectLight.add( rectLightHelper );
@@ -176,19 +169,9 @@ rectLight.add( rectLightHelper );
         right2,
         top2,
         bottom2,
-        back2,
+        panoback,
         front2,
-    ], function ( texture ) {
-                    var pmremGenerator = new THREE.PMREMGenerator( texture );
-                    pmremGenerator.update( renderer );
-                    var pmremCubeUVPacker = new THREE.PMREMCubeUVPacker( pmremGenerator.cubeLods );
-                    pmremCubeUVPacker.update( renderer );
-                    var envMap = pmremCubeUVPacker.CubeUVRenderTarget.texture;
-                
-                    pmremGenerator.dispose();
-                    pmremCubeUVPacker.dispose();
-                    // scene.background = texture;
-                } );
+    ]);
     scene.background = skyBox2;
     scene.background.rotation = 180;
 
@@ -263,7 +246,8 @@ function onDocumentTouchStart(event) {
 
 
 function onDocumentMouseDown(event) {
-
+    if(endFlag)
+        return;
     mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
     mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
 
@@ -279,7 +263,7 @@ function onDocumentMouseDown(event) {
                 // updateTexture(intersects[i].object);
 
                 playAudio(audios['pop']);
-                TNTClick();
+                TNTClick(event.clientX , event.clientY);
             } else {
                 console.log('wrong');
                 playAudio(audios['wrong']);
@@ -364,16 +348,16 @@ function checkChildrenHaveClass(container, className) {
 // multiplier is to define the shaking range
 function rotateModel(obj, duration = 500, multiplier = 1) {
 
-    var x = obj.scene.rotation.x,
-        y = obj.scene.rotation.y,
-        z = obj.scene.rotation.z;
+    var x = obj.initRotation.x,
+        y = obj.initRotation.y,
+        z = obj.initRotation.z;
+
    
     var coords = {
         
         rotation_x: x,
         rotation_y: y,
         rotation_z: z,
-
     }
 
     var targetcoords = {
@@ -420,37 +404,43 @@ function spiralAway(obj) {
 }
 
 function endgame() {
+    endFlag = true;
     setTimeout(function() {
         this.myGltf.scene.visible = false;
     }, 500);
 
-    TweenMax.set($('#logo'), { transformOrigin: "50% 50% 0" });
-    TweenMax.to($('#logo'), 2, {
-        top: $('#logo-final').position().top,
-        scale: 1.4,
-        rotation: 360,
-        delay: 1.5,
-        ease: Elastic.easeOut.config(1, 0.6),
-    });
-
-    TweenMax.to($('#character'), 1.5, {
-        // top: '40%',
-        top: $('#character-final').position().top,
-        delay: 1.5,
-        ease: Elastic.easeOut.config(1, 0.5),
-    });
+    tweenLogos(1.5);
 
     // document.getElementById('end-screen').addEventListener('click', function(){
 
     // })
 
     if (ASOI) {
+        ASOI = false;
         setTimeout(function() {
             stopAudio();
             doSomething('download');
-        }, 3000);
+        }, 4000);
     }
 
+}
+
+function tweenLogos(delay) {
+    TweenMax.set($('#logo'), { transformOrigin: "50% 50% 0" });
+    TweenMax.to($('#logo'), 2, {
+        top: $('#logo-final').position().top,
+        scale: 1.4,
+        rotation: 360,
+        delay: delay,
+        ease: Elastic.easeOut.config(1, 0.6),
+    });
+
+    TweenMax.to($('#character'), 1.5, {
+        // top: '40%',
+        top: $('#character-final').position().top,
+        delay: delay,
+        ease: Elastic.easeOut.config(1, 0.5),
+    });
 }
 
 function downloadAndMute() {
@@ -476,9 +466,9 @@ document.ontouchmove = function(e) {
     e.preventDefault();
 }
 
-var dynamicLocal = 'v2';
+var dynamicLocal = 'v1';
 var ASOI = true;
-var closeButtonTimerDuration = 0; //seconds
+var closeButtonTimerDuration = 5; //seconds
 var containersToLocalise = [
     'findObjects',
     // 'tapToPlay',
@@ -519,37 +509,6 @@ window.onload = function() {
     }, closeButtonTimerDuration * 1000);
 
     this.lastFrameTime = 0;
-
-
-    // document.addEventListener('keydown', checkKey.bind(this), false);
-
-    // function checkKey(e) {
-
-    //     var inc = 0.1;
-
-    //     e = e || window.event;
-
-    //     if (e.keyCode == '38') {
-    //         // up arrow
-    //         this.myGltf.scene.position.x += inc;
-    //         console.log(this.myGltf.scene.position.x);
-
-    //         localStorage.setItem('x', this.myGltf.scene.position.x);
-    //     } else if (e.keyCode == '40') {
-    //         // down arrow
-    //         this.myGltf.scene.position.x -= inc;
-    //         console.log(this.myGltf.scene.position.x);
-    //         localStorage.setItem('x', this.myGltf.scene.position.x);
-    //     } else if (e.keyCode == '37') {
-    //         // left arrow
-    //         this.myGltf.scene.position.z -= inc;
-    //         localStorage.setItem('z', this.myGltf.scene.position.z);
-    //     } else if (e.keyCode == '39') {
-    //         // right arrow
-    //         this.myGltf.scene.position.z += inc;
-    //         localStorage.setItem('z', this.myGltf.scene.position.z);
-    //     }
-    // }
 
     if (dynamicLocal !== undefined && dynamicLocal == 'v2') {
 
@@ -643,7 +602,7 @@ window.onload = function() {
 
 
 
-function TNTClick() {
+function TNTClick(mouseX, mouseY) {
     if(handTween2 != null) {
         TweenMax.to($('#hand'), 0.5, {
                 opacity: 0,
@@ -657,6 +616,8 @@ function TNTClick() {
 
         pBar.value = tntCharged;
         
+        sparkles(10, mouseX, mouseY);
+
         if(this.myGltf){
 
             rotateModel(this.myGltf, 500, Math.random() * 2);
@@ -667,22 +628,76 @@ function TNTClick() {
         pBar.value = pBar.max;
         
         if(this.myGltf){
-            rotateModel(this.myGltf, 1500, 2);
+            rotateModel(this.myGltf, 1800, 2);
         }
+
+        sparkles(10, mouseX, mouseY, 3);
         setTimeout(function(){
             
 
             explodeTNT();
 
-        }, 2000);
+        }, 1800);
 
     }
+
+    
 
     playAudio(audios['pop']);
 
     this.myGltfAction.reset();
     this.myGltfAction.play();
 
+}
+
+function sparkles(amount, posX, posY, radiusMultiplier = 1) {
+    var options = [
+        'yellow',
+        'blue',
+        'red',
+    ]
+
+    var sparkles = [];
+
+    for (var i = 0; i < amount; i++) {
+        var sparkle = $('<div class="sparkle" />');
+        sparkle.addClass(options[ parseInt(3 * Math.random())]);
+        
+        var width = $('#centerScreen').width() * 0.2 * Math.random();
+        var radius = width/2 * radiusMultiplier;
+        width += 'px';
+        radius += 'px';
+        sparkle.css({
+            opacity: 0.8 + Math.random() * 0.2,
+            width: width, height: width,
+            top: posY + 10  *  Math.random(),
+            left: posX  + 10 *  Math.random(),
+            '-moz-border-radius' : radius,
+            '-webkit-border-radius' : radius,
+            'border-radius' : radius
+        });
+        sparkle.attr("id", 'sparkle' + i);
+        sparkles.push(sparkle);
+
+        $('body').append(sparkle);
+    }
+
+    for (var i = 0; i < sparkles.length; i++) {
+        TweenMax.to(sparkles[i], 4 + 2 * Math.random(), {
+            opacity: 0,
+            scale: 0,
+            // delay: 0.5 + i * 0.2 * Math.random(),
+            top: $('body').height() * 0.4 * Math.random(),
+            left: $('body').width() * Math.random(),
+            ease: Expo.easeOut,
+            onComplete: function(e){
+                var sparkle = $(this)[0].target[0];
+                if(sparkle!=undefined){
+                    sparkle.remove();
+                }
+            }
+        })
+    }
 }
 
 function explodeTNT() {
@@ -698,7 +713,7 @@ function explodeTNT() {
         delay: 0.1,
         ease: Linear.easeIn,
         onComplete: function() {
-            TweenMax.to($('#explosion-layer-2'), 0.3, {
+            TweenMax.to($('#explosion-layer-2'), 0.1, {
                 opacity: 0,
                 ease: Linear.None
             });
@@ -758,14 +773,14 @@ function explodeTNT() {
         }
     });
 
-    var sakuraNewOn = 100;
+    var sakuraNewOn = 1000;
     var block_colours = ["red", "blue", "yellow"];
     setTimeout(function() {
         $('#centerScreen').sakura({
             className: block_colours,
             maxSize: 50,
             minSize: 30,
-            fallSpeed: 0.1,
+            fallSpeed: 0.5,
             newOn: sakuraNewOn
         });
 
@@ -819,6 +834,11 @@ function onWindowResize() {
     camera.aspect = document.body.clientWidth / document.body.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(document.body.clientWidth, document.body.clientHeight);
+    if(endFlag){
+        endgame();
+        tweenLogos(0);
+    }
+
 }
 
 
@@ -829,8 +849,7 @@ function loadTNT() {
 
     var urls = ['TNT.gltf'];
 
-    // var newScale = orientationCheck() == 'portrait'? 0.65 : 1;
-    var newScale = orientationCheck() == 'portrait'? 0.01 : 1;
+    var newScale = orientationCheck() == 'portrait'? 0.01 : 0.015;
 
     // var urls = []
     var loader = new THREE.GLTFLoader();
@@ -851,26 +870,21 @@ function loadTNT() {
                 gltf.scene.position.y = 0;
                 gltf.scene.position.z = -1.55;
 
-                gltf.scene.rotation.x = THREE.Math.degToRad(15);
+                gltf.scene.rotation.x = orientationCheck() == 'portrait'? THREE.Math.degToRad(15): THREE.Math.degToRad(20);
                 gltf.scene.rotation.y = THREE.Math.degToRad(0);
                 gltf.scene.rotation.z = 0;
             }
+            gltf.initRotation = {
+                x: gltf.scene.rotation.x,
+                y: gltf.scene.rotation.y,
+                z: gltf.scene.rotation.z
+            };
 
-            // var pmremGenerator = new THREE.PMREMGenerator( texture );
-            // pmremGenerator.update( renderer );
-            // var pmremCubeUVPacker = new THREE.PMREMCubeUVPacker( pmremGenerator.cubeLods );
-            // pmremCubeUVPacker.update( renderer );
-
-            // pmremGenerator.dispose();
-            // pmremCubeUVPacker.dispose();
-
-
-
-            // objects.push(this.myGltf);
             gltf.scene.traverse(function(object) {
 
                 if (object.isMesh) {
                     object.clickable = true;
+                   
                     objects.push(object);
                 }
 

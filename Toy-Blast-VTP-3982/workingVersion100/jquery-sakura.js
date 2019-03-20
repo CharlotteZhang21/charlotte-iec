@@ -79,7 +79,7 @@
             setTimeout(function () {
                 requestAnimationFrame(petalCreator);
             }, options.newOn);
-
+    
             // Get one random animation of each type and randomize fall time of the petals.
             var blowAnimation = options.blowAnimations[Math.floor(Math.random() * options.blowAnimations.length)];
             var swayAnimation = options.swayAnimations[Math.floor(Math.random() * options.swayAnimations.length)];

@@ -1,5 +1,5 @@
 
-.abs-container{
+#abs-container{
     position: absolute;
     top: 0;
     left: 0;
@@ -56,9 +56,10 @@
 }
 
 #background_2D {
-    width: auto;
+    width: 100%;
     height: 100%;
     z-index: 2;
+    pointer-events: none;
 }
 
 #board_2D {
@@ -67,7 +68,7 @@
     top: 0;
     bottom: 0;
     z-index: 2;
-    /*pointer-events: none;*/
+    pointer-events: none;
 }
 
 .zoomOut {
@@ -90,6 +91,7 @@
     text-align: center;
     position: absolute;
     margin: auto;
+    text-shadow: #000 1px 0 10px;
     /*transform: translate(-50%, -50%);*/
 }
 
@@ -226,8 +228,6 @@
 #tntProgress[value]::-webkit-progress-bar {
 
     background-color: #1d2f42;
-    /*background: url('progressBar_bg.png');*/
-    /*background-size: auto;*/
     border-radius: 50px;
 
     border: 1px solid #386083;
@@ -341,7 +341,7 @@
 }
 
 .cta-holder p{
-    color: #fff;
+    color: #316871;
     opacity: 0;
     transition: opacity .5s ease-in-out;
     z-index: 999;
@@ -366,7 +366,7 @@
 
 .cta-container {
 
-    bottom: 2.5vh;
+    bottom: 5%;
     top:auto;
     width: 60%;
     left: 0;
@@ -406,6 +406,21 @@
     -webkit-animation-iteration-count: infinite;
     animation-iteration-count: infinite;
 }
+.sparkle {
+    position: absolute;
+}
+.sparkle.blue {
+    background-color: #0092e9;
+}
+
+.sparkle.yellow {
+    background-color: #e7b000;
+}
+
+.sparkle.red {
+    background-color: #ae0000;
+}
+
 
 
 /* TOOLTIP */
@@ -416,7 +431,9 @@
     }
 
     #tntProgress{
-        width: 30%;
+        width: 35%;
+        height: 10%;
+        top: 70%;
     }
 
     #logo {
@@ -439,7 +456,7 @@
     .cta-container {
         position: absolute;
         bottom: 0%;
-        width: 35%;
+        width: 32%;
         right: 1%;
         left: auto;
         height: 21%;
@@ -449,7 +466,7 @@
     }
 
     .cta-holder p{
-        margin: 7% auto;
+        margin: 9% auto;
     }
 
     .button1,
@@ -471,11 +488,7 @@
     z-index: 1;
     -webkit-animation: pulseFade 1.5s infinite ease-in-out;
 }
-@media all and (min-width: 700px) and (orientation: landscape ){
-    .cta-holder p {
-        margin: 11% auto;
-    }
-}
+
 
 @media all and (min-width: 768px) and (orientation: portrait) {
     #background_2D {
@@ -491,11 +504,17 @@
         top: 30%;
     }
 
+    .cta-holder p {
+        margin: 7% auto;
+    }
+
 }
 
 
 @media all and (min-height: 768px) and (orientation: landscape) {
-      
+     .cta-holder p {
+        margin: 23% auto;
+     } 
 }
 
 /*iPhone X portrait*/
@@ -505,7 +524,18 @@
 
 /*iPhone X landscape*/
 @media (min-aspect-ratio: 724/354) and (orientation: landscape){   
-
+    .cta-container {
+        width: 28%;
+    }
+    .overlayText {
+        font-size: 6vw;
+    }
+    #character {
+        width: 40%;
+    }
+    #character-final {
+        top: 35%;
+    }
 }
 
 
