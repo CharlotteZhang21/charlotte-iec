@@ -1,0 +1,237 @@
+
+
+<script src="directionalnavigation-1.0.0.0.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var isWin81 = !!(navigator.userAgent.match('Windows Phone 8.1'));
+var screenSizeCheck = window.matchMedia("(min-width: 1000px)");
+
+var carouselElem;
+
+// var gamepadConnected = false;
+// var gamepadReport;
+
+var vungleCloseButton = document.getElementById('vungle-close');
+var topContainer = document.getElementById('top-container');
+var bottomContainer = document.getElementById('bottom-container');
+var footerContainer = document.getElementById('vungle-footer');
+var copyCenterContainer = document.getElementById('copy-center');
+var screenshotsContainer = document.getElementById('screenshots-container');
+var carouselContainer = document.getElementById('carousel-container');
+var carouselCloseButton = document.getElementById('carousel-close');
+var vungleCTA = document.getElementById('vungle-cta');
+
+// var gamepadConsole = document.getElementById('gamepad-console');
+
+function doSomething(s) {
+	return actionClicked(s);
+}
+
+function windows81Check() {
+	var metaEl = document.createElement("meta");
+	metaEl.setAttribute("name", "viewport");
+	metaEl.setAttribute("content", "initial-scale = 1.0,maximum-scale = 1.0");
+	document.head.appendChild(metaEl);
+}
+
+function fadeIn(el) {
+	el.style.opacity = 0;
+	el.style.display = 'block';
+	setTimeout(function(){
+		el.style.opacity = 1;
+	}, 100);
+}
+
+function showCarousel() {
+	var ccStyle = window.getComputedStyle(carouselContainer);
+	if (ccStyle.display === "none") {
+		fadeIn(carouselContainer);
+		if(typeof carouselElem == "undefined") {
+			
+			console.log('create carousel');
+			carouselElem = new Slider('#carousel', '.z-slide-item', {
+				'current': 0,
+				'duration': 1,
+				'minPercentToSlide': null,
+				'autoplay': false,
+				'direction': 'left',
+				'interval': 3
+			});
+		}
+	} else {
+		fadeIn(carouselContainer);
+	}
+	vungleCloseButton.style.display = 'none';
+}
+
+function hideCarousel() {
+	carouselContainer.style.opacity = 0;
+	setTimeout(function(){
+		vungleCloseButton.style.display = 'block';
+		carouselContainer.style.display = 'none';
+	}, 250);
+}
+
+function updateCSS() {
+	if (isWin81) {
+		windows81Check();
+		if (window.innerHeight > window.innerWidth){
+			metaEl.setAttribute("content", "initial-scale = 1.0,maximum-scale = 1.0");
+		} else {
+			metaEl.setAttribute("content", "initial-scale = 0.5,maximum-scale = 0.5");
+		}
+	}
+	
+	if (screenSizeCheck.matches) {
+		//Surface or XBox
+		
+		console.log('carousel status: '+carouselElem);
+		screenshotsContainer.addEventListener("click", showCarousel);
+		carouselCloseButton.addEventListener("click", hideCarousel);
+
+		bottomContainer.removeAttribute('style');
+		copyCenterContainer.removeAttribute('style');
+		
+		document.body.classList.add('large');
+		
+		if (carouselContainer.style.opacity == 1) vungleCloseButton.style.display = 'none';
+
+	} else {
+		//Mobile
+		
+		document.body.classList.remove('large');
+		vungleCloseButton.style.display = 'block';
+		
+		
+		if(window.innerHeight > window.innerWidth){
+			document.body.classList.remove('landscape');
+			bottomContainerHeight = (window.innerHeight-topContainer.offsetHeight)-footerContainer.offsetHeight;
+			bottomContainer.style.height = bottomContainerHeight+'px';
+		} else {
+			document.body.classList.add('landscape');
+			bottomContainerHeight = window.innerHeight-footerContainer.offsetHeight;
+			bottomContainer.style.height = bottomContainerHeight+'px';
+		}
+		
+		var copyCenterHeight = document.getElementById('copy-center').clientHeight;
+		var copyContainerHeight = document.getElementById('copy-container').clientHeight;
+
+		var copySpacing = (copyContainerHeight-copyCenterHeight)/2;
+		copyCenterContainer.style.marginTop = copySpacing+'px';
+	}
+	
+	
+}
+
+function gamePad() {
+	return "getGamepads" in navigator;
+}
+
+function reportOnGamepad(e) {
+/*
+		var gp = navigator.getGamepads()[0];
+		var html = "";
+			html += "id: "+gp.id+"<br/>";
+		
+		for(var i=0;i<gp.buttons.length;i++) {
+			html+= "Button "+(i+1)+": ";
+			if(gp.buttons[i].pressed) html+= " pressed";
+			html+= "<br/>";
+		}
+		
+		for(var i=0;i<gp.axes.length; i+=2) {
+			html+= "Stick "+(Math.ceil(i/2)+1)+": "+gp.axes[i]+","+gp.axes[i+1]+"<br/>";
+		}
+*/
+/*
+		var gp = navigator.getGamepads()[0];
+		var html = "";
+			html += "id: "+gp.id+"<br/>";
+		
+		console.log('something happened ' + e);
+		
+		gamepadConsole.innerHTML = html;
+*/
+}
+
+function reportOnGamepadButtonDown() {
+/*
+	var gp = navigator.getGamepads()[0];
+		var html = "";
+			html += "id: "+gp.id+"<br/>";
+		
+		console.log('something happened ' + e);
+		
+		gamepadConsole.innerHTML = html;
+*/
+}
+
+window.onload = function() {
+	document.body.classList.remove("preload");
+	updateCSS();
+	console.log("Windows 8.1?: "+isWin81);
+	
+	vungleCTA.focus();
+	
+// 	navigator.gamepadInputEmulation = "gamepad";
+	/*
+if (gamePad()) {
+		window.addEventListener("gamepadconnected", function(e) {
+			gamepadConnected = true;
+			console.log("gamepad connected");
+			gamepadReport = window.setInterval(reportOnGamepad,100);
+		});
+		window.addEventListener("gamepaddisconnected", function(e) {
+			console.log("gamepad disconnected");
+			window.clearInterval(gamepadReport);
+		});
+
+		window.addEventListener("gamepadbuttondown", function(e) {
+        	console.log('done');
+    	}, false);
+		
+		//if no gamepad is connected, ping every half a second
+		var pingGamepad = window.setInterval(function() {
+			console.log('check gamepad');
+			if(navigator.getGamepads()[0]) {
+				if(!gamepadConnected) {
+					var event = document.createEvent('HTMLEvents');
+					event.initEvent('gamepadconnected', true, false);
+					window.dispatchEvent(event);
+				}
+				window.clearInterval(pingGamepad);					
+			}
+		}, 500);
+	}
+*/
+};
+
+window.onresize = function() {
+	updateCSS();
+};
+
+document.ontouchmove = function(e){
+	e.preventDefault();
+}	
