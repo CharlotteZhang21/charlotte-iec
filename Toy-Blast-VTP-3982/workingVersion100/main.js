@@ -468,7 +468,7 @@ document.ontouchmove = function(e) {
 
 var dynamicLocal = 'v1';
 var ASOI = true;
-var closeButtonTimerDuration = 5; //seconds
+var closeButtonTimerDuration = 0; //seconds
 var containersToLocalise = [
     'findObjects',
     // 'tapToPlay',

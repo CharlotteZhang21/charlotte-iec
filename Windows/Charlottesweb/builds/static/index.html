@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0, user-scalable=no" />
+    <title>Vungle Endcard</title>
+    <!-- build:css main.css -->
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="main.css">
+    <!-- /build -->
+    <style>
+    /* Generic font for autolocalised texts! */
+    @font-face {
+        font-family: 'Noto Sans';
+        src: url('NotoSans-ExtraBold.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    </style>
+    <!-- logo strike start -->
+    <style>
+    #vungle-footer {
+        display: none !important;
+    }
+    </style>
+    <!-- logo strike end -->
+</head>
+
+<body ontouchstart="ontouchstart" class="preload">
+    <!-- IEC Creative starts here-->
+    <div id="wrap">
+        <div class="item video-area">
+            <video preload playsinline muted autoplay id='videoBg'></video>
+            <img id="bg-static-img" />
+        </div>
+        <!-- info WRAPPER -->
+        <div id="info-wrap">
+            <div class="info-content videoPlayerFadeContent">
+                <!--==== APP ICON ====-->
+                <div class="info-app-icon">
+                    <img id="app-icon" src="app-icon.jpg">
+                </div>
+                <!--==== END APP ICON ====-->
+                <!--==== APP NAMES ====-->
+                <div class="info-app-metadata primary">
+                    <h1 id="app-name">Candy Crush Friends Saga</h1>
+                    <div id="stars">stars</div>
+                    <div id="download-num">(2149)</div>
+                    <p id="app-description">New tasty match 3 puzzle! Dunk the cookie and save octopuses to collect friends!</p>
+                </div>
+                <!--==== END APP NAMES ====-->
+                <!--==== CTA ====-->
+                <div class="info-app-cta">
+                    <div id="vungle-cta" class="cta" onclick="doSomething('download')">Download</div>
+                </div>
+                <!--==== END CTA ====-->
+            </div>
+        </div>
+        <!-- End of info WRAPPER -->
+        <!-- Flickity HTML init -->
+        <div id='main-carousel' class="info-app-gallery">
+            <div class="info-app-gallery-cell">
+                <img src="1.png" />
+            </div>
+            <div class="info-app-gallery-cell">
+                <img src="2.png" />
+            </div>
+            <div class="info-app-gallery-cell">
+                <img src="3.png" />
+            </div>
+            <div class="info-app-gallery-cell">
+                <img src="4.png" />
+            </div>
+            <div class="info-app-gallery-cell">
+                <img src="5.png" />
+            </div>
+        </div>
+        <!-- Flickity HTML end -->
+        <div>
+          <h1>Description</h1>
+          <p>The newest game from the Candy Crush Franchise! With updated graphics, fun new game modes and a host of friends to help you blast through hundreds of levels!
+
+Your Candy Crush Friends have been scattered throughout the Candy Kingdom - Join this match 3 puzzle game to find them! This friendly bunch have their own unique powers to help you to create sweet candy combinations and blast through blockers!
+
+Switch and match candies to unlock rewards, friends, and sweet collectable outfits! The more candies you collect the greater your power on the game board!
+
+This fun new candy game is filled with delicious treats - cookies, jam, chocolate and more! You’re favourite game modes, but sweeter than ever!
+
+Candy Crush Friends Saga is completely free to play but some optional in-game items will require payment with real money.</p>
+        </div>
+    </div>
+    <!-- IEC Creative ends here -->
+    <script src="flickity.pkgd.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
