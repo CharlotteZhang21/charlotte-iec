@@ -363,7 +363,7 @@ a {
             font-size: 1em;
             line-height: 1.3em;
             white-space: pre-line;
-            margin-top: 10px;
+            margin: 10px 0;
             font-weight: 400;
             // max-width: 700px;
 
@@ -459,8 +459,12 @@ a {
     }
 }
 
-
-#vungle-cta {
+#scrollHeight {
+    z-index: 100;
+    position:fixed;
+    height: 20px;
+    color: #000; }
+.cta {
     position: relative;
     border: 2px solid transparent;
     outline: 0;
@@ -480,6 +484,7 @@ a {
     font-weight: 600;
     box-shadow: 0 4px 8px 0 transparent;
     cursor: pointer;
+    opacity: 0;
     
     transition: all .2s ease-in-out;
     vertical-align: bottom;
@@ -559,4 +564,5 @@ a {
     left: 0;
     right: 0;
     margin-top: 0;
+    z-index: 2;
 }

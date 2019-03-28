@@ -655,7 +655,7 @@ a {
   font-size: 1em;
   line-height: 1.3em;
   white-space: pre-line;
-  margin-top: 10px;
+  margin: 10px 0;
   font-weight: 400; }
   @media (min-width: 1084px) {
     .info-app-description p {
@@ -718,7 +718,13 @@ a {
   #mute-toggle:hover {
     opacity: 1; }
 
-#vungle-cta {
+#scrollHeight {
+  z-index: 100;
+  position: fixed;
+  height: 20px;
+  color: #000; }
+
+.cta {
   position: relative;
   border: 2px solid transparent;
   outline: 0;
@@ -737,13 +743,14 @@ a {
   font-weight: 600;
   box-shadow: 0 4px 8px 0 transparent;
   cursor: pointer;
+  opacity: 0;
   transition: all .2s ease-in-out;
   vertical-align: bottom;
   white-space: nowrap; }
   @media (min-width: 1084px) {
-    #vungle-cta {
+    .cta {
       width: 90%; } }
-  #vungle-cta:hover {
+  .cta:hover {
     background-color: #1a73b9; }
 
 #vungle-footer {
@@ -792,4 +799,5 @@ a {
   top: 0;
   left: 0;
   right: 0;
-  margin-top: 0; }
+  margin-top: 0;
+  z-index: 2; }

@@ -1,4 +1,5 @@
 import VideoController from './video-controller';
+import * as Utils from './auto-localisation-util';
 
 var videoPath = 'video.mp4';
 
@@ -29,9 +30,11 @@ function main() {
         updateVideo();
 
     } else {
-        $('#videoBg').addClass('hide');
 
+        $('#videoBg').addClass('hide');
+        
         $('#bg-static-img').removeClass('hide');
+        
         $('#bg-static-img').attr('src', staticImgSrc);
     }
 
@@ -41,15 +44,29 @@ function main() {
 
     /////------ CTA ---------//////////
 
-    document.getElementById('vungle-cta').addEventListener('pointerdown', (event) => {
-        console.log('cta download')
-        parent.postMessage('download', '*');
-    });
+    var text = Utils.getLocalisedCta().text;
+    var fontFamily = Utils.getLocalisedCta().font;
+    var fontSizeMultiplier = Utils.getLocalisedCta().fontSizeMultiplier;
 
-    document.getElementById('app-icon').addEventListener('pointerdown', (event) => {
-        console.log('cta download')
-        parent.postMessage('download', '*');
-    });
+    var fontSize = document.getElementById('vungle-cta').offsetHeight * fontSizeMultiplier;
+
+    
+
+    // var fontMarginTop = orientationCheck()=='portrait'? document.getElementById('cta-img').offsetHeight * 0.05 : document.getElementById('cta-img').offsetHeight * 0.3;
+
+    document.getElementById('vungle-cta').style.fontSize = fontSize + 'px';
+    // document.getElementById('cta-text').style.top = fontMarginTop + 'px';
+    
+
+    document.getElementById('vungle-cta').style.opacity = 1;
+    
+    document.getElementById('vungle-cta').innerHTML = text;
+
+    bindCtaClick(document.getElementById('vungle-cta'));
+    
+    bindCtaClick(document.getElementById('app-icon'));
+
+
     /////------ CTA END ------//////////
 
 
@@ -74,24 +91,37 @@ function main() {
 
     ////------ WINDOW SCROLL --------////// 
 
-    // var infoContentTop = $('#info-content').position().top + parseInt($('#info-content').css('margin-top').replace('px', ''))/ 2;
-    var infoContentTop = $('#info-content').position().top;
-    var lastScroll = 0;
+    var infoContentTop = $('#videoBg').position().top + $('#videoBg').height();
+
     var contentCloneflag = false;
 
 
     $('#wrap').scroll(function() {
-
+        
+        // $('#scrollHeight').html("height " + infoContentTop );//debug
+        
         if ($(this).scrollTop() >= infoContentTop) {
+            if(infoContentTop < 10) {
+                infoContentTop = $('#videoBg').position().top + $('#videoBg').height();
+                // $('#scrollHeight').html("height " + infoContentTop );// debug
+            }
             if (!contentCloneflag) {
 
                 $("#info-content").clone().appendTo("#wrap").addClass('fixed').attr('id', 'info-clone');
+
+                $('#info-clone').find('#vungle-cta').attr('id', 'vungle-cta-clone');
+                $('#info-clone').find('#app-icon').attr('id', 'app-icon-clone');
+
+                bindCtaClick(document.getElementById('vungle-cta-clone'));
+                bindCtaClick(document.getElementById('app-icon-clone'));
+
                 $('#info-content').css('opacity', 0);
+                
                 contentCloneflag = true;
             } else {
                 $('#info-clone').css('opacity', 1);
                 $('#info-content').css('opacity', 0);
-
+                
             }
         } else {
 
@@ -107,6 +137,21 @@ function main() {
     ////------ WINDOW SCROLL END --------////// 
 
 }
+
+function bindCtaClick(obj) {
+    
+    obj.addEventListener("click", function() {
+        console.log('cta download');
+        parent.postMessage('download', '*');
+    });
+
+    // document.getElementById('app-icon').addEventListener("touchstart", function() {
+    //     console.log('cta download');
+    //     parent.postMessage('download', '*');
+    // });
+
+}
+
 
 function updateVideo() {
     setTimeout(function() {
@@ -168,5 +213,8 @@ window.onload = function() {
 
     initCarousel();
 
-    main();
+    setTimeout(function(){
+        main();
+    }, 500);
+    
 }
