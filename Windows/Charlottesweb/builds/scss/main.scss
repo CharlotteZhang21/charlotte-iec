@@ -1,5 +1,6 @@
 @import 'media-query';
 @import 'vunglrousel';
+@import 'vungle';
 
 html {
     height: 100%;
@@ -33,10 +34,16 @@ a {
     margin: auto;
     top: 0;
     left: 0;
-    overflow-x: hidden;
+    overflow: scroll;
+    // overflow-x: hidden;
+
     height: 100%;
     width: 100%;
     background-color: #fff;
+
+    @media (max-width: $small-screen) {
+        overflow-y: hidden;
+    }
 }
 
 .layout-item {
@@ -89,14 +96,16 @@ a {
 
 
 #info-wrap {
-    // max-width: 1600px;
-    width: 100%;
+    max-width: 1600px;
+
+    width: 90%;
+    // max-width: 1200px;
+    margin: auto;
 }
 
 .info {
     &-content {
-        max-width: 1200px;
-        width: 100%;
+        width: 90%;
         min-height: 72px;
         margin: 36px auto;
         position: relative;
@@ -106,13 +115,28 @@ a {
         -ms-grid-columns: 100%;
         grid-template-columns: 100%;
         transition: margin 333ms ease-in-out, transform 333ms ease-in-out;
-        border-radius: 2px;
-        box-shadow: 0 6px 23px 0 rgba(0, 0, 0, .16);
+        transition: width 0.1s ease-in-out;
+        // border-radius: 2px;
+        // box-shadow: 0 6px 23px 0 rgba(0, 0, 0, .16);
         background-color: #fff;
+        max-width: 1600px;
+
+        @media (min-width: $medium-screen) {
+            margin-top: -80px;
+            border-radius: 2px;
+            background: #fff;
+            -ms-grid-columns: auto minmax(0, 1fr);
+            -ms-grid-rows: auto auto auto auto 1fr auto;
+            grid-template-columns: min-content minmax(0, 1fr);
+            grid-template-rows: auto auto auto auto 1fr auto;
+            -webkit-box-shadow: 0 6px 23px 0 rgba(0, 0, 0, .16);
+            -moz-box-shadow: 0 6px 23px 0 rgba(0, 0, 0, .16);
+            box-shadow: 0 6px 23px 0 rgba(0, 0, 0, .16);
+        }
 
 
         @media (min-width: $large-screen) {
-            width: 90%;
+            // width: 0%;
             margin-top: -120px;
             -ms-grid-columns: auto minmax(0, 1fr) 256px;
             grid-template-columns: min-content minmax(0, 1fr) 256px;
@@ -135,6 +159,10 @@ a {
         display: flex;
         justify-content: center;
 
+        // @media (min-width: $small-screen) {
+        //     padding-left: 0;
+        //     height: 225px;
+        // }
 
         @media (min-width: $medium-screen) {
             -ms-grid-row: 2;
@@ -149,21 +177,20 @@ a {
 
         }
 
-        &img {
+        & img {
             margin-right: auto;
             margin-left: auto;
-            width: 120px;
+            // max-width: 120px;
+            width: 25%;
+            height: 100%;
+            margin-top: -120px;
             display: flex;
             justify-content: center;
             align-items: center;
 
-            @media (min-width: $small-screen) {
-                width: 150px;
-            }
-
             @media (min-width: $medium-screen) {
-                width: 200px;
-                height: auto;
+                width: auto;
+                height: 100%;
                 margin-top: 0;
             }
         }
@@ -180,7 +207,10 @@ a {
         grid-row-end: span 3;
         padding: 0 5%;
 
+        text-align: center;
+
         @media (min-width: $medium-screen) {
+            text-align: left;
             -ms-grid-column: 2;
             grid-column-start: 2;
             padding: 24px;
@@ -192,23 +222,28 @@ a {
 
         }
 
-        &h1 {
+        & h1 {
             font-size: 24px;
             font-weight: 600;
         }
 
-        &p {
+        & p {
             display: block;
             margin-block-start: 1em;
             margin-block-end: 1em;
             margin-inline-start: 0px;
             margin-inline-end: 0px;
             line-height: 1.5em;
+            font-size: 1em;
+
+            @media (min-width: $large-screen) {
+                font-size: 1.3em;
+            }
         }
 
     }
 
-    &-app-description {
+    &-app-call-out {
         display: block;
         margin-block-start: 1em;
         margin-block-end: 1em;
@@ -221,18 +256,17 @@ a {
         -ms-grid-column: 1;
         grid-row-start: 5;
         grid-column-start: 1;
-        padding: 0 5% 24px;
-        margin-top: 24px;
         position: relative;
         z-index: 4;
+        text-align: center;
 
-        @media (min-width: $small-screen) {
-
-            -ms-grid-row: 4;
-            grid-row-start: 4;
+        & p {
+            font-size: 1.3em;
+            font-weight: 600;
         }
 
         @media (min-width: $medium-screen) {
+            text-align: left;
             -ms-grid-row: 4;
             -ms-grid-row-span: 2;
             -ms-grid-column: 2;
@@ -240,7 +274,7 @@ a {
             grid-row-end: span 2;
             grid-column-start: 2;
             margin-top: 0;
-            padding: 24px 0;
+            padding: 24px;
         }
 
         @media (min-width: $large-screen) {
@@ -253,47 +287,110 @@ a {
             grid-row-start: 2;
             grid-row-end: span 3;
             padding: 24px;
+            margin-top: 5px;
         }
     }
 
     &-app-gallery {
-        width: 90%;
-        max-width: 1200px;
-        margin: auto;
+
+        margin: 24px auto;
         left: 0;
         right: 0;
         height: 256px;
+        width: 100%;
         background: #d4d4d4;
 
         // padding: 24px 5%;
-        &-cell {
-            margin: auto;
+        & img {
+            display: block;
             height: 100%;
-            width: 30%;
-            // background: #d4d4d4;
-            bottom: auto;
-            border-radius: 10px;
+            /* set min-width, allow images to set cell width */
+            min-width: 150px;
+            max-width: 100%;
+            margin-right: 10px;
+            /* vertically center */
+            opacity: 0.8;
+            top: 50%;
             transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-            padding: 0;
-            // transform: scale(0.8);
+            transform: translateY(-50%);
 
-            & img {
-                width: auto;
-                height: 100%;
+            transition: opacity 0.4s;
+            opacity: 0;
 
-                margin: auto;
-                top: 0;
-                right: 0;
-                left: 0;
-                bottom: 0;
-                position: absolute;
 
+            &.flickity-lazyloaded,
+            &.flickity-lazyerror {
+                opacity: 1;
             }
 
             &.is-selected {
-                // opacity: 1;
-                // transform: scale(1);
+                opacity: 1;
             }
+        }
+
+        &.is-fullscreen img {
+            opacity: 0.5;
+
+            &.is-selected {
+                opacity: 1;
+            }
+        }
+
+
+        @media (max-width: $small-screen) {
+            display: none;
+        }
+
+        @media (min-width: $large-screen) {
+            height: 350px;
+        }
+
+
+    }
+
+
+
+    &-app-description {
+        & h1 {
+            font-size: 24px;
+            line-height: 28px;
+            padding-bottom: 4px;
+            font-weight: 600;
+
+        }
+
+        & p {
+            font-size: 1em;
+            line-height: 1.3em;
+            white-space: pre-line;
+            margin-top: 10px;
+            font-weight: 400;
+            // max-width: 700px;
+
+            @media (min-width: $large-screen) {
+                font-size: 1.3em;
+            }
+        }
+
+        @media (max-width: $small-screen) {
+            display: none;
+        }
+    }
+
+}
+
+#app-stars {
+    padding: 10px 0;
+    display: inline-flex;
+    font-size: 1.2em;
+
+    & span {
+        color: $star-color;
+
+        &.counts {
+            color: #666;
+            margin: 0 5px;
+            padding: 0;
         }
     }
 
@@ -301,9 +398,13 @@ a {
 
 
 .flickity-prev-next-button {
+    & .flickity-button-icon {
+        left: auto;
+    }
+
     & svg {
         position: absolute;
-        left: 50%;
+        // left: 50%;
         top: 37%;
         width: 28%;
         height: 28%;
@@ -321,7 +422,7 @@ a {
     }
 
     &.previous {
-        margin-left: -25px;
+        margin-left: -35px;
 
         &:hover {
             cursor: pointer;
@@ -331,7 +432,7 @@ a {
     }
 
     &.next {
-        margin-right: -25px;
+        margin-right: -35px;
 
         &:hover {
             cursor: pointer;
@@ -344,6 +445,20 @@ a {
     }
 }
 
+#mute-toggle {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 2;
+    opacity: 0.9;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
 
 #vungle-cta {
     position: relative;
@@ -351,12 +466,11 @@ a {
     outline: 0;
     margin: auto;
     color: #fff;
-    background-color: #0067b8;
-    font-size: 24px;
+    background-color: $button-color;
+    font-size: 1.5em;
     position: relative;
-    border: 10px solid transparent;
+    margin-top: 12px;
     outline: 0;
-    // max-width: 374px;
     min-width: 120px;
     padding: 9px 12px 10px;
 
@@ -366,12 +480,83 @@ a {
     font-weight: 600;
     box-shadow: 0 4px 8px 0 transparent;
     cursor: pointer;
-    overflow: hidden;
+    
     transition: all .2s ease-in-out;
     vertical-align: bottom;
     white-space: nowrap;
 
-    &:hover {
-        background-color: #ffff;
+    @media (min-width: $large-screen) {
+        width: 90%;
     }
+    &:hover {
+        background-color: #1a73b9;
+    }
+}
+
+#vungle-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background-color: #000;
+}
+
+.vungle-footer {
+    text-align: center;
+    height: 40px;
+    background-color: #f2f2f2;
+
+    & span {
+        font-size: 30px;
+        line-height: 40px;
+        display: inline;
+        animation: footerAppear 1 2s cubic-bezier(0.19, 1, 0.22, 1);
+        animation-fill-mode: forwards;
+    }
+
+    @media (max-width: $small-screen) {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+
+    }
+}
+
+.flickity-enabled.is-fullscreen {
+    margin-top: 0;
+    z-index: 3;
+
+    & img {
+        top: 50%;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        // width: 98%;
+        height: auto;
+        width: auto;
+        // height: auto;
+        max-height: 98%;
+        max-width: 98%;
+
+    }
+
+
+    & .flickity-prev-next-button {
+        &.previous {
+            margin-left: 0;
+        }
+
+        &.next {
+            margin-right: 0;
+        }
+    }
+}
+
+.fixed {
+    position: fixed;
+    width: 90%;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-top: 0;
 }

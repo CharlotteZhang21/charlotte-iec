@@ -83,17 +83,21 @@ class VideoController {
             if (this.video.shouldLoop) {
                 this.video.currentTime = this.video.initialTime;
                 this.video.play();
-                this.onLoop.dispatch();
+
+                if(this.onLoop!=null)
+                    this.onLoop.dispatch();
             } else {
                 if (!this.video.paused) {
                     this.video.pause();
                 }
-                this.onComplete.dispatch();
+                if(this.onComplete!=null)
+                    this.onComplete.dispatch();
             }
         }
         if (!this.video.paused && this.videoEnded()) {
             this.video.pause();
-            this.onComplete.dispatch();
+            if(this.onComplete!=null)
+                this.onComplete.dispatch();
         }
     }
 
@@ -158,7 +162,6 @@ class VideoController {
 
     unmute() {
         this.muted = false;
-
     }
 
     mute() {

@@ -1,79 +1,63 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0"/>
-		<meta name="author" content="Vungle">
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>Vungle Endcard</title>
-		<script src="vungle.js"></script>
-		
-		<link rel="stylesheet" href="style.css">
-		<link rel="stylesheet" href="zSlider.css">
-		<link rel="stylesheet" type="text/css" media="all and (min-width: 1000px)" href="large.css" />
-	</head>
-	<body ontouchstart="ontouchstart" class="preload">
+<!DOCTYPE html>
+<html>
 
-		<!-- IEC Creative starts here-->
-		
-		<div class="scroll-area">
-			<div id="top-container">
-				<div class="postroll-image"></div>
-			</div>
-	
-			<div id="bottom-container">
-				<div id="copy-container" class="copy-container">
-					<div id="copy-center" class="copy-center">
-						<div class="icon-column">
-							<img class="app-icon" src="app-icon.jpg" alt="App Icon">
-						</div>
-	
-						<div class="app-info-column">
-							<h1>Candy Crush Soda Saga</h1>
-							<p class="stars">
-								<span class="dark star vungicon-star-full"></span>
-								<span class="dark star vungicon-star-full"></span>
-								<span class="dark star vungicon-star-full"></span>
-								<span class="dark star vungicon-star-full"></span>
-								<span class="dark star vungicon-star-half"></span>
-								<span class="review-count">(1,512)</span>
-							</p>
-							<div class="price">
-								<span class="price-main">Free</span>
-								<sup class="price-sub">+</sup>
-							</div>
-							<div class="horizontal-line"></div>
-							<a id="vungle-cta" class="cta" tabindex="0" href="javascript:void(0)" onclick="doSomething('download')">Get the app</a>
-						</div>
-					</div>
-					<div class="large-container"><div class="column-left">
-						<h3>App Description</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum non eros id leo accumsan posuere. Phasellus lacinia lorem enim, at sollicitudin justo rhoncus ut. Morbi molestie urna nulla, vitae tristique lacus ultricies commodo. Duis varius ex vitae odio mattis convallis. Aenean ultrices ligula at lorem pellentesque tincidunt.</p><p>Proin elit elit, malesuada vel semper eleifend, auctor mattis odio. Pellentesque vitae lorem id lorem euismod tristique id at turpis. Nulla posuere libero quis nisl venenatis iaculis. Sed porta quam sit amet sem gravida scelerisque nec sed urna. Cras felis nisi, bibendum quis nulla non, volutpat luctus lorem. Vestibulum tincidunt pretium ligula, sed condimentum dui feugiat eget.</p>
-						</div><div class="column-right">
-							<h3>App Screenshots</h3>
-							<div id="screenshots-container" class="screenshots-container" tabindex="0"><img src="1.jpeg"><img src="2.jpeg"><img src="3.jpeg"><img src="4.jpeg"><div class="screenshots-container-tooltip"><span class="vungicon-fullscreen-open"></span></div></div>
-						</div></div>
-				</div>
-			</div>
-		</div>
-		
-		<div id="carousel-container">
-			<span id="carousel-close" tabindex="-1" class="vungicon-fullscreen-close"></span>
-			<ul id="carousel" class="z-slide-content">
-                <li class="z-slide-item"><img src="1.jpeg"></li>
-                <li class="z-slide-item hide-item"><img src="2.jpeg"></li>
-                <li class="z-slide-item hide-item"><img src="3.jpeg"></li>
-                <li class="z-slide-item hide-item"><img src="4.jpeg"></li>
-                <li class="z-slide-item hide-item"><img src="5.jpeg"></li>
-            </ul>
-		</div>
+<head>
+    <title></title>
+    <style ></style>
+    <link rel="stylesheet" href="main.css">
+    /* external css: flickity.css, fullscreen.css */
 
-		<div id="vungle-header"><a id="vungle-close" class="vungicon-close-simple" tabindex="0" href="javascript:void(0)" onclick="doSomething('close')"></a></div>
-		<div id="vungle-footer"><span class="footer vungicon-windows"></span><span class="footer vungicon-vungle"></span></div>
+    * {
+        box-sizing: border-box;
+    }
 
-		<!-- IEC Creative ends here -->
+    body {
+        font-family: sans-serif;
+    }
 
-		<script src="zSliderUNMINIFIED.js"></script>
-		<script src="endcard.js"></script>
-	</body>
+    .carousel {
+        background: #EEE;
+    }
+
+    .carousel-image {
+        display: block;
+        height: 300px;
+        /* set min-width, allow images to set cell width */
+        min-width: 150px;
+        max-width: 100%;
+        margin-right: 10px;
+        /* vertically center */
+        top: 50%;
+        transform: translateY(-50%)
+    }
+
+    .carousel.is-fullscreen .carousel-image {
+        height: auto;
+        max-height: 100%;
+    }
+    </style>
+</head>
+
+<body>
+    <h1>Flickity - fullscreen images natural size</h1>
+    <!-- Flickity HTML init -->
+    <p><button class="button view-fullscreen-button">View fullscreen</button></p>
+    <div class="carousel" data-flickity='{ "fullscreen": true, "lazyLoad": 2 }'>
+        <img class="carousel-image" data-flickity-lazyload="https://picsum.photos/720/540/?image=517" />
+        <img class="carousel-image" data-flickity-lazyload="https://picsum.photos/540/720/?image=696" />
+        <img class="carousel-image" data-flickity-lazyload="https://picsum.photos/720/540/?image=56" />
+        <img class="carousel-image" data-flickity-lazyload="https://picsum.photos/800/500/?image=1084" />
+        <img class="carousel-image" data-flickity-lazyload="https://picsum.photos/720/540/?image=1080" />
+        <img class="carousel-image" data-flickity-lazyload="https://picsum.photos/640/640/?image=1074" />
+        <img class="carousel-image" data-flickity-lazyload="https://picsum.photos/720/540/?image=1069" />
+        <img class="carousel-image" data-flickity-lazyload="https://picsum.photos/800/500/?image=1062" />
+        <img class="carousel-image" data-flickity-lazyload="https://picsum.photos/720/540/?image=1002" />
+        <img class="carousel-image" data-flickity-lazyload="https://picsum.photos/640/640/?image=935" />
+        <img class="carousel-image" data-flickity-lazyload="https://picsum.photos/720/540/?image=855" />
+        <img class="carousel-image" data-flickity-lazyload="https://picsum.photos/640/640/?image=824" />
+    </div>
+    <script src="flickity.pkgd.js"></script>
+    <script src="flickity-fullscreen.js"></script>
+</body>
+
 </html>

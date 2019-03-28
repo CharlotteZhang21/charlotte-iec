@@ -26,9 +26,5 @@
     "vinyl-source-stream": "^1.1.2",
     "yargs": "^4.6.0"
   },
-  "dependencies": {
-    "flickity": "^2.2.0",
-    "flickity-fullscreen": "^1.1.1",
-    "flickity-imagesloaded": "^2.0.0"
-  }
+  "dependencies": {}
 }

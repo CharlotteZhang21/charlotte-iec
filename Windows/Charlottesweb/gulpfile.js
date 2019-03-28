@@ -119,7 +119,7 @@ function serve() {
 
     // gulp.watch(SOURCE_PATH + '/**/*.html', ['html']);
 
-    gulp.watch(SOURCE_PATH + '/*.html', ['html']);
+    gulp.watch(SOURCE_PATH + '/**/*.html', ['html']);
     
     // Watches for changes in files inside the './static' folder. Also sets 'keepFiles' to true (see cleanBuild()).
     gulp.watch(STATIC_PATH + '/**/*', ['watch-static']).on('change', function() {
