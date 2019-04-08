@@ -20,9 +20,7 @@ dist/
 
 # Ignore media files which are probably large in file size
 *.wmv
-*.mpg
-*.mpeg
-*.mp4
+*.mpgs
 *.mov
 *.flv
 *.avi
