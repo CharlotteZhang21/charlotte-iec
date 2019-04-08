@@ -25,9 +25,9 @@ function main() {
 
         videoController = new VideoController('videoBg');
 
-        videoController.play(videoPath, { "from": from, "loop": true });
+        videoController.play(videoPath, { "from": from, "loop": true, "simple": true });
 
-        updateVideo();
+        // updateVideo();
 
     } else {
 
@@ -91,7 +91,8 @@ function main() {
 
     ////------ WINDOW SCROLL --------////// 
 
-    var infoContentTop = $('#videoBg').position().top + $('#videoBg').height();
+    // var infoContentTop = $('#videoBg').position().top + $('#videoBg').height();
+    var infoContentTop = 10000;
 
     var contentCloneflag = false;
 
@@ -99,12 +100,18 @@ function main() {
     $('#wrap').scroll(function() {
         
         // $('#scrollHeight').html("height " + infoContentTop );//debug
+        // console.log(infoContentTop);
+        // console.log($(this).scrollTop());
+
+
         
-        if ($(this).scrollTop() >= infoContentTop) {
-            if(infoContentTop < 10) {
-                infoContentTop = $('#videoBg').position().top + $('#videoBg').height();
-                // $('#scrollHeight').html("height " + infoContentTop );// debug
-            }
+        if (infoContentTop <=0) {
+        // if ($(this).scrollTop() >= infoContentTop) {
+            // if(infoContentTop < 10) {
+            //     infoContentTop = $('#info-content').position().top;
+            //     // $('#scrollHeight').html("height " + infoContentTop );// debug
+            // }
+
             if (!contentCloneflag) {
 
                 $("#info-content").clone().appendTo("#wrap").addClass('fixed').attr('id', 'info-clone');
@@ -123,11 +130,14 @@ function main() {
                 $('#info-content').css('opacity', 0);
                 
             }
+
         } else {
 
             $('#info-clone').css('opacity', 0);
             $('#info-content').css('opacity', 1);
         }
+
+        infoContentTop = $('#info-content').offset().top;
 
 
 
@@ -153,12 +163,12 @@ function bindCtaClick(obj) {
 }
 
 
-function updateVideo() {
-    setTimeout(function() {
-        videoController.update();
-        updateVideo();
-    }, 10)
-}
+// function updateVideo() {
+//     setTimeout(function() {
+//         videoController.update();
+//         updateVideo();
+//     }, 10)
+// }
 
 
 function initCarousel() {
@@ -194,8 +204,7 @@ function initCarousel() {
 
     previewCarousel.on('staticClick', function(event, pointer, cellElement, cellIndex) {
         console.log(cellIndex);
-
-
+        parent.postMessage('hideCloseButton','*');
         previewCarousel.viewFullscreen();
         previewCarousel.select(cellIndex);
         // showFullScreen();

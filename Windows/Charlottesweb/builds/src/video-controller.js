@@ -63,7 +63,16 @@ class VideoController {
                 _this.video.currentTime = 0;
                 _this.video.endTime = 0;
                 _this.video.play();
-                _this.initVideoArgs(args);
+                if(args.simple == undefined || !args.simple)
+                    _this.initVideoArgs(args);
+                else{
+                    if(args.loop != undefined && args.loop) {
+
+                        _this.video.loop = true;
+
+                        console.log(_this.video);
+                    }
+                }
             });
             
         } else {

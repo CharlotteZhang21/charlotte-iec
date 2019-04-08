@@ -477,7 +477,7 @@ a {
   max-width: 1600px; }
   @media (min-width: 768px) {
     .info-content {
-      margin-top: -80px;
+      margin-top: -120px;
       border-radius: 2px;
       background: #fff;
       -ms-grid-columns: auto minmax(0, 1fr);
@@ -489,7 +489,7 @@ a {
       box-shadow: 0 6px 23px 0 rgba(0, 0, 0, 0.16); } }
   @media (min-width: 1084px) {
     .info-content {
-      margin-top: -120px;
+      margin-top: -150px;
       -ms-grid-columns: auto minmax(0, 1fr) 256px;
       grid-template-columns: min-content minmax(0, 1fr) 256px;
       -ms-grid-rows: auto auto auto 1fr auto auto;
@@ -736,7 +736,7 @@ a {
   margin-top: 12px;
   outline: 0;
   min-width: 120px;
-  padding: 9px 12px 10px;
+  padding: 9px 10px;
   display: inline-block;
   text-align: center;
   line-height: 1;
@@ -749,7 +749,8 @@ a {
   white-space: nowrap; }
   @media (min-width: 1084px) {
     .cta {
-      width: 90%; } }
+      width: 100%;
+      padding: 9px 0; } }
   .cta:hover {
     background-color: #1a73b9; }
 
@@ -792,6 +793,8 @@ a {
     margin-left: 0; }
   .flickity-enabled.is-fullscreen .flickity-prev-next-button.next {
     margin-right: 0; }
+  .flickity-enabled.is-fullscreen .flickity-fullscreen-button-exit {
+    z-index: 9999999999999; }
 
 .fixed {
   position: fixed;
