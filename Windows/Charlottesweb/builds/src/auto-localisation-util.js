@@ -120,7 +120,7 @@ export function getLocalisedCta() {
             text = 'Tải';
             break;
         default:
-            downloadText = "GET";
+            text = "GET";
     }
     return { 'text': text.toUpperCase(), 'font': font, 'fontSizeMultiplier': fontSizeMultiplier };
 }

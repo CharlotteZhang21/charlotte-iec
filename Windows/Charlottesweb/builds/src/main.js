@@ -162,15 +162,6 @@ function bindCtaClick(obj) {
 
 }
 
-
-// function updateVideo() {
-//     setTimeout(function() {
-//         videoController.update();
-//         updateVideo();
-//     }, 10)
-// }
-
-
 function initCarousel() {
 
     var d;
@@ -204,10 +195,21 @@ function initCarousel() {
 
     previewCarousel.on('staticClick', function(event, pointer, cellElement, cellIndex) {
         console.log(cellIndex);
-        parent.postMessage('hideCloseButton','*');
+        
         previewCarousel.viewFullscreen();
         previewCarousel.select(cellIndex);
         // showFullScreen();
+    });
+
+    previewCarousel.on( 'fullscreenChange', function( isFullscreen ) {
+        if(isFullscreen) {
+            console.log('hide');
+            parent.postMessage('hideCloseButton','*');
+                
+        }else {
+            console.log('reveal');
+            parent.postMessage('revealCloseButton', '*');
+        }
     });
 }
 
