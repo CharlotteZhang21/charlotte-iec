@@ -66,6 +66,7 @@ class VideoController {
                 if(args.simple == undefined || !args.simple)
                     _this.initVideoArgs(args);
                 else{
+                    _this.video.simple = args.simple;
                     if(args.loop != undefined && args.loop) {
 
                         _this.video.loop = true;
@@ -170,11 +171,25 @@ class VideoController {
     }
 
     unmute() {
-        this.muted = false;
+
+        if(this.video.simple){
+            this.video.muted = false;
+        }else{
+            this.muted = false;    
+        }
+        console.log(this.video);
+        
     }
 
     mute() {
-        this.muted = true;
+
+        if(this.video.simple){
+            this.video.muted = true;
+        }else{
+            this.muted = true;    
+        }
+        console.log(this.video);
+        
     }
 
     pause() {

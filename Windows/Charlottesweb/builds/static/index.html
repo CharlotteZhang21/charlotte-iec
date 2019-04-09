@@ -30,10 +30,10 @@
     <div id="wrap">
         <!-- <p id="scrollHeight">h0</p> -->
         <div class="item video-area">
-            <div id="mute-toggle">
+            <button id="mute-toggle" class="hide">
                 <img id="iconMuted"  src="mute.svg">
                 <img id="iconUnmuted" style="display: none;" src="unmute.svg">
-            </div>
+            </button>
             <video preload playsinline muted autoplay id='videoBg'></video>
             <img id="bg-static-img" />
         </div>
@@ -64,7 +64,7 @@
                 <!--==== CTA ====-->
                 <div class="info-app-cta">
                     <p>Free+</p>
-                    <div id="vungle-cta" class="cta" onClick="parent.postMessage('download', '*')">Get</div>
+                    <button id="vungle-cta" class="cta" onClick="parent.postMessage('download', '*')">Get</button>
                 </div>
                 <!--==== END CTA ====-->
             </div>

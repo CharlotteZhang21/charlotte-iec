@@ -28,6 +28,11 @@ a {
     text-decoration: none;
 }
 
+button {
+    border: none;
+    background: none;
+    padding: 0;
+}
 
 #wrap {
     position: absolute;
@@ -326,6 +331,10 @@ a {
             &.is-selected {
                 opacity: 1;
             }
+
+            &:focus {
+                border: solid 2px $focus-border-color;
+            }
         }
 
         &.is-fullscreen img {
@@ -419,6 +428,10 @@ a {
         width: 50px;
         height: 50px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, .2);
+
+        &:focus {
+            border: solid 2px $focus-border-color;
+        }
     }
 
     &.previous {
@@ -454,16 +467,24 @@ a {
     z-index: 2;
     opacity: 0.9;
 
-    &:hover {
+    transition: opacity 1s ease-in-out;
+
+    &:hover,
+    &:focus {
         opacity: 1;
+    }
+
+    &.hide {
+        opacity: 0;
+        pointer-events: 0;
     }
 }
 
 #scrollHeight {
     z-index: 100;
-    position:fixed;
+    position: fixed;
     height: 20px;
-    color: #000; 
+    color: #000;
 }
 
 .cta {
@@ -487,7 +508,7 @@ a {
     box-shadow: 0 4px 8px 0 transparent;
     cursor: pointer;
     opacity: 0;
-    
+
     transition: all .2s ease-in-out;
     vertical-align: bottom;
     white-space: nowrap;
@@ -496,7 +517,10 @@ a {
         width: 100%;
         padding: 9px 0;
     }
-    &:hover {
+
+    &:hover,
+    &:focus {
+        border: solid 2px $focus-border-color;
         background-color: #1a73b9;
     }
 }
@@ -559,9 +583,27 @@ a {
         }
     }
 
-    & .flickity-fullscreen-button-exit{
-        z-index: 9999999999999;
+    & .flickity-fullscreen-button-exit {
+        width: 30px;
+        height: 30px;
+        // border-radius: 10px;
+        bottom: 55px;
+        position: absolute;
+        top: auto;
+        margin: auto;
+
+        & .flickity-button-icon {
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            margin: auto;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
     }
+
 }
 
 .fixed {

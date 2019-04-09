@@ -29,6 +29,27 @@ function main() {
 
         // updateVideo();
 
+
+
+        ////------ MUTE --------////// 
+
+        $('#mute-toggle').removeClass('hide');
+
+        document.getElementById('mute-toggle').addEventListener('pointerdown', function (event) {
+
+            muted = !muted;
+
+            if (muted) {
+                videoController.mute();
+            } else {
+                videoController.unmute();
+            }
+
+            $('#iconMuted').toggle(muted);
+            $('#iconUnmuted').toggle(!muted);
+        });
+        /////------ MUTE TOGGLE END --------//////////
+
     } else {
 
         $('#videoBg').addClass('hide');
@@ -70,23 +91,6 @@ function main() {
     /////------ CTA END ------//////////
 
 
-    ////------ MUTE --------////// 
-
-
-    document.getElementById('mute-toggle').addEventListener('pointerdown', (event) => {
-
-        muted = !muted;
-
-        if (muted) {
-            videoController.mute();
-        } else {
-            videoController.unmute();
-        }
-
-        $('#iconMuted').toggle(muted);
-        $('#iconUnmuted').toggle(!muted);
-    });
-    /////------ MUTE TOGGLE END --------//////////
 
 
     ////------ WINDOW SCROLL --------////// 
@@ -149,16 +153,12 @@ function main() {
 }
 
 function bindCtaClick(obj) {
-    
+    // console.log(obj.focus);
+    obj.focus();
     obj.addEventListener("click", function() {
         console.log('cta download');
         parent.postMessage('download', '*');
     });
-
-    // document.getElementById('app-icon').addEventListener("touchstart", function() {
-    //     console.log('cta download');
-    //     parent.postMessage('download', '*');
-    // });
 
 }
 
@@ -187,6 +187,7 @@ function initCarousel() {
             wrapAround: true, // Toggle endless scrolling [True or false]
             fullscreen: true,
             lazyLoad: 3,
+            accessibility: true,
             // freeScroll: false, // Toggle stickeyness scrolling [True or false]
             autoPlay: 3000, // Set the Delay between switching Items
             initialIndex: 0 // Which Item should be centered first? 
@@ -194,23 +195,23 @@ function initCarousel() {
     }
 
     previewCarousel.on('staticClick', function(event, pointer, cellElement, cellIndex) {
-        console.log(cellIndex);
+        // console.log(cellIndex);
         
         previewCarousel.viewFullscreen();
         previewCarousel.select(cellIndex);
         // showFullScreen();
     });
 
-    previewCarousel.on( 'fullscreenChange', function( isFullscreen ) {
-        if(isFullscreen) {
-            console.log('hide');
-            parent.postMessage('hideCloseButton','*');
+    // previewCarousel.on( 'fullscreenChange', function( isFullscreen ) {
+    //     if(isFullscreen) {
+    //         console.log('hide');
+    //         parent.postMessage('hideCloseButton','*');
                 
-        }else {
-            console.log('reveal');
-            parent.postMessage('revealCloseButton', '*');
-        }
-    });
+    //     }else {
+    //         console.log('reveal');
+    //         parent.postMessage('revealCloseButton', '*');
+    //     }
+    // });
 }
 
 function showFullScreen() {
@@ -218,12 +219,15 @@ function showFullScreen() {
 }
 
 
-
+window.resize = function() {
+    previewCarousel.resize();
+}
 
 window.onload = function() {
+    
 
     initCarousel();
-
+    
     setTimeout(function(){
         main();
     }, 500);

@@ -407,6 +407,11 @@ body {
 a {
   text-decoration: none; }
 
+button {
+  border: none;
+  background: none;
+  padding: 0; }
+
 #wrap {
   position: absolute;
   margin: auto;
@@ -634,6 +639,8 @@ a {
       opacity: 1; }
     .info-app-gallery img.is-selected {
       opacity: 1; }
+    .info-app-gallery img:focus {
+      border: solid 2px #004eff; }
   .info-app-gallery.is-fullscreen img {
     opacity: 0.5; }
     .info-app-gallery.is-fullscreen img.is-selected {
@@ -693,6 +700,8 @@ a {
   width: 50px;
   height: 50px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+  .flickity-prev-next-button.previous:focus, .flickity-prev-next-button.next:focus {
+    border: solid 2px #004eff; }
 
 .flickity-prev-next-button.previous {
   margin-left: -35px; }
@@ -714,9 +723,13 @@ a {
   top: 20px;
   left: 20px;
   z-index: 2;
-  opacity: 0.9; }
-  #mute-toggle:hover {
+  opacity: 0.9;
+  transition: opacity 1s ease-in-out; }
+  #mute-toggle:hover, #mute-toggle:focus {
     opacity: 1; }
+  #mute-toggle.hide {
+    opacity: 0;
+    pointer-events: 0; }
 
 #scrollHeight {
   z-index: 100;
@@ -751,7 +764,8 @@ a {
     .cta {
       width: 100%;
       padding: 9px 0; } }
-  .cta:hover {
+  .cta:hover, .cta:focus {
+    border: solid 2px #004eff;
     background-color: #1a73b9; }
 
 #vungle-footer {
@@ -794,7 +808,21 @@ a {
   .flickity-enabled.is-fullscreen .flickity-prev-next-button.next {
     margin-right: 0; }
   .flickity-enabled.is-fullscreen .flickity-fullscreen-button-exit {
-    z-index: 9999999999999; }
+    width: 30px;
+    height: 30px;
+    bottom: 55px;
+    position: absolute;
+    top: auto;
+    margin: auto; }
+    .flickity-enabled.is-fullscreen .flickity-fullscreen-button-exit .flickity-button-icon {
+      position: absolute;
+      width: 60%;
+      height: 60%;
+      margin: auto;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0; }
 
 .fixed {
   position: fixed;
