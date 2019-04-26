@@ -1,0 +1,167 @@
+<!-- ==================================================================== -->
+<!-- ========================= READ THIS FIRST ========================== -->
+<!-- This is the index.html file.
+
+     The only thing you need to tweak here is the containers.
+     Containers will later be used by the PIEC overlay to know where to place things (HUD elements, buttons, etc.).
+
+     A container will look like:
+
+     <div class="layout-item" id="name-of-your-container"></div>
+
+     Don't forget to style it inside main.css!!!
+
+<!   ==================================================================== -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0, user-scalable=no" />
+    <title>Vungle Endcard</title>
+    <!-- build:css main.css -->
+    <link rel="stylesheet" href="css/main.css">
+    <!-- /build -->
+    <style>
+    @font-face {
+        font-family: "vungle-fonticon";
+        src: url("vungle-fonticon.eot");
+        src: url("vungle-fonticon.eot?#iefix") format("embedded-opentype"), url("vungle-fonticon.woff") format("woff"), url("vungle-fonticon.ttf") format("truetype"), url("vungle-fonticon.svg#vungle-fonticon") format("svg");
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'myfont';
+        src: url('CurseCasual.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    /* Generic font for autolocalised texts! */
+    @font-face {
+        font-family: 'Noto Sans';
+        src: url('NotoSans-ExtraBold.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    /* Generic font for autolocalised texts! */
+    @font-face {
+        font-family: 'Mikado';
+        src: url('MikadoBold.otf') format('opentype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    </style>
+    <!-- logo strike start -->
+    <style>
+    #vungle-footer {
+        display: none !important;
+    }
+    </style>
+    <!-- logo strike end -->
+</head>
+
+<body class="preload light">
+    <div id="wrap">
+        
+        <div id="game">
+        </div>
+        
+        <div id="piec-wrap">
+            <!-- ==================================================================== -->
+            <!-- ==================================================================== -->
+            <!-- ================== ADD PIEC CONTAINERS HERE ======================= -->
+            <div class="layout-item" id="background"></div>
+
+            <div class="layout-item" id="cta-container">
+            </div>
+
+            <div class="layout-item" id="cta-container-final">
+            </div>
+
+            <div class="layout-item" id="field">
+            </div>
+
+            <div class="layout-item" id="field-deco-front-0"></div>
+            <div class="layout-item" id="field-deco-back-0"></div>
+
+
+            <div class="layout-item" id="field-deco-front-1"></div>
+            <div class="layout-item" id="field-deco-back-1"></div>
+
+
+            <div class="layout-item" id="field-deco-front-2"></div>
+            <div class="layout-item" id="field-deco-back-2"></div>
+
+            <div class="layout-item crop" id="crop_0_0"></div>
+            <div class="layout-item crop" id="crop_0_1"></div>
+            <div class="layout-item crop" id="crop_0_2"></div>
+
+            <div class="layout-item crop" id="crop_1_0"></div>
+            <div class="layout-item crop" id="crop_1_1"></div>
+            <div class="layout-item crop" id="crop_1_2"></div>
+
+            <div class="layout-item crop" id="crop_2_0"></div>
+            <div class="layout-item crop" id="crop_2_1"></div>
+            <div class="layout-item crop" id="crop_2_2"></div>
+            
+
+            <div class="layout-item hand" id="hand-1"></div>
+
+            <div class="layout-item" id="powerup-container"></div>
+            <div class="layout-item" id="powerup-counter"></div>
+            <div class="layout-item" id="powerup-container-spawn"></div>
+            <div class="layout-item" id="powerup-counter-fill"></div>
+            <div class="layout-item" id="powerup-counter-icon"></div>
+            <div class="layout-item" id="powerup-counter-text"></div>
+
+            <div class="layout-item" id="particle-container"></div>
+            <div class="layout-item" id="particle-container-goal"></div>
+            
+
+            <div class="layout-item" id="hand"></div>
+            <!-- ================== END PIEC CONTAINERS HERE ======================= -->
+            <!-- ==================================================================== -->
+            <!-- ==================================================================== -->
+        </div>
+        
+    </div>
+    <!-- IEC Creative ends here -->
+    <!-- phaser requires fonts to be preloaded before they can be used "in game" -->
+    <!-- note: you can add more fonts below -->
+    <div class="preload-font" style="font-family: myFont;">.</div>
+    <div class="preload-font" style="font-family: Noto Sans;">.</div>
+    <div class="preload-font" style="font-family: Mikado;">.</div> 
+    <!-- build:remove -->
+    <script src="http://localhost:35729/livereload.js"></script>
+    <!-- /build -->
+    <!-- build:js phaser.min.js -->
+    <script src="node_modules/phaser/build/custom/phaser-no-physics.js"></script>
+    <!-- /build -->
+    <!-- build:js settings.js -->
+    <script src="settings.js"></script>
+    <!-- /build -->
+    <!-- build:remove -->
+    <script src="src/settings-overide.js"></script>
+    <!-- /build -->
+    <!-- build:js bundle.min.js -->
+    <script src="bundle.js"></script>
+    <!-- /build -->
+    <script>
+
+    window.onload = function() {
+    };
+
+
+    window.addEventListener('resize', function(e) {
+        piec.onSDKCall();
+        piec.onResize();
+    });
+
+    var piec = piec || {};
+    </script>
+</body>
+
+</html>
