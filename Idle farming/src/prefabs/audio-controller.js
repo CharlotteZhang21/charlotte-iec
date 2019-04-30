@@ -6,7 +6,15 @@ Handles audio controls, including muting, playing audios, etc.
 class AudioController {
 
     constructor() {
+        
         this.audios = [];
+        this.canPlay = false;
+    }
+
+    setCanPlay() {
+        if(!this.canPlay)
+            this.canPlay = true;
+
     }
 
     /*
@@ -19,6 +27,9 @@ class AudioController {
         + "loop" : bool   audio loops if true
     */
     play(keyName, src, args) {
+        if(!this.canPlay){
+            return;
+        }
         if (this.audios[keyName] == null) {
             this.audios[keyName] = new Audio(src);
         }

@@ -494,7 +494,7 @@ button {
       box-shadow: 0 6px 23px 0 rgba(0, 0, 0, 0.16); } }
   @media (min-width: 1084px) {
     .info-content {
-      margin-top: -150px;
+      margin-top: -200px;
       -ms-grid-columns: auto minmax(0, 1fr) 256px;
       grid-template-columns: min-content minmax(0, 1fr) 256px;
       -ms-grid-rows: auto auto auto 1fr auto auto;
@@ -810,9 +810,9 @@ button {
   .flickity-enabled.is-fullscreen .flickity-fullscreen-button-exit {
     width: 30px;
     height: 30px;
-    bottom: 55px;
     position: absolute;
-    top: auto;
+    right: 10px;
+    top: 10px;
     margin: auto; }
     .flickity-enabled.is-fullscreen .flickity-fullscreen-button-exit .flickity-button-icon {
       position: absolute;

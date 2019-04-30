@@ -75,7 +75,7 @@ a {
     height: 5%;
     top: 63%;
     left: 35%;
-    
+
 }
 
 #field-deco-back-1 {
@@ -98,7 +98,7 @@ a {
     height: 5%;
     top: 50%;
     left: 15%;
-    
+
 }
 
 .crop {
@@ -108,6 +108,22 @@ a {
 
 }
 
+#coins-counter {
+    width: 50%;
+    height: 5%;
+    top: 5%;
+    left: 0;
+    right: 0;
+}
+
+#coin {
+    width: 10%;
+    height: 10%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
 
 /*
     #crop_level_number
@@ -115,21 +131,23 @@ a {
     number -> how many crops in this level  
 
 */
-#crop_0_2 {
+
+#crop_0_0 {
+    width: 23%;
+    height: 23%;
+    top: 31%;
+    left: 37%;
+}
+
+#crop_0_1 {
     width: 23%;
     height: 23%;
     top: 35%;
     left: 23%;
 }
 
-#crop_0_1 {
-    width: 23%;
-    height: 23%;
-    top: 31%;
-    left: 35%;
-}
 
-#crop_0_0 {
+#crop_0_2 {
     width: 23%;
     height: 23%;
     top: 37%;
@@ -179,6 +197,7 @@ a {
     top: 10%;
     left: 35%;
 }
+
 #crop_2_1 {
     width: 45%;
     height: 45%;
@@ -190,13 +209,13 @@ a {
 /* power up containers */
 
 .hand {
-  width: 40%;
-  height: 40%; 
+    width: 40%;
+    height: 40%;
 }
 
 #hand-1 {
-  top: 30%;
-  left: 50%; 
+    top: 30%;
+    left: 50%;
 }
 
 
@@ -211,41 +230,45 @@ a {
 }
 
 #powerup-container-spawn {
-  width: 50%;
-  height: 20%;
-  top: 50%;
-  left: 0;
-  right: 0; 
+    width: 50%;
+    height: 20%;
+    top: 50%;
+    left: 0;
+    right: 0;
 }
 
 #powerup-counter-text {
-  width: 16%;
-  height: 3%;
-  top: 77.5%;
-  left: 0%;
-  right: 6.5%; }
+    width: 16%;
+    height: 3%;
+    top: 77.5%;
+    left: 0%;
+    right: 6.5%;
+}
 
 
 #powerup-counter {
-  top: 70%;
-  left: 0;
-  right: 0;
-  width: 70%;
-  height: 15%; }
+    top: 70%;
+    left: 0;
+    right: 0;
+    width: 80%;
+    height: 15%;
+}
 
 #powerup-counter-fill {
-  top: 74.25%;
-  width: 38%;
-  height: 4%;
-  left: 0%;
-  right: 3.75%; }
+    top: 74.75%;
+    width: 45%;
+    height: 3.5%;
+    left: 0;
+    right: 6%;
+}
 
 #powerup-counter-icon {
-  width: 16%;
-  height: 10%;
-  top: 71.5%;
-  left: 0%;
-  right: 5%; }
+    width: 18%;
+    height: 10%;
+    top: 71.5%;
+    left: 0%;
+    right: 5%;
+}
 
 #hand {
     width: 10%;

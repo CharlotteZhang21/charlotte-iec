@@ -15,6 +15,10 @@ var videoController = null;
 
 var muted = true;
 
+var infoContentTop = 10000;
+
+var contentCloneflag = false;
+
 function main() {
 
     //show the video or static image
@@ -35,7 +39,7 @@ function main() {
 
         $('#mute-toggle').removeClass('hide');
 
-        document.getElementById('mute-toggle').addEventListener('pointerdown', function (event) {
+        document.getElementById('mute-toggle').addEventListener('pointerdown', function(event) {
 
             muted = !muted;
 
@@ -53,9 +57,9 @@ function main() {
     } else {
 
         $('#videoBg').addClass('hide');
-        
+
         $('#bg-static-img').removeClass('hide');
-        
+
         $('#bg-static-img').attr('src', staticImgSrc);
     }
 
@@ -71,20 +75,20 @@ function main() {
 
     var fontSize = document.getElementById('vungle-cta').offsetHeight * fontSizeMultiplier;
 
-    
+
 
     // var fontMarginTop = orientationCheck()=='portrait'? document.getElementById('cta-img').offsetHeight * 0.05 : document.getElementById('cta-img').offsetHeight * 0.3;
 
     document.getElementById('vungle-cta').style.fontSize = fontSize + 'px';
     // document.getElementById('cta-text').style.top = fontMarginTop + 'px';
-    
+
 
     document.getElementById('vungle-cta').style.opacity = 1;
-    
+
     document.getElementById('vungle-cta').innerHTML = text;
 
     bindCtaClick(document.getElementById('vungle-cta'));
-    
+
     bindCtaClick(document.getElementById('app-icon'));
 
 
@@ -96,43 +100,42 @@ function main() {
     ////------ WINDOW SCROLL --------////// 
 
     // var infoContentTop = $('#videoBg').position().top + $('#videoBg').height();
-    var infoContentTop = 10000;
 
-    var contentCloneflag = false;
 
 
     $('#wrap').scroll(function() {
-        
+
         // $('#scrollHeight').html("height " + infoContentTop );//debug
         // console.log(infoContentTop);
         // console.log($(this).scrollTop());
 
 
-        
-        if (infoContentTop <=0) {
-        // if ($(this).scrollTop() >= infoContentTop) {
-            // if(infoContentTop < 10) {
-            //     infoContentTop = $('#info-content').position().top;
-            //     // $('#scrollHeight').html("height " + infoContentTop );// debug
-            // }
 
-            if (!contentCloneflag) {
+        if (infoContentTop <= 0) {
+            if ($(window).scrollTop() >= infoContentTop) {
+                // if(infoContentTop < 10) {
+                //     infoContentTop = $('#info-content').position().top;
+                //     // $('#scrollHeight').html("height " + infoContentTop );// debug
+                // }
+                repositionInfoContent();
+                // if (!contentCloneflag) {
 
-                $("#info-content").clone().appendTo("#wrap").addClass('fixed').attr('id', 'info-clone');
+                //     $("#info-content").clone().appendTo("#wrap").addClass('fixed').attr('id', 'info-clone');
 
-                $('#info-clone').find('#vungle-cta').attr('id', 'vungle-cta-clone');
-                $('#info-clone').find('#app-icon').attr('id', 'app-icon-clone');
+                //     $('#info-clone').find('#vungle-cta').attr('id', 'vungle-cta-clone');
+                //     $('#info-clone').find('#app-icon').attr('id', 'app-icon-clone');
 
-                bindCtaClick(document.getElementById('vungle-cta-clone'));
-                bindCtaClick(document.getElementById('app-icon-clone'));
+                //     bindCtaClick(document.getElementById('vungle-cta-clone'));
+                //     bindCtaClick(document.getElementById('app-icon-clone'));
 
-                $('#info-content').css('opacity', 0);
-                
-                contentCloneflag = true;
-            } else {
-                $('#info-clone').css('opacity', 1);
-                $('#info-content').css('opacity', 0);
-                
+                //     $('#info-content').css('opacity', 0);
+
+                //     contentCloneflag = true;
+                // } else {
+                //     $('#info-clone').css('opacity', 1);
+                //     $('#info-content').css('opacity', 0);
+
+                // }
             }
 
         } else {
@@ -150,6 +153,27 @@ function main() {
 
     ////------ WINDOW SCROLL END --------////// 
 
+}
+
+function repositionInfoContent() {
+    if (!contentCloneflag) {
+
+        $("#info-content").clone().appendTo("#wrap").addClass('fixed').attr('id', 'info-clone');
+
+        $('#info-clone').find('#vungle-cta').attr('id', 'vungle-cta-clone');
+        $('#info-clone').find('#app-icon').attr('id', 'app-icon-clone');
+
+        bindCtaClick(document.getElementById('vungle-cta-clone'));
+        bindCtaClick(document.getElementById('app-icon-clone'));
+
+        $('#info-content').css('opacity', 0);
+
+        contentCloneflag = true;
+    } else {
+        $('#info-clone').css('opacity', 1);
+        $('#info-content').css('opacity', 0);
+
+    }
 }
 
 function bindCtaClick(obj) {
@@ -196,26 +220,28 @@ function initCarousel() {
 
     previewCarousel.on('staticClick', function(event, pointer, cellElement, cellIndex) {
         // console.log(cellIndex);
-        
+
         previewCarousel.viewFullscreen();
         previewCarousel.select(cellIndex);
-        // showFullScreen();
+
     });
 
-    // previewCarousel.on( 'fullscreenChange', function( isFullscreen ) {
-    //     if(isFullscreen) {
-    //         console.log('hide');
-    //         parent.postMessage('hideCloseButton','*');
-                
-    //     }else {
-    //         console.log('reveal');
-    //         parent.postMessage('revealCloseButton', '*');
-    //     }
-    // });
-}
+    previewCarousel.on('fullscreenChange', function(isFullscreen) {
+        if (isFullscreen) {
+            // console.log('hide');
+            // parent.postMessage('hideCloseButton','*');
 
-function showFullScreen() {
-    // console.log('e');
+        } else {
+            if ($(window).scrollTop() < infoContentTop) {
+                $('#info-clone').css('opacity', 0);
+                $('#info-content').css('opacity', 1);
+            }
+            // repositionInfoContent();
+            console.log($(window).scrollTop());
+            console.log($('#info-content').offset().top);
+            // parent.postMessage('revealCloseButton', '*');
+        }
+    });
 }
 
 
@@ -224,12 +250,12 @@ window.resize = function() {
 }
 
 window.onload = function() {
-    
+
 
     initCarousel();
-    
-    setTimeout(function(){
+
+    setTimeout(function() {
         main();
     }, 500);
-    
+
 }

@@ -11,7 +11,7 @@ import AudioContoller from '../prefabs/audio-controller';
 import Field from '../prefabs/field';
 import CtaButton from '../prefabs/cta-button';
 import Background from '../prefabs/background';
-
+import Counter from '../prefabs/counter';
 //======= game mechanism
 import HandGestureController from '../prefabs/hand-gesture-controller';
 import PowerUpGame from '../prefabs/powerup-game';
@@ -38,8 +38,11 @@ import * as CustomPngSequencesRenderer from '../utils/custom-png-sequences-rende
         this.game.global.windowHeight = document.body.clientHeight;
 
 
+        this.game.global.interacted = false;
 
-        this.audioController = new AudioContoller();
+
+
+        this.audioController = new AudioContoller(game);
         
 
         //========== BACKGROUND
@@ -50,7 +53,14 @@ import * as CustomPngSequencesRenderer from '../utils/custom-png-sequences-rende
 
         //========== END OF BACKGROUND
 
-        this.gameField = new Field(this.game);
+
+        //========== COUNTER
+
+        this.counter = new Counter(this.game, PiecSettings.moneyCounter, this.audioController);
+
+        //========== END OF COUNTER
+
+        this.gameField = new Field(this.game, this.counter, this.audioController);
         
         this.game.add.existing(this.gameField);
         

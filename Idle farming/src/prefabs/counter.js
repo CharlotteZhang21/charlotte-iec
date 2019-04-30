@@ -14,7 +14,7 @@ class Counter extends Phaser.Group {
     constructor(game, args) {
         super(game);
 
-
+    
         this.currentValue = args.initialValue;
         this.maxValue = args.maxValue;
         this.minValue = args.minValue;
@@ -301,7 +301,7 @@ class Counter extends Phaser.Group {
         this.add(this.counterBackground);
     }
 
-    changeCounterTo(value, duration) {
+    changeCounterTo(value, duration, scaleAni = true) {
 
         var speed = this.calcSpeedFromDuration(value, duration);
         var waitBetweenUpdates = 10;
@@ -313,10 +313,15 @@ class Counter extends Phaser.Group {
                 if (this.textField) {
                     var scaleEffect = 1.4;
 
-                    var tween = this.game.add.tween(this.textField.scale).to({ x: this.textField.initialScale * scaleEffect, y: this.textField.initialScale * scaleEffect }, duration * 1 / 4, Phaser.Easing.Linear.None, true, duration * 1 / 3);
-                    tween.onComplete.add(function() {
-                        this.game.add.tween(this.textField.scale).to({ x: this.textField.initialScale, y: this.textField.initialScale }, duration * 1 / 4, Phaser.Easing.Linear.None, true, 0);
-                    }, this);
+                    if(scaleAni){
+                        var tween = this.game.add.tween(this.textField.scale).to({ x: this.textField.initialScale * scaleEffect, y: this.textField.initialScale * scaleEffect }, duration * 1 / 4, Phaser.Easing.Linear.None, true, duration * 1 / 3);
+                    
+                        tween.onComplete.add(function() {
+                            this.game.add.tween(this.textField.scale).to({ x: this.textField.initialScale, y: this.textField.initialScale }, duration * 1 / 4, Phaser.Easing.Linear.None, true, 0);
+                        }, this);    
+                    
+                    }
+                    
                 }
                 break;
             case 'rectangle_progressbar':
