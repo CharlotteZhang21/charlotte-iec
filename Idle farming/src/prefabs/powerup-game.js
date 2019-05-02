@@ -55,6 +55,8 @@ class PowerUpGame extends Phaser.Group {
         this.direction = '';
         this.directionChangeTimes = 0;
 
+        this.disableInteraction();// disable it untill there are things to interact
+
     }
 
     //Can only be called once!
@@ -263,57 +265,12 @@ class PowerUpGame extends Phaser.Group {
         }
         this.prevX = this.getGameXInput();
         this.prevY = this.getGameYInput();
-
-
-
-
-
-
-
-
-
-        // for (var i = 0; i < this.letters.length; i++) {
-        // if (this.handTutorial && (i == 1 || i == 2)) {
-        // this.bezierCurveRight = false;
-        // }
-        // var cookie = this.lettersToCookies[this.letters[i]];
-        // if (i == 0) {
-        //     this.graphics.moveTo(cookie.x, cookie.y);
-        // } else {
-        //     this.drawLineToPoint(prevX, prevY, cookie.x, cookie.y);
-        // }
-        // prevX = cookie.x;
-        // prevY = cookie.y;
-        // }
-
-        // if (this.wordStarted) {
-        //     if (this.handTutorial && (i == 1 || i == 2)) {
-        //         this.bezierCurveRight = false;
-        //     }
-        //     this.drawLineToPoint(prevX, prevY, this.mouseX, this.mouseY);
-        // }
-
-        // for (var i = 0; i < this.letters.length; i++) {
-        //     var cookie = this.lettersToCookies[this.letters[i]];
-        //     if (PiecSettings.circleLetter !== undefined && PiecSettings.circleLetter == true) {
-        //         this.graphics.beginFill(this.lineColor, 1);
-        //         this.graphics.drawCircle(cookie.x, cookie.y, cookie.width * 1.2);
-        //     }
-        // }
     }
 
     drawLineToPoint(prevX, prevY, newX, newY) {
-        // if (PiecSettings.connectionLine == "curved") {
-        // if (this.bezierCurveRight) {
-        // this.graphics.bezierCurveTo(prevX, prevY, newX, prevY, newX, newY);
-        // this.bezierCurveRight = false;
-        // } else {
-        //     this.graphics.bezierCurveTo(prevX, prevY, prevX, newY, newX, newY);
-        //     this.bezierCurveRight = true;
-        // }
-        // } else {
+        
         this.graphics.lineTo(newX, newY);
-        // }
+        
     }
 
     createFollowFingerSprite() {
@@ -469,7 +426,6 @@ class PowerUpGame extends Phaser.Group {
                 case 'cropsHarvest': //customised for idle farming, it can call the interaction elements animation
                     this.args.particles.src = this.getParticlesSrc();
                     ParticlesUtil.particleBurst(this.game, this.args.particles.src, this.args.particles.htmlTag, ContainerUtil.getXCenterWithinContainer(this.interactionElement.getContainer()), ContainerUtil.getYCenterWithinContainer(this.interactionElement.getContainer()), Math.round(1 * Math.random()));
-
                     this.interactionElement.harvest();
                     break;
                 case "burst":
@@ -747,6 +703,7 @@ class PowerUpGame extends Phaser.Group {
             if (this.currentPower == this.maxPower && !this.poweredUp) {
                 Tweener.pulseOnce(this.counter, 0, 300, Phaser.Easing.Quadratic.InOut);
                 // console.log("dispatching on success on completion " + this.currentPower);
+
                 this.dispatchOnSuccess();
             }
         }
@@ -760,9 +717,13 @@ class PowerUpGame extends Phaser.Group {
     }
 
     dispatchOnSuccess() {
-        if (this.currentPower == this.maxPower)
+        if (this.currentPower == this.maxPower){
             this.poweredUp = true;
+        }
         this.clearParticles();
+        
+        
+
         this.onSuccess.dispatch(this, Math.max(0, this.currentCheckpoint - 1));
     }
 
@@ -798,7 +759,7 @@ class PowerUpGame extends Phaser.Group {
     }
 
     scaleCounter(scale) {
-
+        
         if (this.game != null && this.completeInitialTween) {
 
             if (this.counter.tween !== undefined && this.counter.tween != null) {
@@ -809,6 +770,7 @@ class PowerUpGame extends Phaser.Group {
                 x: scale,
                 y: scale,
             }, 400, Phaser.Easing.Linear.None, true, 0);
+
         }
     }
 

@@ -13,7 +13,13 @@ class Background extends Phaser.Group {
 
 		this.add(this.bg);
 
-		ContainerUtil.fitInContainerHeight(this.bg, 'background', 0.5, 0.5);
+		if(Util.isPortrait()) {
+			ContainerUtil.fitInContainerHeight(this.bg, 'background', 0.5, 0.5);	
+		}else {
+			ContainerUtil.fitInContainer(this.bg, 'background', 0.5, 0.5);	
+		}
+
+		
 		
 	}
 

@@ -1,6 +1,7 @@
 import * as Util from '../utils/util';
 
 import CustomSprite from '../prefabs/custom-sprite';
+
 import * as ContainerUtil from '../utils/container-util';
 import * as AnimationsUtil from '../utils/animations-util';
 import * as CustomPngSequencesRenderer from '../utils/custom-png-sequences-renderer.js';
@@ -34,6 +35,17 @@ class Field extends Phaser.Group {
 
         this.audioController = audioController;
 
+        this.initSignal();
+
+        this.idleTimer = this.game.time.events.add(5000, function(){
+            // this.game.onComplete.dispatch();
+            this.actived.dispatch();
+        }, this);
+
+    }
+
+    initSignal() {
+        this.actived = new Phaser.Signal();
     }
 
     getCurrentLevel() {
@@ -45,6 +57,8 @@ class Field extends Phaser.Group {
     }
 
     createField(level) {
+
+
         this.cropsGroup = [];
 
         this.currentLevel = PiecSettings.fields[level];
@@ -55,43 +69,60 @@ class Field extends Phaser.Group {
 
         ContainerUtil.fitInContainer(this.field, this.fieldContainer, 0.5, 0.5);
 
-
-        this.fieldDecoBack = new Phaser.Sprite(this.game, 0, 0, this.currentLevel.fieldDeco + "_back");
-
-        ContainerUtil.fitInContainer(this.fieldDecoBack, 'field-deco-back-' + level, 0.5, 1);
-
-        this.fieldDecoFront = new Phaser.Sprite(this.game, 0, 0, this.currentLevel.fieldDeco + "_front");
-
-        ContainerUtil.fitInContainer(this.fieldDecoFront, 'field-deco-front-' + level, 0.5, 1);
-
-        this.cropsGroup = this.createCrops(this.currentLevel.crops, this.currentLevel.cropsAmount, level);
-
-
-
         this.add(this.field);
-        this.add(this.fieldDecoBack);
-        this.add(this.cropsLayer);
 
-        this.add(this.fieldDecoFront);
+        
+        if(this.currentLevel.fieldDeco != undefined && this.currentLevel.fieldDeco != ''){
+        
+            this.fieldDecoBack = new Phaser.Sprite(this.game, 0, 0, this.currentLevel.fieldDeco + "_back");
+
+            ContainerUtil.fitInContainer(this.fieldDecoBack, 'field-deco-back-' + level, 0.5, 1);
+    
+            this.fieldDecoFront = new Phaser.Sprite(this.game, 0, 0, this.currentLevel.fieldDeco + "_front");
+
+            ContainerUtil.fitInContainer(this.fieldDecoFront, 'field-deco-front-' + level, 0.5, 1);
+
+    
+        }
+
+        
+        
+
+        
+        this.cropsGroup = this.createCrops(this.currentLevel.crops, this.currentLevel.cropsAmount, level);    
+        
+
+        if(this.fieldDecoBack != undefined && this.fieldDecoBack != null){
+            this.add(this.fieldDecoBack);    
+        }
+        if(this.cropsGroup.length > 0){
+            this.add(this.cropsLayer);    
+        }
+        
+
+        if(this.fieldDecoFront != undefined && this.fieldDecoFront != null){
+            this.add(this.fieldDecoFront);
+        }
 
 
         //==== ANIMATION 
 
         Tweener.scaleIn(this.field, 0, 500, Phaser.Easing.Quadratic.InOut);
 
-        for (var i = 0; i < this.cropsGroup.length; i++) {
+        if(this.cropsGroup.length > 0)
+            for (var i = 0; i < this.cropsGroup.length; i++) {
 
 
-            Tweener.scaleIn(this.cropsGroup[i], 400 + i * 200, 500, Phaser.Easing.Quadratic.InOut, Tweener.jiggleJump(this.cropsGroup[i], 800 * Math.random(), 800, Phaser.Easing.Linear.None));
+                Tweener.scaleIn(this.cropsGroup[i], 400 + i * 200, 500, Phaser.Easing.Quadratic.InOut, Tweener.jiggleJump(this.cropsGroup[i], 800 * Math.random(), 800, Phaser.Easing.Linear.None));
 
-        }
+            }
 
-        if (this.currentLevel.appear == 'fromSky') {
+        if (this.currentLevel.appear != undefined && this.currentLevel.appear == 'fromSky') {
             Tweener.appearFromSky(this.fieldDecoFront, 500, 500, Phaser.Easing.Quadratic.InOut);
 
             Tweener.appearFromSky(this.fieldDecoBack, 500, 500, Phaser.Easing.Quadratic.InOut);
 
-        } else {
+        } else if(this.currentLevel.appear != undefined && this.currentLevel.appear == 'fromGround'){
             Tweener.appearFromGround(this.fieldDecoFront, 0, 500, Phaser.Easing.Quadratic.InOut);
 
             Tweener.appearFromGround(this.fieldDecoBack, 0, 500, Phaser.Easing.Quadratic.InOut);
@@ -101,22 +132,34 @@ class Field extends Phaser.Group {
 
 
         //==== Sparckles
-        this.game.time.events.add(600, function() {
-            this.stars = [];
-            this.spawnStars();
-            this.bringAllStarsToTop();
 
+        if(this.currentLevel.spawnStars != undefined && this.currentLevel.spawnStars)
+            this.game.time.events.add(600, function() {
+                this.stars = [];
+                this.spawnStars();
+                this.bringAllStarsToTop();
+
+            }, this);
+
+
+
+        this.field.inputEnabled = true;
+        this.field.input.useHandCursor = true;
+        this.field.events.onInputDown.add(function() {
+            this.actived.dispatch();
         }, this);
 
     }
 
     levelUp(miniGame) {
 
-        miniGame.disableInteraction();
+        if(miniGame!=null)
+            miniGame.disableInteraction();
 
 
 
         this.level++;
+
 
         this.fieldDisappear();
 
@@ -127,8 +170,11 @@ class Field extends Phaser.Group {
         this.game.time.events.add(800, function() {
 
             this.createField(this.level);
-
-            miniGame.enableInteraction();
+            this.game.time.events.add(1000, function() {
+                
+                if(miniGame!=undefined)
+                    miniGame.enableInteraction();
+            });
 
         }, this);
     }
@@ -140,6 +186,8 @@ class Field extends Phaser.Group {
         Tweener.fadeOut(this.field, 0, 300, Phaser.Easing.Linear.None, true, function(e) {
             e.destroy();
         });
+
+
         for (var i = 0; i < this.cropsGroup.length; i++) {
 
             var crop = this.cropsGroup[i];
@@ -152,13 +200,15 @@ class Field extends Phaser.Group {
 
         this.cropsLayer.destroy();
 
-        Tweener.disappearToSide(this.fieldDecoFront, this.fieldDecoFront.x + this.fieldDecoFront.width / 2, 0, 400, Phaser.Easing.Quadratic.In).onComplete.add(function() {
-            this.fieldDecoFront.destroy();
-        }, this);
+        if(this.fieldDecoFront!=null)
+            Tweener.disappearToSide(this.fieldDecoFront, this.fieldDecoFront.x + this.fieldDecoFront.width / 2, 0, 400, Phaser.Easing.Quadratic.In).onComplete.add(function() {
+                this.fieldDecoFront.destroy();
+            }, this);
 
-        Tweener.disappearToSide(this.fieldDecoBack, this.fieldDecoBack.x - this.fieldDecoBack.width / 2, 0, 400, Phaser.Easing.Quadratic.In).onComplete.add(function() {
-            this.fieldDecoBack.destroy();
-        }, this);
+        if(this.fieldDecoBack != null)
+            Tweener.disappearToSide(this.fieldDecoBack, this.fieldDecoBack.x - this.fieldDecoBack.width / 2, 0, 400, Phaser.Easing.Quadratic.In).onComplete.add(function() {
+                this.fieldDecoBack.destroy();
+            }, this);
 
 
 
@@ -178,17 +228,24 @@ class Field extends Phaser.Group {
             if (i == 0) {
                 crop.scale.x = -crop.scale.x;
             }
+
             this.cropsLayer.add(crop);
             cropsGroup.push(crop);
 
         }
 
+        // this.cropsEffect = this.currentLevel.jumpingEffect;
         this.cropsEffect = true;
 
         return cropsGroup;
     }
 
     harvest() {
+        if(this.idleTimer) {
+            
+            this.game.time.events.remove(this.idleTimer);
+            
+        }
         //animation: crops jump, coins fly
         this.cropsJump();
 
@@ -209,8 +266,13 @@ class Field extends Phaser.Group {
         if (this.coinsTotal < this.counter.maxValue) {
             this.coinsTotal += this.currentLevel.coins;
             this.counter.changeCounterTo(this.coinsTotal, 1000, false);
-        } else
+        } else{
             this.coinsTotal = this.counter.maxValue;
+            this.game.onComplete.dispatch();
+        
+        }
+
+
     }
 
     decreaseCoins() {
@@ -421,7 +483,12 @@ class Field extends Phaser.Group {
                 star.scale.y = star.scale.x;
             }
 
-            star.x = this.field.width / 3 + this.field.width / 2 * Math.random();
+            if(Util.isPortrait()){
+                star.x = this.field.width / 3 + this.field.width / 2 * Math.random();    
+            }else {
+                star.x = this.field.width /1.5 + this.field.width / 2 * Math.random();
+            }
+            
             star.y = this.field.y + this.field.height * .2;
             star.angle = Math.random() * 45;
 

@@ -1,6 +1,6 @@
 import * as ContainerUtil from '../utils/container-util';
 import * as Tweener from '../utils/tweener';
-import * as Util from '../utils/util';
+// import * as Util from '../utils/util';
 
 class CustomText extends Phaser.Text {
     constructor(game, args) {
@@ -79,6 +79,7 @@ class CustomText extends Phaser.Text {
 
     autolocalise() {
         var lang = this.game.global.deviceLanguage;
+                
         if (PiecSettings.translations[this.text][lang] !== undefined) {
             this.text = " " + PiecSettings.translations[this.text][lang] + " ";
         }

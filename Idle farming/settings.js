@@ -6,7 +6,8 @@ var PiecSettings = PiecSettings || {};
 //===== bg.jpg will be used as new Phaser.Sprite(this.game, 0, 0, 'bg')
 PiecSettings.assets = [
     'bg.jpg',
-    'cta.png',
+    // 'cta.png',
+    'cta-bg.png',
     'pig_field.png',
     'pig_fence_back.png',
     'pig_fence_front.png',
@@ -25,7 +26,10 @@ PiecSettings.assets = [
     'hand.png',
     'coin.png',
     'cloud.png',
+    'logo.png',
+    'farmer.png',
     // 'coin-animation.png',
+    'wellDoneBg.png',
     'background-counter.png',
     'background-counter-fill.png',
     'background-counter-icon.png',
@@ -35,9 +39,91 @@ PiecSettings.assets = [
 
 PiecSettings.fontFamily = 'myFont';
 
+PiecSettings.tutorialText = {
+    text: 'Tap to buy',
+    container: 'tutorial-text',
+    style: {    
+        fontWeight: "bold",
+        fontFamily: PiecSettings.fontFamily,
+        color: ['#fff'], // if there is no gradient, leave only one color in the array
+        stroke: 'black', // if there is no stroke, can delete it
+        strokeThickness: 6,
+        shadow: {
+            x: 2,
+            y: 6,
+            color: 'rgb(0,0,0)',
+            blur: 0
+        }, //phaser shadow
+    },
+    anchor: {
+        x: 0.5,
+        y: 0.5
+    }
+};
+
+PiecSettings.wellDoneText = {
+    text: 'Well Done!',
+    container: 'well-done-text',
+    style: {    
+        fontWeight: "bold",
+        fontFamily: PiecSettings.fontFamily,
+        color: ['#221b42'], // if there is no gradient, leave only one color in the array
+        // stroke: 'black', // if there is no stroke, can delete it
+        // strokeThickness: 0,
+        // shadow: {
+        //     x: 2,
+        //     y: 6,
+        //     color: 'rgb(0,0,0)',
+        //     blur: 0
+        // }, //phaser shadow
+    },
+    anchor: {
+        x: 0.5,
+        y: 0.5
+    }
+};
+
+PiecSettings.ctaButtonText = {
+    text: 'Play Now!',
+    autolocalise: true,
+    container: 'cta-text',
+    style: {    
+        fontWeight: "bold",
+        fontFamily: PiecSettings.fontFamily,
+        color: ['#ffe200'], // if there is no gradient, leave only one color in the array
+        stroke: '#531508', // if there is no stroke, can delete it
+        strokeThickness: 6,
+        // shadow: {
+        //     x: 2,
+        //     y: 6,
+        //     color: 'rgb(0,0,0)',
+        //     blur: 0
+        // }, //phaser shadow
+    },
+    anchor: {
+        x: 0.5,
+        y: 0.5
+    }
+
+}
+
 //======================================== FIELD ========================================
 
-PiecSettings.fields = [{
+PiecSettings.fields = [
+    {
+        crops: 'coin',
+        cropsAmount: 1, // control where the crop is using the div containers
+        coins: 0,
+        dailyCost: 0,
+        field: 'pig_field',
+        upgradeCost: 1,
+        // fieldDeco: 'pig_fence',
+        flyingParticles: ["coin"],
+        // appear: 'fromSky', // choose the way the fence appear, fall fromSky or fromGround
+        spawnStars: false,
+        jumpingEffect: false,
+ 
+    },{
         crops: 'pig',
         cropsAmount: 3, // control where the crop is using the div containers
         coins: 1,
@@ -47,8 +133,9 @@ PiecSettings.fields = [{
         fieldDeco: 'pig_fence',
         flyingParticles: ["pig"],
         appear: 'fromSky', // choose the way the fence appear, fall fromSky or fromGround
-        level: 0,
- 
+        spawnStars: true,    
+        jumpingEffect: true,
+    
     }, {
         crops: 'cow',
         cropsAmount: 3,
@@ -59,7 +146,8 @@ PiecSettings.fields = [{
         fieldDeco: 'cow_fence',
         flyingParticles: ["cow", "cow_white"],
         appear: 'fromGround',
-        level: 1,
+        spawnStars: true, 
+        jumpingEffect: true,
  
     }, {
         crops: 'unicorn',
@@ -71,7 +159,8 @@ PiecSettings.fields = [{
         fieldDeco: 'unicorn_fence',
         flyingParticles: ["unicorn"],
         appear: 'fromSky',
-        level: 2,
+        spawnStars: true,   
+        jumpingEffect: true,     
 
     },
 
@@ -132,7 +221,7 @@ PiecSettings.moneyCounter = {
     tag: 'coins-counter',
     htmlTag: 'coins-counter',
     initialValue: 0, 
-    maxValue: 1000,
+    maxValue: 100, //set it to the amount that allows CTA to show up
     minValue: 0,
     // eachItemCountsAs: 300,
     sounds: {
@@ -179,3 +268,60 @@ PiecSettings.moneyCounter = {
 //         isReversed: false,
 //     }
 // ];
+
+PiecSettings.translations = {
+    'Play Now!' : {
+        en: "Play Now!",
+        ja: "今すぐプレイ!",
+        ko: "지금 플레이!",
+        zh: "开始游戏!",
+        'zh-traditional': '馬上開始!',
+        de: "Jetzt spielen!",
+        fr: "Jouer!",
+        it: "Gioca ora!",
+        es: "Juega ya!",
+        pt: "Joga Já!",
+        ca: "Jugar!",
+        ru: "играть!",
+        tr: "oyun!",
+        nl: "spelen!",
+        sv: "spela!",
+        id: "bermain!",
+        ro: "Joaca!",
+        ar: "لعب!",
+        uk: "грати!",
+        no: "spille!",
+        nb: "spille!",
+        nn: "spille!",
+        he: "לְשַׂחֵק!",
+        ms: "Bermain!",
+        th: "เล่น!",
+        pl: "Grać!",
+        be: "Гуляць!",
+        el: "Παίξτε τώρα!",
+        bg: "Играйте!",
+        da: "Spille!",
+        sr: "Игра!",
+        kk: "Ойнайық!",
+        vi: "Chơi!",
+        hr: "Igra!",
+        km: "លេង!",
+        sq: "Luaj!",
+        sl: "Igraj!",
+        lt: "Žaisti!",
+        az: "Oynamaq!",
+        zu: "Dlala!",
+        ga: "Seinn!",
+        is: "Leika!",
+        hu: "Játék!",
+        lv: "Spēlēt!",
+        ka: "ითამაშეთ!",
+        mt: "Play!",
+        et: "Mängi!",
+        ne: "खेल्नु!",
+        bn: "খেলুন!",
+        eu: "Jokatu!",
+        fi: "Pelata!",
+        sw: "Jaribu!",
+    }
+}

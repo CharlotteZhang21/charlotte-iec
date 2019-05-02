@@ -1,1 +1,221 @@
-var PiecSettings = PiecSettings || {};PiecSettings.version = "-";//========================== General Settings. Timer, ASOI, fonts =============================PiecSettings.videoOrientation = 'portrait';PiecSettings.orientationLock = 'portrait'; //Choose between "portrait", "landscape" and "none"PiecSettings.fontColor = "#fff";PiecSettings.genericFontFamily = "Noto Sans";//PiecSettings.videoFramerate = 25; //REMOVE if you want to write in seconds.PiecSettings.initialScript = "intro";PiecSettings.script = {     intro: {          video: "video.mp4",          from: 0.01,          to: 3.16,          loop: false,          autoplay: {               script: "tut01",               after: 0,               timer: false          },          hud: [               {                    tag: "cta",                    at: 0.01,                    show: false,                    htmlTag: "cta_htag_0",                    triggerOnce: false,                    duration: 0               }          ]     },     tut01: {          video: "video.mp4",          from: 3.2,          to: 3.28,          loop: true,          interactions: [               {                    from: 3.2,                    to: 3.28,                    typeOfInteraction: "tap",                    htmlTag: "hold01_htag_0",                    src: "",                    onSuccess: "play01"               }          ],          hud: [               {                    tag: "cta",                    at: 3.2,                    show: false,                    htmlTag: "cta_htag_0",                    triggerOnce: false,                    duration: 0               }          ]     },     play01: {          video: "video.mp4",          from: 3.36,          to: 4.32,          loop: false,          autoplay: {               script: "tut02",               after: 0,               timer: false          },          hud: [               {                    tag: "cta",                    at: 3.36,                    show: false,                    htmlTag: "cta_htag_0",                    triggerOnce: false,                    duration: 0               }          ]     },     tut02: {          video: "video.mp4",          from: 4.48,          to: 5.08,          loop: true,          interactions: [               {                    from: 4.48,                    to: 5.08,                    typeOfInteraction: "release",                    htmlTag: "release01_htag_0",                    src: "",                    onSuccess: "play02"               }          ],          hud: [               {                    tag: "cta",                    at: 4.48,                    show: false,                    htmlTag: "cta_htag_0",                    triggerOnce: false,                    duration: 0               }          ]     },     play02: {          video: "video.mp4",          from: 5.16,          to: 5.72,          loop: false,          autoplay: {               script: "tut03",               after: 0,               timer: false          },          hud: [               {                    tag: "cta",                    at: 5.16,                    show: false,                    htmlTag: "cta_htag_0",                    triggerOnce: false,                    duration: 0               }          ]     },     tut03: {          video: "video.mp4",          from: 5.84,          to: 7.36,          loop: true,          interactions: [               {                    from: 5.84,                    to: 7.36,                    typeOfInteraction: "tap",                    htmlTag: "hold02_htag_0",                    src: "",                    onSuccess: "play03"               }          ],          hud: [               {                    tag: "cta",                    at: 5.84,                    show: false,                    htmlTag: "cta_htag_0",                    triggerOnce: false,                    duration: 0               }          ]     },     play03: {          video: "video.mp4",          from: 7.64,          to: 8.72,          loop: false,          autoplay: {               script: "tut04",               after: 0,               timer: false          },          hud: [               {                    tag: "cta",                    at: 7.64,                    show: false,                    htmlTag: "cta_htag_0",                    triggerOnce: false,                    duration: 0               }          ]     },     tut04: {          video: "video.mp4",          from: 8.76,          to: 9.16,          loop: true,          interactions: [               {                    from: 8.76,                    to: 9.16,                    typeOfInteraction: "release",                    htmlTag: "release02_htag_0",                    src: "",                    onSuccess: "outro"               }          ],          hud: [               {                    tag: "cta",                    at: 8.76,                    show: false,                    htmlTag: "cta_htag_0",                    triggerOnce: false,                    duration: 0               }          ]     },     outro: {          video: "video.mp4",          from: 9.52,          to: 16.08,          loop: false,          autoplay: {               script: "asoi_buffer",               after: 0,               timer: false          },          hud: [               {                    tag: "cta",                    at: 9.52,                    show: false,                    htmlTag: "cta_htag_0",                    triggerOnce: false,                    duration: 3200               },               {                    tag: "cta",                    at: 12.72,                    show: true,                    htmlTag: "cta_htag_0",                    triggerOnce: false,                    duration: 0               },               {                    tag: "cta",                    at: 12.72,                    show: true,                    htmlTag: "cta_htag_0",                    triggerOnce: false,                    duration: 3360               },               {                    tag: "cta",                    at: 16.08,                    show: false,                    htmlTag: "cta_htag_0",                    triggerOnce: false,                    duration: 0               }          ]     },     asoi_buffer: {          video: "video.mp4",          from: 16.08,          to: 17.28,          loop: false,          hud: [               {                    tag: "cta",                    at: 16.08,                    show: true,                    htmlTag: "cta_htag_0",                    triggerOnce: false,                    duration: 680.000000000003               },               {                    tag: "cta",                    at: 16.76,                    show: false,                    htmlTag: "cta_htag_0",                    triggerOnce: false,                    duration: 0               }          ]     }};//======================================== HUD Elements ========================================PiecSettings.hudElements = {     cta: {          htmlTag: "cta_htag_0",          anchor: {               x: 0.5,               y: 0.5          },          type: "cta"     }};//============Variables and Flags used within the Video PIEC script to apply conditions and consequences=================PiecSettings.variables = {};//=================================== Collectible Component ====================================PiecSettings.collectibles = {};//================================= Mini Games (e.g. projectile) ===============================PiecSettings.minigames = {};//===================================== Png Animations =========================================PiecSettings.pngAnimations = {}PiecSettings.defaultLang = "en";PiecSettings.translations = {    'Download': {        en: "Download",        ja: "ダウンロード",        ko: "다운로드",        zh: "下载",        de: "Download",        fr: "Télécharger",        it: "Scarica",        es: "Descargar",        pt: "Baixar",        ca: "Descarregar",        ru: "Скачать",        tr: "Indir",        nl: "Download",        sv: "Ladda ner",        id: "Download",        ro: "Descărcare",        ar: "تحميل",        uk: "скачати",        no: "Nedlasting",        nb: "Nedlasting",        nn: "Nedlasting",        he: "הורד",        ms: "ഡൗൺലോഡ്",        th: "ดาวน์โหลด",        pl: "Pobierz",        be: "спампаваць",        el: "κατεβάστε",        bg: "изтегляне",        da: "Hent",        sr: "довнлоад",        kk: "жүктеу",        vi: "Tải về",        hr: "zbirka",        km: "ទាញយក",        sq: "Shkarko",        sl: "prenesi",        lt: "parsisiųsti",        az: "yükləyin",        zu: "ukulanda",        ga: "íoslódáil",        is: "sækja",        hu: "Letöltés",        lv: "lejupielādēt",        ka: "ჩამოტვირთვა",        mt: "niżżel",        et: "lae alla",        ne: "डाउनलोड",        bn: "ডাউনলোড",        eu: "deskargatu",        fi: "ladata",        sw: "kupakua",    },    'Play!': {        en: "Play!",        ja: "遊びます!",        ko: "놀이!",        zh: "玩!",        de: "abspielen!",        fr: "jouer!",        it: "giocare!",        es: "¡Jugar!",        pt: "Toque!",        ca: "Jugar!",        ru: "играть!",        tr: "oyun!",        nl: "spelen!",        sv: "spela!",        id: "bermain!",        ro: "Joaca!",        ar: "لعب!",        uk: "грати!",        no: "spille!",        nb: "spille!",        nn: "spille!",        he: "לְשַׂחֵק!",        ms: "Bermain!",        th: "เล่น!",        pl: "Grać!",        be: "Гуляць!",        el: "Παίζω!",        bg: "Играйте!",        da: "Spille!",        sr: "Игра!",        kk: "Ойнайық!",        vi: "Chơi!",        hr: "Igra!",        km: "លេង!",        sq: "Luaj!",        sl: "Igraj!",        lt: "Žaisti!",        az: "Oynamaq!",        zu: "Dlala!",        ga: "Seinn!",        is: "Leika!",        hu: "Játék!",        lv: "Spēlēt!",        ka: "ითამაშეთ!",        mt: "Play!",        et: "Mängi!",        ne: "खेल्नु!",        bn: "খেলুন!",        eu: "Jokatu!",        fi: "Pelata!",        sw: "Jaribu!",    },    'Play': {        en: "Play",        ja: "遊びます",        ko: "놀이",        zh: "玩",        de: "abspielen",        fr: "jouer",        it: "giocare",        es: "¡Jugar",        pt: "Toque",        ca: "Jugar",        ru: "играть",        tr: "oyun",        nl: "spelen",        sv: "spela",        id: "bermain",        ro: "Joaca",        ar: "لعب",        uk: "грати",        no: "spille",        nb: "spille",        nn: "spille",        he: "לְשַׂחֵק",        ms: "Bermain",        th: "เล่น",        pl: "Grać",        be: "Гуляць",        el: "Παίζω",        bg: "Играйте",        da: "Spille",        sr: "Игра",        kk: "Ойнайық",        vi: "Chơi",        hr: "Igra",        km: "លេង",        sq: "Luaj",        sl: "Igraj",        lt: "Žaisti",        az: "Oynamaq",        zu: "Dlala",        ga: "Seinn",        is: "Leika",        hu: "Játék",        lv: "Spēlēt",        ka: "ითამაშეთ",        mt: "Play",        et: "Mängi",        ne: "खेल्नु",        bn: "খেলুন",        eu: "Jokatu",        fi: "Pelata",        sw: "Jaribu",    }};
+var PiecSettings = PiecSettings || {};
+
+
+//===== when assets are loaded, we can use the name without suffix which indicates the file type
+//===== for example 
+//===== bg.jpg will be used as new Phaser.Sprite(this.game, 0, 0, 'bg')
+PiecSettings.assets = [
+    'bg.jpg',
+    'cta.png',
+    'pig_field.png',
+    'pig_fence_back.png',
+    'pig_fence_front.png',
+    'pig.png',
+    'cow_white.png',
+    'cow.png',
+    'cow_field.png',
+    'cow_fence_back.png',
+    'cow_fence_front.png',
+    'unicorn.png',
+    'unicorn_fence_back.png',
+    'unicorn_fence_front.png',
+    'unicorn_field.png',
+    'confetti-1.png',
+    'confetti-2.png',
+    'hand.png',
+    'coin.png',
+    'cloud.png',
+    'logo.png',
+    'farmer.png',
+    // 'coin-animation.png',
+    'background-counter.png',
+    'background-counter-fill.png',
+    'background-counter-icon.png',
+    'coins-counter-bg.png',
+];
+
+
+PiecSettings.fontFamily = 'myFont';
+
+PiecSettings.tutorialText = {
+    text: 'Tap to buy',
+    container: 'tutorial-text',
+    style: {    fontWeight: "bold",
+        fontFamily: PiecSettings.fontFamily,
+        color: ['#fff'], // if there is no gradient, leave only one color in the array
+        stroke: 'black', // if there is no stroke, can delete it
+        strokeThickness: 6,
+        shadow: {
+            x: 2,
+            y: 6,
+            color: 'rgb(0,0,0)',
+            blur: 0
+        }, //phaser shadow
+    },
+    anchor: {
+        x: 0.5,
+        y: 0.5
+    }
+};
+
+//======================================== FIELD ========================================
+
+PiecSettings.fields = [
+    {
+        crops: 'coin',
+        cropsAmount: 1, // control where the crop is using the div containers
+        coins: 0,
+        dailyCost: 0,
+        field: 'pig_field',
+        upgradeCost: 1,
+        // fieldDeco: 'pig_fence',
+        flyingParticles: ["coin"],
+        // appear: 'fromSky', // choose the way the fence appear, fall fromSky or fromGround
+        spawnStars: false,
+        jumpingEffect: false,
+ 
+    },{
+        crops: 'pig',
+        cropsAmount: 3, // control where the crop is using the div containers
+        coins: 1,
+        dailyCost: 1,
+        field: 'pig_field',
+        upgradeCost: 1,
+        fieldDeco: 'pig_fence',
+        flyingParticles: ["pig"],
+        appear: 'fromSky', // choose the way the fence appear, fall fromSky or fromGround
+        spawnStars: true,    
+        jumpingEffect: true,
+    
+    }, {
+        crops: 'cow',
+        cropsAmount: 3,
+        coins: 2,
+        dailyCost: 1,
+        upgradeCost: 3,
+        field: 'cow_field',
+        fieldDeco: 'cow_fence',
+        flyingParticles: ["cow", "cow_white"],
+        appear: 'fromGround',
+        spawnStars: true, 
+        jumpingEffect: true,
+ 
+    }, {
+        crops: 'unicorn',
+        cropsAmount: 2,
+        coins: 3,
+        dailyCost: 1,
+        upgradeCost: 5,
+        field: 'unicorn_field',
+        fieldDeco: 'unicorn_fence',
+        flyingParticles: ["unicorn"],
+        appear: 'fromSky',
+        spawnStars: true,   
+        jumpingEffect: true,     
+
+    },
+
+]
+
+PiecSettings.miniGameArgs = {
+    typeOfInteraction: 'scratch', //choose between "tap", "scratch"
+    htmlTag: 'powerup-container', //active area, that should be tapped!
+    initialValue: 0, //overwrites value in PiecSettings.variables
+    valueIncrementPerInteraction: .3,
+    valueDecreasePerQuarterSecond: 0.3,
+    checkpoints: [50, 100], //This is [100] by default, meaning there's only 1, and it's at the very end of the fill container
+    playCheckpointOnArrival: true, //If this is true, it plays the onSuccess checkpoint as soon as we arrive there. If false, it will play the reached checkpoint when time runs out. This alters autoplay functionality.
+    //Each number represents a percentage of the total % of the fill width
+    //This is 1 by default. If using more than 1, there will be more than 1 success possibility
+    valueRange: { min: 0, max: 10 },
+    sounds: {
+        interact: 'cowsCollected4.mp3',
+        // interact: 'pop.mp3',
+        upgrade: 'upgrade.mp3',
+    },
+    followFinger: {
+        freedom: 'position',
+        form: 'line',
+        anchor: { x: 0.5, y: 0.7 },
+        persistent: true,
+    },
+    particles: {
+        effect: 'cropsHarvest', //one particle at a time, with a random position
+        htmlTag: "particle-container", //specifies default size of particles
+        htmlTagGoal: "particle-container-goal",
+        isAnimation: false,
+        // src: ["glitter05.png", "glitter06.png","glitter04.png"],
+    },
+    tutorial: { //Remove if no tutorial needed
+        tagName: "hand",
+        htmlTagSpawn: "powerup-container-spawn", //If not specified, template will use default htmlTag container
+    },
+    counter: {
+        tag: 'powerup-counter-dragon',
+        htmlTag: 'powerup-counter',
+        htmlTagFill: 'powerup-counter-fill', //optional. If nothing is specified, it wil just default a position within the parent container
+        htmlTagIcon: 'powerup-counter-icon', //optional
+        htmlTagText: 'powerup-counter-text', //optional
+        iconSrc: 'background-counter-icon',
+        backgroundSrc: 'background-counter', // counter's background source
+        fillSrc: 'background-counter-fill',
+        style: 'rectangle_progressbar', // choose among number, rectangle_progressbar, circle_progressbar 
+    },
+
+}
+
+
+
+
+
+PiecSettings.moneyCounter = {
+    tag: 'coins-counter',
+    htmlTag: 'coins-counter',
+    initialValue: 0, 
+    maxValue: 100, //set it to the amount that allows CTA to show up
+    minValue: 0,
+    // eachItemCountsAs: 300,
+    sounds: {
+        collect: 'coin-pickup.mp3',
+        lose: 'coin-empty.mp3',
+    },
+    iconSrc: 'coin',
+    backgroundSrc: 'coins-counter-bg',
+    style: 'number',
+    fontStyle: { //only needed when you have a number counter
+        fontWeight: "bold",
+        fontFamily: PiecSettings.fontFamily,
+        color: ['#fff'], // if there is no gradient, leave only one color in the array
+        stroke: 'black', // if there is no stroke, can delete it
+        shadow: {
+            x: 2,
+            y: 6,
+            color: 'rgb(0,0,0)',
+            blur: 0
+        }, //phaser shadow
+        anchor: {
+            x: .5,
+            y: .6
+        }
+    },
+    // },
+    onCollectEffects: ['flyToGoal'],
+    // },
+
+
+
+}
+
+// PiecSettings.pngAnimations = [
+//     { // 1
+//         src: 'coin-animation.png',
+//         spriteWidth: 714/7,
+//         spriteHeight: 102/1,
+//         spriteNumber: 7,
+//         loops: 1,
+//         delay: 0,
+//         fps: 24,
+//         scale: 1,
+//         isReversed: false,
+//     }
+// ];

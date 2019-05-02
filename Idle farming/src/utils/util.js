@@ -24,9 +24,13 @@ export function rndRgba(alpha) {
 }
 
 // boolean screen orientation
-export function isPortrait(game) {
+export function isPortrait() {
 
-    return game.global.windowHeight > game.global.windowWidth;
+    return document.body.clientHeight > document.body.clientWidth;
+}
+
+export function getOrientation() {
+    return isPortrait() ? "portrait" : "landscape";
 }
 
 
@@ -104,7 +108,7 @@ export function uniq(a) {
 }
 
 
-export function extend( defaults, options ) {
+export function extend(defaults, options) {
 
     var extended = {};
     var prop;
@@ -125,16 +129,50 @@ export function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+
+export function animToDom(elId, sprite) {
+
+    var el = document.getElementById(elId);
+
+    var rect = el.getBoundingClientRect();
+
+    // first try to fit horizontally
+
+    var scale = (rect.width * window.devicePixelRatio) / sprite._frame.sourceSizeW;
+
+    sprite.scale.x = scale;
+    sprite.scale.y = scale;
+
+    //check if fits
+    var fitsHorizontally = sprite._frame.sourceSizeH * scale <= (rect.height * window.devicePixelRatio);
+
+    if (fitsHorizontally === false) {
+
+        //sprite would be too tall if fitted horizontally, try vertical
+
+        scale = (rect.height * window.devicePixelRatio) / sprite._frame.sourceSizeH;
+
+        sprite.scale.x = scale;
+        sprite.scale.y = scale;
+    }
+    // set anchor to middle
+    sprite.anchor.set(0.5, 0.5);
+
+    // now position the sprite
+    sprite.x = (rect.left + (rect.width * 0.5)) * window.devicePixelRatio;
+    sprite.y = (rect.top + (rect.height * 0.5)) * window.devicePixelRatio;
+}
+
+export function getAngleBetweenTwoPoints(x1, y1, x2, y2) {
+    return Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+}
+
 export function getEasing(easing) {
 
     switch (easing) {
 
         case 'Linear':
             return Phaser.Easing.Linear.None;
-        case 'LinearOut':
-            return Phaser.Easing.Linear.Out;
-        case 'LinearIn':
-            return Phaser.Easing.Linear.In;
         case 'BackIn':
             return Phaser.Easing.Back.In;
         case 'BackOut':
@@ -163,8 +201,6 @@ export function getEasing(easing) {
             return Phaser.Easing.Quadratic.In;
         case 'QuadraticOut':
             return Phaser.Easing.Quadratic.Out;
-        case 'QuadraticInOut':
-            return Phaser.Easing.Quadratic.InOut;
         case 'QuarticIn':
             return Phaser.Easing.Quartic.In;
         case 'QuarticOut':
@@ -182,13 +218,52 @@ export function getEasing(easing) {
     console.error('unkown easing value "' + easing + '"');
 }
 
+export function JSONmerge(json1, json2) {
+    for (var key in json2) {
+        json1[key] = json2[key];
+    }
+    return json1;
+}
+
+export function getDeviceLang() {
+    var lang;
+    if (navigator.userLanguage) {
+        lang = navigator.userLanguage;
+        if (lang.indexOf('zh') == -1)
+            lang = lang.split("-")[0].toLowerCase();
+        // lang = lang.split("-")[0];
+    } else if (navigator.language) {
+        lang = navigator.language;
+        if (lang.indexOf('zh') == -1)
+            lang = lang.split("-")[0].toLowerCase();
+        // lang = lang.split("-")[0];
+    } else {
+        lang = "en";
+        if (PiecSettings.defaultLang !== undefined)
+            lang = PiecSettings.defaultLang;
+    }
+    lang = lang.toLowerCase();
+
+    console.log(lang);
+
+    //for simplified and traditional chinese
+    if (lang.indexOf('zh') !== -1) {
+        if (lang == "zh-tw" || lang == "zh-hk") {
+            lang = 'zh-traditional';
+        } else {
+            lang = 'zh';
+        }
+    }
+
+    return lang;
+}
 
 export function getDeviceOS() {
     // var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios check
     var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    
+
     var device = null;
-      // Windows Phone must come first because its UA also contains "Android"
+    // Windows Phone must come first because its UA also contains "Android"
     if (/windows phone/i.test(userAgent)) {
         device = "windowsPhone";
     }
@@ -202,8 +277,12 @@ export function getDeviceOS() {
         device = "ios";
     }
 
-    
+
 
     return device;
-    
+
+}
+
+export function getRandomColor() {
+    return '#'+((1<<24)*(Math.random()+1)|0xc0c0c0).toString(16).substr(1);
 }

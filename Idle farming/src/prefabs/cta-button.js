@@ -12,10 +12,11 @@ class CtaButton extends Phaser.Group {
         if (args.OSsensitive !== undefined && args.OSsensitive == true) {
             deviceType = this.game.global.deviceOS + "-";
         }
-
+        
         if (args.autolocalise !== undefined && args.autolocalise == true) {
             if (PiecSettings.translations[args.src][this.game.global.deviceLanguage] !== undefined) {
                 languageType = PiecSettings.translations[args.src][this.game.global.deviceLanguage];
+        
             }
         }
         args.src = deviceType + languageType + args.src;
@@ -32,10 +33,11 @@ class CtaButton extends Phaser.Group {
         this.button.inputEnabled = true;
         this.button.input.useHandCursor = true;
         this.button.events.onInputDown.add(function() {
-            console.log('here');
+            
             this.game.onSDKCall.dispatch();
             this.game.time.events.add(50, function() {
-                parent.postMessage("download", "*");
+                console.log('download');
+                parent.postMessage('download','*');
             }, this);
         }, this);
 

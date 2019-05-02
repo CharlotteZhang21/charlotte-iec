@@ -1,3 +1,5 @@
+@import '_media-queries';
+
 html {
     height: 100%;
 }
@@ -36,13 +38,61 @@ a {
     height: 100%;
 }
 
+#cta-text {
+    bottom: 5%;
+    left: 0;
+    right: 0;
+    width: 40%;
+    height: 10%;
+
+
+    @include iphoneLandscape {
+        left: auto;
+        right: 7%;
+        width: 15%;
+    }
+
+    &-final {
+        width: 50%;
+        height: 10%;
+        top: 50%;
+        left: 0;
+        right: 0;
+
+    }
+}
+
+
+
 #cta-container {
     bottom: 5%;
     left: 0;
     right: 0;
     width: 60%;
     height: 10%;
+
+
+    @include iphoneLandscape {
+        left: auto;
+        right: 5%;
+        width: 20%;
+    }
+
+    &-final {
+        width: 80%;
+        height: 10%;
+        top: 50%;
+        left: 0;
+        right: 0;
+
+        @include iphoneLandscape {
+            width: 50%;
+            top: 20%;
+        }
+    }
 }
+
+
 
 #field {
     width: 85%;
@@ -50,63 +100,113 @@ a {
     top: 53%;
     left: 0;
     right: 0;
+
+    // @media all and (orientation: landscape){
+    @include iphoneLandscape {
+        width: 50%;
+        top: 44%;
+    }
 }
+
 
 /*for the pig fence*/
-#field-deco-front-0 {
-    width: 70%;
-    height: 5%;
-    top: 63%;
-    left: 0;
-    right: 0;
+
+#field-deco {
+    &-front {
+
+        //pig fence
+        &-1 {
+            width: 70%;
+            height: 5%;
+            top: 63%;
+            left: 0;
+            right: 0;
+
+            // @media all and (orientation: landscape){
+            @include iphoneLandscape {
+                width: 40%;
+            }
+        }
+
+        //cow fence
+        &-2 {
+            width: 50%;
+            height: 5%;
+            top: 63%;
+            left: 35%;
+
+            @include iphoneLandscape {
+                width: 30%;
+                left: 40%;
+            }
+        }
+
+        //unicorn fence
+        &-3 {
+            width: 35%;
+            height: 5%;
+            top: 60%;
+            left: 50%;
+
+            @include iphoneLandscape {
+
+                width: 23%;
+                top: 60%;
+            }
+
+        }
+    }
+
+    &-back {
+
+        //pig
+        &-1 {
+            width: 68%;
+            height: 5%;
+            top: 50%;
+            left: 0;
+            right: 0;
+
+            @include iphoneLandscape {
+                width: 36%;
+                top: 39%;
+            }
+        }
+
+        //cow
+        &-2 {
+            width: 75%;
+            height: 5%;
+            top: 52%;
+            left: 10%;
+
+            @include iphoneLandscape {
+                width: 40%;
+                top: 46%;
+                left: 30%;
+            }
+        }
+
+        //unicorn
+        &-3 {
+            width: 35%;
+            height: 5%;
+            top: 50%;
+            left: 15%;
+
+            @include iphoneLandscape {
+                width: 23%;
+                top: 43%;
+                left: 28%;
+
+            }
+        }
+    }
+
 }
 
-#field-deco-back-0 {
-    width: 68%;
-    height: 5%;
-    top: 50%;
-    left: 0;
-    right: 0;
-}
 
-/*for the cow fence*/
-#field-deco-front-1 {
-    width: 50%;
-    height: 5%;
-    top: 63%;
-    left: 35%;
 
-}
-
-#field-deco-back-1 {
-    width: 75%;
-    height: 5%;
-    top: 52%;
-    left: 10%;
-}
-
-/*for the unicorn fence*/
-#field-deco-front-2 {
-    width: 35%;
-    height: 5%;
-    top: 60%;
-    left: 50%;
-}
-
-#field-deco-back-2 {
-    width: 35%;
-    height: 5%;
-    top: 50%;
-    left: 15%;
-
-}
-
-.crop {
-    width: 30%;
-    height: 30%;
-    top: 50%;
-
-}
 
 #coins-counter {
     width: 50%;
@@ -114,7 +214,14 @@ a {
     top: 5%;
     left: 0;
     right: 0;
+
+    @include iphoneLandscape {
+        width: 25%;
+        left: 5%;
+        right: auto;
+    }
 }
+
 
 #coin {
     width: 10%;
@@ -123,6 +230,10 @@ a {
     bottom: 0;
     left: 0;
     right: 0;
+
+    @include iphoneLandscape {
+        width: 5%;
+    }
 }
 
 /*
@@ -132,92 +243,234 @@ a {
 
 */
 
-#crop_0_0 {
-    width: 23%;
-    height: 23%;
-    top: 31%;
-    left: 37%;
+#crop {
+    &_0 {
+        &_0 {
+
+            width: 18%;
+            height: 18%;
+            top: 31%;
+            left: 0;
+            right: 0;
+
+            @include iphoneLandscape {
+                width: 10%;
+                top: 20%;
+            }
+        }
+    }
+
+    &_1 {
+        &_0 {
+            width: 23%;
+            height: 23%;
+            top: 31%;
+            left: 37%;
+
+            @include iphoneLandscape {
+                width: 15%;
+                left: 40%;
+                top: 20%;
+            }
+        }
+
+        &_1 {
+            width: 23%;
+            height: 23%;
+            top: 35%;
+            left: 23%;
+
+            @include iphoneLandscape {
+                width: 15%;
+                left: 33%;
+                top: 30%;
+            }
+        }
+
+        &_2 {
+
+            width: 23%;
+            height: 23%;
+            top: 37%;
+            left: 48%;
+
+            @include iphoneLandscape {
+                width: 15%;
+                top: 35%;
+            }
+        }
+    }
+
+    &_2 {
+        &_0 {
+
+            width: 35%;
+            height: 35%;
+            top: 15%;
+            left: 20%;
+
+            @include iphoneLandscape {
+                width: 18%;
+                top: 6%;
+                left: 40%;
+            }
+        }
+
+        &_1 {
+            width: 35%;
+            height: 35%;
+            top: 28%;
+            left: 12%;
+
+            @include iphoneLandscape {
+                width: 18%;
+                top: 18%;
+                left: 30%;
+            }
+        }
+
+        &_2 {
+            width: 35%;
+            height: 35%;
+            top: 20%;
+            left: 40%;
+
+            @include iphoneLandscape {
+                width: 18%;
+                top: 22%;
+                left: 44%;
+            }
+        }
+    }
+
+    &_3 {
+        &_0 {
+
+            width: 45%;
+            height: 45%;
+            top: 10%;
+            left: 35%;
+
+            @include iphoneLandscape {
+                width: 30%;
+                left: 45%;
+                top: 3%;
+            }
+        }
+
+        &_1 {
+
+            width: 45%;
+            height: 45%;
+            top: 20%;
+            left: 15%;
+
+            @include iphoneLandscape {
+                width: 30%;
+                left: 30%;
+                top: 15%;
+            }
+        }
+
+    }
 }
 
-#crop_0_1 {
-    width: 23%;
-    height: 23%;
-    top: 35%;
-    left: 23%;
-}
-
-
-#crop_0_2 {
-    width: 23%;
-    height: 23%;
-    top: 37%;
-    left: 48%;
-}
-
-/*
-    #crop_level_number
-    level -> stage of the game
-    number -> how many crops in this level  
-
-*/
-
-#crop_1_0 {
-    width: 35%;
-    height: 35%;
-    top: 15%;
-    left: 20%;
-
-}
-
-#crop_1_1 {
-    width: 35%;
-    height: 35%;
-    top: 28%;
-    left: 12%;
-}
-
-#crop_1_2 {
-    width: 35%;
-    height: 35%;
-    top: 20%;
-    left: 40%;
-}
-
-
-/*
-    #crop_level_number
-    level -> stage of the game
-    number -> how many crops in this level  
-
-*/
-
-#crop_2_0 {
-    width: 45%;
-    height: 45%;
-    top: 10%;
-    left: 35%;
-}
-
-#crop_2_1 {
-    width: 45%;
-    height: 45%;
-    top: 20%;
-    left: 15%;
-}
 
 
 /* power up containers */
 
 .hand {
-    width: 40%;
-    height: 40%;
+    width: 30%;
+    height: 30%;
 }
 
 #hand-1 {
-    top: 30%;
-    left: 50%;
+    top: 45%;
+    left: 45%;
+
+    @include iphoneLandscape {
+        width: 20%;
+        height: 20%;
+        left: 50%;
+    }
 }
 
+#tutorial-text {
+    width: 80%;
+    height: 5%;
+    left: 0;
+    right: 0;
+    top: 30%;
+}
+
+#logo {
+    width: 30%;
+    height: 10%;
+    top: -10%;
+    left: 0;
+    right: 0;
+
+    @include iphoneLandscape {
+        top: -20%;
+    }
+
+    &-final {
+        width: 50%;
+        height: 50%;
+        top: 5%;
+        left: 0;
+        right: 0;
+
+        @include iphoneLandscape {
+            width: 20%;
+            top: 2%;
+        }
+    }
+}
+
+
+
+#well-done {
+    &-bg {
+        width: 30%;
+        height: 15%;
+        right: 10%;
+        top: 60%;
+
+        @include iphoneLandscape {
+            top: 70%;
+            
+        }
+    }
+
+    &-text {
+        width: 25%;
+        height: 5%;
+        right: 10%;
+        top: 65%;
+
+        @include iphoneLandscape {
+            width: 25%;
+            height: 10%;
+            top: 73%;
+            right: 10.5%;
+            
+        }
+    }
+
+}
+
+
+
+#farmer {
+    width: 100%;
+    height: 10%;
+    bottom: 2%;
+
+    @include iphoneLandscape {
+        width: 55%;
+    }
+}
 
 
 #powerup-container {
@@ -227,6 +480,10 @@ a {
     bottom: 0;
     left: 0;
     right: 0;
+
+    @include iphoneLandscape {
+        width: 80%;
+    }
 }
 
 #powerup-container-spawn {
@@ -237,13 +494,7 @@ a {
     right: 0;
 }
 
-#powerup-counter-text {
-    width: 16%;
-    height: 3%;
-    top: 77.5%;
-    left: 0%;
-    right: 6.5%;
-}
+#powerup-counter-text {}
 
 
 #powerup-counter {
@@ -252,23 +503,48 @@ a {
     right: 0;
     width: 80%;
     height: 15%;
+
+    @include iphoneLandscape {
+        width: 50%;
+
+    }
+
+    &-text {
+        width: 16%;
+        height: 3%;
+        top: 77.5%;
+        left: 0%;
+        right: 6.5%;
+    }
+
+    &-fill {
+        top: 74.75%;
+        width: 45%;
+        height: 3.5%;
+        left: 0;
+        right: 6%;
+
+        @include iphoneLandscape {
+            width: 28.5%;
+            right: 3.8%;
+            top: 79.3%;
+        }
+    }
+
+    &-icon {
+        width: 18%;
+        height: 10%;
+        top: 71.5%;
+        left: 0%;
+        right: 5%;
+
+        @include iphoneLandscape {
+            width: 12%;
+            top: 72.5%;
+        }
+    }
 }
 
-#powerup-counter-fill {
-    top: 74.75%;
-    width: 45%;
-    height: 3.5%;
-    left: 0;
-    right: 6%;
-}
-
-#powerup-counter-icon {
-    width: 18%;
-    height: 10%;
-    top: 71.5%;
-    left: 0%;
-    right: 5%;
-}
 
 #hand {
     width: 10%;
@@ -282,6 +558,11 @@ a {
     right: 0;
     top: 0;
     bottom: 0;
+
+    @include iphoneLandscape {
+        width: 10%;
+        height: 10%;
+    }
 }
 
 #particle-container-goal {

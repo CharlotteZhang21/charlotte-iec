@@ -15,6 +15,7 @@ class Boot extends Phaser.State {
 
         // custom game events here
         game.onInteract = new Phaser.Signal();        
+        game.onComplete = new Phaser.Signal();
         game.onSDKCall = new Phaser.Signal();
         game.onResize = new Phaser.Signal();
 

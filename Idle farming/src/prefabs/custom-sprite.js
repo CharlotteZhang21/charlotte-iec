@@ -55,6 +55,7 @@ class CustomSprite extends Phaser.Sprite {
         ContainerUtil.fitInContainer(this, container, this.anchor.x, this.anchor.y);
     }
 
+
 }
 
 export default CustomSprite;

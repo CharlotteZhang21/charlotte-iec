@@ -271,7 +271,7 @@ export function wobbleScaleIn(sprite, angle, toScale, endScale, cb) {
     }
 }
 
-export function jiggle(sprite, xScalar, yScalar, duration, yoyo = true) {
+export function jiggle(sprite, xScalar, yScalar, delay, duration, yoyo = true) {
 
 
     var origScaleX = sprite.scale.x;
