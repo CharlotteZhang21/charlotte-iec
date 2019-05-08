@@ -109,10 +109,13 @@ function main() {
         // console.log(infoContentTop);
         // console.log($(this).scrollTop());
 
+        // if(console.log($(window).scrollTop()))
 
+        showScrollIndicator($(this).scrollTop());
 
         if (infoContentTop <= 0) {
-            if ($(window).scrollTop() >= infoContentTop) {
+            if ($(this).scrollTop() >= infoContentTop) {
+
                 // if(infoContentTop < 10) {
                 //     infoContentTop = $('#info-content').position().top;
                 //     // $('#scrollHeight').html("height " + infoContentTop );// debug
@@ -156,6 +159,7 @@ function main() {
 }
 
 function repositionInfoContent() {
+
     if (!contentCloneflag) {
 
         $("#info-content").clone().appendTo("#wrap").addClass('fixed').attr('id', 'info-clone');
@@ -245,14 +249,82 @@ function initCarousel() {
 }
 
 
+function initContent () {
+    if(windowsSettings.appName== undefined || windowsSettings.appName == '') {
+        console.log('no appName')
+    }else{
+        $('#app-name').html(windowsSettings.appName);
+    }
+
+
+    if(windowsSettings.callOut == undefined || windowsSettings.callOut == '') {
+        console.log('no callOut')
+    }else{
+        $('#app-callout').html(windowsSettings.callOut);
+    }
+
+    if(windowsSettings.stars== undefined || windowsSettings.stars.length < 5) {
+        console.log('five stars have to be defined');
+    }else{
+        var d = $("<div />").appendTo($('#app-stars'));
+
+        var span;
+        for(var i = 0; i < windowsSettings.stars.length; i++) {
+            console.log("vungle-star-" + windowsSettings.stars[i]);
+            span = $("<span />").addClass("star").addClass("vungicon-star-" + windowsSettings.stars[i]);
+            span.appendTo(d);
+        }
+        
+    }
+
+    if(windowsSettings.reviewCounts == undefined || windowsSettings.reviewCounts == '') {
+        console.log('no reviewCounts')
+    }else{
+         $("<span />").addClass("counts").html(windowsSettings.reviewCounts).appendTo($("#app-stars"));
+
+
+    }
+
+
+
+    if(windowsSettings.descriptionContent== undefined || windowsSettings.descriptionContent == '') {
+        console.log('no descriptionContent')
+    }else{
+        $('#info-app-description-content').html(windowsSettings.descriptionContent);
+    }
+
+}
+
+
+function showScrollIndicator(currentScroll) {
+     
+    if (currentScroll > 10) {
+        $('#scrollIndicator').addClass('hide');
+    } else {
+        $('#scrollIndicator').removeClass('hide');
+        $('#scrollIndicator').find('.dot').addClass('fadeInDown');
+    }
+}
+
 window.resize = function() {
     previewCarousel.resize();
 }
 
 window.onload = function() {
+    $('body').removeClass('preload');
 
-
+    
+    initContent()
     initCarousel();
+
+
+    if ($('.vungle-footer').offset().top > $(window).height()) {
+
+
+        showScrollIndicator(0);
+
+    }
+
 
     setTimeout(function() {
         main();

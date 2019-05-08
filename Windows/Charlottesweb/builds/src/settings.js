@@ -1,6 +1,9 @@
 var windowsSettings = windowsSettings || {};
 
 
+
+windowsSettings.appName = 'Candy Crush Friends Saga';
+
 windowsSettings.carouselImg = [
 	// "1.jpeg",
 	// "2.jpeg",
@@ -14,7 +17,8 @@ windowsSettings.carouselImg = [
 	"4.png",
 	"5.png",
 
-]
+];
+
 
 windowsSettings.defaultLang = "en";
 windowsSettings.translations = {

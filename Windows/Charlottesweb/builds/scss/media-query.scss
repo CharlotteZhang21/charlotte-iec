@@ -6,3 +6,20 @@ $star-color: #fb5a07;
 $button-color: #0067b8;
 
 $focus-border-color: #004eff;
+
+$scroll-down-color: #0067b8;
+
+
+
+@mixin animationFadeInDown($duration, $delay, $transition) {
+	 -webkit-animation: fadeInDown $duration $transition $delay infinite;
+
+	  // animation: fadeInDown 5s infinite;
+     animation: fadeInDown $duration $transition $delay infinite;
+
+}
+
+@-webkit-keyframes fadeInDown { 0% { opacity: 0.5; top: 0; } 30% {opacity: 1} 100% { opacity: 0; top: 60% }  }
+        @keyframes fadeInDown { 0% { opacity: 0.5; top: 0; } 30% {opacity: 1} 100% { opacity: 0; top: 60% }  }
+
+

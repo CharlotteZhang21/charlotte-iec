@@ -1,6 +1,20 @@
 var windowsSettings = windowsSettings || {};
 
 
+windowsSettings.appName = 'Candy Crush Friends Saga';
+
+windowsSettings.stars = ['full', 'full', 'full', 'full', 'half']; // has to be five;
+
+windowsSettings.reviewCounts = "1,512";
+
+windowsSettings.callOut = 'New tasty match 3 puzzle! Dunk the cookie and save octopuses to collect friends!';
+
+windowsSettings.descriptionContent = 'The newest game from the Candy Crush Franchise! With updated graphics, fun new game modes and a host of friends to help you blast through hundreds of levels! \n\n \
+                    Your Candy Crush Friends have been scattered throughout the Candy Kingdom - Join this match 3 puzzle game to find them! This friendly bunch have their own unique powers to help you to create sweet candy combinations and blast through blockers! \n\n \
+                    Switch and match candies to unlock rewards, friends, and sweet collectable outfits! The more candies you collect the greater your power on the game board!\n\n \
+                    This fun new candy game is filled with delicious treats - cookies, jam, chocolate and more! You’re favourite game modes, but sweeter than ever!\n\n \
+                    Candy Crush Friends Saga is completely free to play but some optional in-game items will require payment with real money.';
+
 windowsSettings.carouselImg = [
 	"1.jpeg",
 	"2.jpeg",
