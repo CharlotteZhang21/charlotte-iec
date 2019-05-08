@@ -1,21 +1,27 @@
 @-webkit-keyframes fadeInDown {
   0% {
     opacity: 0.5;
+    transform: rotate(45deg) scale(0.8);
     top: 0; }
   30% {
+    transform: rotate(45deg) scale(1.2);
     opacity: 1; }
   100% {
     opacity: 0;
+    transform: rotate(45deg) scale(1);
     top: 60%; } }
 
 @keyframes fadeInDown {
   0% {
     opacity: 0.5;
+    transform: rotate(45deg) scale(0.8);
     top: 0; }
   30% {
+    transform: rotate(45deg) scale(1.2);
     opacity: 1; }
   100% {
     opacity: 0;
+    transform: rotate(45deg) scale(1);
     top: 60%; } }
 
 /*! Flickity v2.2.0
@@ -483,11 +489,25 @@ button {
 
 #info-wrap {
   max-width: 1600px;
-  width: 90%;
+  width: 80%;
   margin: auto; }
 
+#ESRB {
+  display: inline-flex; }
+  #ESRB img {
+    width: 50px;
+    height: 50px; }
+  #ESRB p {
+    font-size: 13px;
+    color: #0067b8;
+    font-weight: 600;
+    padding: 0 5px; }
+  @media (max-width: 1084px) {
+    #ESRB {
+      display: none; } }
+
 .info-content {
-  width: 90%;
+  width: 80%;
   min-height: 72px;
   margin: 36px auto;
   position: relative;
@@ -752,33 +772,39 @@ button {
     pointer-events: 0; }
 
 #scrollIndicator {
-  position: fixed;
-  z-index: 1000;
   bottom: 10px;
   margin: auto;
-  left: 0;
+  position: fixed;
   right: 0;
-  width: 30px;
+  left: 0;
+  z-index: 10;
+  opacity: 0.9;
+  width: 50px;
   height: 50px;
   border-radius: 50px;
-  background: #fff;
-  border: 2px solid #0067b8;
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+  background: #000;
   transition: opacity 0.5s ease-in-out; }
   #scrollIndicator .dot {
-    width: 8px;
-    height: 8px;
+    width: 5px;
+    height: 5px;
     position: absolute;
     margin: auto;
     left: 0;
     right: 0;
-    border-radius: 50px;
-    background: #0067b8; }
+    opacity: 0;
+    border: 1px solid #fff;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg); }
   #scrollIndicator.hide {
     opacity: 0; }
-  #scrollIndicator .fadeInDown {
+  #scrollIndicator .fadeInDown-0 {
     -webkit-animation: fadeInDown 1s ease-out 0s infinite;
     animation: fadeInDown 1s ease-out 0s infinite; }
+  #scrollIndicator .fadeInDown-1 {
+    -webkit-animation: fadeInDown 1s ease-out 0.5s infinite;
+    animation: fadeInDown 1s ease-out 0.5s infinite; }
   @media (max-width: 540px) {
     #scrollIndicator {
       display: none; } }
@@ -878,7 +904,7 @@ button {
 
 .fixed {
   position: fixed;
-  width: 90%;
+  width: 80%;
   top: 0;
   left: 0;
   right: 0;

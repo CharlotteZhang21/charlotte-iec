@@ -5,6 +5,8 @@ $large-screen: 1084px;
 $star-color: #fb5a07;
 $button-color: #0067b8;
 
+$font-color: #0067b8;
+
 $focus-border-color: #004eff;
 
 $scroll-down-color: #0067b8;
@@ -19,7 +21,7 @@ $scroll-down-color: #0067b8;
 
 }
 
-@-webkit-keyframes fadeInDown { 0% { opacity: 0.5; top: 0; } 30% {opacity: 1} 100% { opacity: 0; top: 60% }  }
-        @keyframes fadeInDown { 0% { opacity: 0.5; top: 0; } 30% {opacity: 1} 100% { opacity: 0; top: 60% }  }
+@-webkit-keyframes fadeInDown { 0% { opacity: 0.5;transform: rotate(45deg) scale(0.8); top: 0; } 30% {transform: rotate(45deg) scale(1.2); opacity: 1} 100% { opacity: 0;transform: rotate(45deg) scale(1); top: 60% }  }
+        @keyframes fadeInDown { 0% { opacity: 0.5;transform: rotate(45deg) scale(0.8); top: 0; } 30% {transform: rotate(45deg) scale(1.2); opacity: 1} 100% { opacity: 0;transform: rotate(45deg) scale(1); top: 60% }  }
 
 

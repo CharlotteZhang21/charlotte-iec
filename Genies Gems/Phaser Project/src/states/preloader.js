@@ -91,7 +91,8 @@
 
          this.game.load.image('circle', PiecSettings.assetsDir + 'burst.png');
 
-         this.game.load.image('board-bg', PiecSettings.assetsDir + 'board-bg.png');
+         this.game.load.image('board-bg-1', PiecSettings.assetsDir + 'board-bg-1.png');
+         this.game.load.image('board-bg-2', PiecSettings.assetsDir + 'board-bg-2.png');
 
          this.game.load.image('hand', PiecSettings.assetsDir + 'hand.png');
 

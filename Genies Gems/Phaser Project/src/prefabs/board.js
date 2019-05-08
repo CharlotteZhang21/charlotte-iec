@@ -323,10 +323,17 @@ class Board extends Phaser.Group {
     }
 
     initBackground(board) {
+        var backgroundTile, boardColor;
         for (var i = 0; i < board.length; i++) {
             for (var j = 0; j < board[0].length; j++) {
                 if (board[i][j] != 0) {
-                    var backgroundTile = new Phaser.Sprite(this.game, 0, 0, 'board-bg');
+                    if( i % 2 == 0) {
+                        boardColor = j % 2 == 0 ? 'board-bg-1' : 'board-bg-2';
+                    }else {
+                        boardColor = j % 2 != 0 ? 'board-bg-1' : 'board-bg-2';
+                    }
+                    
+                    backgroundTile = new Phaser.Sprite(this.game, 0, 0, boardColor);
                     backgroundTile.x = j * backgroundTile.height;
                     backgroundTile.y = i * backgroundTile.width;
                     this.add(backgroundTile);

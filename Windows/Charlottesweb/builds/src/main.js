@@ -293,6 +293,26 @@ function initContent () {
         $('#info-app-description-content').html(windowsSettings.descriptionContent);
     }
 
+
+    if(windowsSettings.ESRB== undefined || windowsSettings.ESRB == {}) {
+        console.log('no ESRB')
+    }else{
+        if(windowsSettings.ESRB.image && windowsSettings.ESRB.image == '') {
+          console.log('no ESRB image');  
+        }else{
+            $('<img />').attr('src', windowsSettings.ESRB.image).appendTo($('#ESRB'));    
+        }
+
+
+        if(windowsSettings.ESRB.text && windowsSettings.ESRB.text == '') {
+          console.log('no ESRB text');  
+        }else{
+            $('<p />').html(windowsSettings.ESRB.text).appendTo($('#ESRB'));    
+        }
+        
+        
+    }
+
 }
 
 
@@ -302,7 +322,9 @@ function showScrollIndicator(currentScroll) {
         $('#scrollIndicator').addClass('hide');
     } else {
         $('#scrollIndicator').removeClass('hide');
-        $('#scrollIndicator').find('.dot').addClass('fadeInDown');
+        $('#scrollIndicator').find('.dot').each(function(index){
+            $(this).addClass('fadeInDown-' + index);  
+        })
     }
 }
 

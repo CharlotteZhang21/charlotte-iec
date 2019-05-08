@@ -30,6 +30,11 @@ windowsSettings.carouselImg = [
 
 ]
 
+windowsSettings.ESRB = {
+    image: 'ESRB.png',
+    text: 'EVERYONE'
+}
+
 windowsSettings.defaultLang = "en";
 windowsSettings.translations = {
     'Download': {

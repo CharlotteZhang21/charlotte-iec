@@ -103,14 +103,34 @@ button {
 #info-wrap {
     max-width: 1600px;
 
-    width: 90%;
+    width: 80%;
     // max-width: 1200px;
     margin: auto;
 }
 
+
+#ESRB {
+    display: inline-flex;
+    & img{
+        width: 50px;
+        height: 50px;
+    }
+
+    & p{
+        font-size: 13px;
+        color: $font-color;
+        font-weight: 600;
+        padding: 0 5px;
+    }
+
+    @media (max-width: $large-screen) {
+        display: none;
+    }
+}
+
 .info {
     &-content {
-        width: 90%;
+        width: 80%;
         min-height: 72px;
         margin: 36px auto;
         position: relative;
@@ -245,6 +265,7 @@ button {
                 font-size: 1.3em;
             }
         }
+
 
     }
 
@@ -467,14 +488,14 @@ button {
     z-index: 10;
     opacity: 0.9;
 
-    
 
-                // @media all and (min-width: $windows-large-screen) {
-                //     height: 1.5em;
-                //     width: 1.5em;
-                //     margin-right: 0.3em;
-                // }
-            
+
+    // @media all and (min-width: $windows-large-screen) {
+    //     height: 1.5em;
+    //     width: 1.5em;
+    //     margin-right: 0.3em;
+    // }
+
 
     transition: opacity 1s ease-in-out;
 
@@ -490,31 +511,44 @@ button {
 }
 
 #scrollIndicator {
-    position: fixed;
-    z-index: 1000;
+    // position: fixed;
+    // z-index: 1000;
     bottom: 10px;
     margin: auto;
-    left: 0;
+    // left: 0;
+    // right: 0;
+    // opacity: 0.9;
+    position: fixed;
     right: 0;
-    width: 30px;
+    left: 0;
+    z-index: 10;
+    opacity: 0.9;
+
+    width: 50px;
     height: 50px;
     border-radius: 50px;
-    background: #fff;
-    border: 2px solid $scroll-down-color;
-    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+    background: #000;
     transition: opacity 0.5s ease-in-out;
 
     & .dot {
-        width: 8px;
-        height: 8px;
+        width: 5px;
+        height: 5px;
         position: absolute;
         margin: auto;
         left: 0;
         right: 0;
-        // top: 77%;
-        border-radius: 50px;
+        opacity: 0;
+        // width: 0;
+        // height: 0;
 
-        background: $scroll-down-color;
+        border: 1px solid #fff;
+        // border: 1px solid $scroll-down-color;
+        border-width: 0 3px 3px 0;
+        display: inline-block;
+        padding: 3px;
+        transform: rotate(45deg);
+
+
 
     }
 
@@ -523,7 +557,13 @@ button {
     }
 
     & .fadeInDown {
-        @include animationFadeInDown(1s, 0s, ease-out);
+        &-0{
+            @include animationFadeInDown(1s, 0s, ease-out);    
+        }
+        &-1{
+            @include animationFadeInDown(1s, 0.5s, ease-out);    
+        }
+        
     }
 
 
@@ -661,7 +701,7 @@ button {
 
 .fixed {
     position: fixed;
-    width: 90%;
+    width: 80%;
     top: 0;
     left: 0;
     right: 0;
