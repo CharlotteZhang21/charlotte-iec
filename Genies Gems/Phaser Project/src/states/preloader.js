@@ -49,26 +49,26 @@
          this.game.load.image('5_wrap', PiecSettings.assetsDir + 'orange_wrap.png');
          this.game.load.image('6_wrap', PiecSettings.assetsDir + 'purple_wrap.png');
 
-         this.game.load.image('1_fish', PiecSettings.assetsDir + 'red_fish.png');
-         this.game.load.image('2_fish', PiecSettings.assetsDir + 'blue_fish.png');
-         this.game.load.image('3_fish', PiecSettings.assetsDir + 'yellow_fish.png');
-         this.game.load.image('4_fish', PiecSettings.assetsDir + 'green_fish.png');
-         this.game.load.image('5_fish', PiecSettings.assetsDir + 'orange_fish.png');
-         this.game.load.image('6_fish', PiecSettings.assetsDir + 'purple_fish.png');
+         this.game.load.image('1_paw', PiecSettings.assetsDir + 'red_paw.png');
+         this.game.load.image('2_paw', PiecSettings.assetsDir + 'blue_paw.png');
+         this.game.load.image('3_paw', PiecSettings.assetsDir + 'yellow_paw.png');
+         this.game.load.image('4_paw', PiecSettings.assetsDir + 'green_paw.png');
+         this.game.load.image('5_paw', PiecSettings.assetsDir + 'orange_paw.png');
+         this.game.load.image('6_paw', PiecSettings.assetsDir + 'purple_paw.png');
 
-         this.game.load.image('1_sfish', PiecSettings.assetsDir + 'red_sfish.png');
-         this.game.load.image('2_sfish', PiecSettings.assetsDir + 'blue_sfish.png');
-         this.game.load.image('3_sfish', PiecSettings.assetsDir + 'yellow_sfish.png');
-         this.game.load.image('4_sfish', PiecSettings.assetsDir + 'green_sfish.png');
-         this.game.load.image('5_sfish', PiecSettings.assetsDir + 'orange_sfish.png');
-         this.game.load.image('6_sfish', PiecSettings.assetsDir + 'purple_sfish.png');
+         // this.game.load.image('1_sfish', PiecSettings.assetsDir + 'red_sfish.png');
+         // this.game.load.image('2_sfish', PiecSettings.assetsDir + 'blue_sfish.png');
+         // this.game.load.image('3_sfish', PiecSettings.assetsDir + 'yellow_sfish.png');
+         // this.game.load.image('4_sfish', PiecSettings.assetsDir + 'green_sfish.png');
+         // this.game.load.image('5_sfish', PiecSettings.assetsDir + 'orange_sfish.png');
+         // this.game.load.image('6_sfish', PiecSettings.assetsDir + 'purple_sfish.png');
 
-         this.game.load.image('1_wfish', PiecSettings.assetsDir + 'red_wfish.png');
-         this.game.load.image('2_wfish', PiecSettings.assetsDir + 'blue_wfish.png');
-         this.game.load.image('3_wfish', PiecSettings.assetsDir + 'yellow_wfish.png');
-         this.game.load.image('4_wfish', PiecSettings.assetsDir + 'green_wfish.png');
-         this.game.load.image('5_wfish', PiecSettings.assetsDir + 'orange_wfish.png');
-         this.game.load.image('6_wfish', PiecSettings.assetsDir + 'purple_wfish.png');
+         // this.game.load.image('1_wfish', PiecSettings.assetsDir + 'red_wfish.png');
+         // this.game.load.image('2_wfish', PiecSettings.assetsDir + 'blue_wfish.png');
+         // this.game.load.image('3_wfish', PiecSettings.assetsDir + 'yellow_wfish.png');
+         // this.game.load.image('4_wfish', PiecSettings.assetsDir + 'green_wfish.png');
+         // this.game.load.image('5_wfish', PiecSettings.assetsDir + 'orange_wfish.png');
+         // this.game.load.image('6_wfish', PiecSettings.assetsDir + 'purple_wfish.png');
 
          this.game.load.image('1_stripes', PiecSettings.assetsDir + 'zoom_red.png');
          this.game.load.image('2_stripes', PiecSettings.assetsDir + 'zoom_blue.png');

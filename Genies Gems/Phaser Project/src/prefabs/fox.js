@@ -59,6 +59,14 @@ class Fox extends Phaser.Group {
             });
     }
 
+    getPos() {
+        
+        return {
+            x: this.fox.world.x,
+            y: this.fox.world.y
+        }
+    }
+
     moveTo(tile, x, y, duration, easing, cb) {
 
         var tween = this.game.add.tween(tile).to({

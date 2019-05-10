@@ -679,3 +679,21 @@ export function rubberBand(sprite, delay, duration, easing) {
         y: initialScale,
     }, duration, easing, true, delay);
 }
+
+
+// customise 
+
+export function scaleAndFlyToGoal(sprite, x, y, delay, duration, easing) {
+    var initialScale = sprite.scale.x;
+    sprite.game.add.tween(sprite.scale).to({
+        x: [initialScale * 1.1, initialScale, 0],
+        y: [initialScale * 1.1, initialScale, 0],
+    }, duration, easing, true, 0);
+
+    return sprite.game.add.tween(sprite).to({
+        x: x,
+        y: y,
+        angle: [10, 0 , -10, 0, 0]
+    }, duration, easing, true, 0);
+
+}
