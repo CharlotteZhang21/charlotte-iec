@@ -94,6 +94,10 @@
          this.game.load.image('board-bg-1', PiecSettings.assetsDir + 'board-bg-1.png');
          this.game.load.image('board-bg-2', PiecSettings.assetsDir + 'board-bg-2.png');
 
+         this.game.load.image('way_turn', PiecSettings.assetsDir + 'way_turn.png');
+         this.game.load.image('way_straight', PiecSettings.assetsDir + 'way_straight.png');
+         this.game.load.image('way_end', PiecSettings.assetsDir + 'way_end.png');
+
          this.game.load.image('hand', PiecSettings.assetsDir + 'hand.png');
 
          this.game.load.image('logo', PiecSettings.assetsDir + 'logo.png');

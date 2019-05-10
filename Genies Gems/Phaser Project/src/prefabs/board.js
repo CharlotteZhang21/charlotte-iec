@@ -1,6 +1,7 @@
 import * as ContainerUtil from '../utils/container-util';
 import * as Util from '../utils/util';
 import CustomText from '../prefabs/custom-text';
+import Fox from '../prefabs/fox';
 
 class Board extends Phaser.Group {
     constructor(game, args) {
@@ -21,6 +22,13 @@ class Board extends Phaser.Group {
         this.initCandies(args.board);
         this.initSounds();
 
+        //========= CUSTOM FOR Genies&gem =================//
+
+        // this.createFox();
+
+
+        //========= END OF CUSTOM FOR Genies&gem =================//
+        // 
         this.game.input.onDown.add(this.candySelect, this);
         this.game.input.onUp.add(this.candyDeselect, this);
 
@@ -282,30 +290,62 @@ class Board extends Phaser.Group {
     initCandies(board) {
         for (var i = 0; i < board.length; i++) {
             for (var j = 0; j < board[0].length; j++) {
-                this.createCandy(board[i][j], j, i);
+
+                if (i == this.foxPathArray[this.foxCurrentAt].row && j == this.foxPathArray[this.foxCurrentAt].column) {
+
+                    this.createCandy('fox', j, i);
+                } else {
+                    this.createCandy(board[i][j], j, i);
+                }
+
+
+
             }
         }
     }
 
     createCandy(id, col, row, special = "") {
         var type = special;
+
         if (id == 8) {
             id = "colorbomb";
             type = "colorbomb";
         }
+        if (id == 0) {
+            return;
+        }
         var src = id;
         src += special;
         // id += special;
-        var candy = new Phaser.Sprite(this.game, 0, 0, src);
-        candy.anchor.set(0.5);
-        candy.x = this.getTileXFromCol(col);
-        candy.y = this.getTileYFromRow(row);
+
+        if (id != 'fox') {
+            var candy = new Phaser.Sprite(this.game, 0, 0, src);
+
+            candy.x = this.getTileXFromCol(col);
+            candy.y = this.getTileYFromRow(row);
+
+            candy.anchor.set(0.5);
+
+            candy.id = id;
+            
+
+        } else {
+            var candy = this.createFox(this.getTileXFromCol(col), this.getTileYFromRow(row));
+            
+            candy.fixed = true;
+
+            candy.id = 0;
+
+        }
         candy.col = col;
         candy.row = row;
-        candy.id = id;
+        
         candy.type = type;
+
         this.add(candy);
         this.candies[col + "," + row] = candy;
+
+
 
         if (id == "colorbomb") {
             this.idleColorbomb(candy);
@@ -324,21 +364,81 @@ class Board extends Phaser.Group {
 
     initBackground(board) {
         var backgroundTile, boardColor;
+        this.topRow = [];
+
         for (var i = 0; i < board.length; i++) {
+
             for (var j = 0; j < board[0].length; j++) {
+
                 if (board[i][j] != 0) {
-                    if( i % 2 == 0) {
+                    if (this.topRow[j] == null) {
+                        this.topRow[j] = i;
+                    }
+                    //** customise for genies & gem
+                    if (i % 2 == 0) {
                         boardColor = j % 2 == 0 ? 'board-bg-1' : 'board-bg-2';
-                    }else {
+                    } else {
                         boardColor = j % 2 != 0 ? 'board-bg-1' : 'board-bg-2';
                     }
-                    
+
+
+
+
                     backgroundTile = new Phaser.Sprite(this.game, 0, 0, boardColor);
-                    backgroundTile.x = j * backgroundTile.height;
-                    backgroundTile.y = i * backgroundTile.width;
+
+                    backgroundTile.anchor.set(0.5);
+
+                    backgroundTile.x = (j + 0.5) * backgroundTile.height;
+                    backgroundTile.y = (i + 0.5) * backgroundTile.width;
+
                     this.add(backgroundTile);
                     this.tileWidth = backgroundTile.width;
+
                 }
+            }
+        }
+
+        //** customise for genies & gem
+        this.createFoxPath(board);
+    }
+
+    checkDirection(foxPathIndex, i, j) {
+        // var direction = '';
+        var nextIndex = foxPathIndex + 1;
+
+        if (this.foxPath[nextIndex][0] == i) {
+            //check can go left or right
+
+            if (this.foxPath[nextIndex][1] == (j + 1)) {
+
+                //e.g. current point: [2,0] next point: [2,1]    
+
+                return 'r';
+
+            } else if (this.foxPath[nextIndex][1] == (j - 1)) {
+
+                //e.g. current point: [2,1] next point: [2,0]
+
+                return 'l';
+
+            } else {
+                console.log("ERROR: foxPath wrong ", 'background:  #ffb9cd; color: #333');
+            }
+
+        } else if (this.foxPath[nextIndex][1] == j) {
+            //Check can go up or down
+
+            if (this.foxPath[nextIndex][0] == (i + 1)) {
+
+                //e.g current point: [2,1] next point [3,1] 
+
+                return 'd';
+
+            } else if (this.foxPath[nextIndex][0] == (i - 1)) {
+
+                //e.g current point: [2,1] next point [1,1] 
+
+                return 'u';
             }
         }
     }
@@ -351,13 +451,13 @@ class Board extends Phaser.Group {
         this.animateParticlesOnTouch(x, y);
         this.cancelHand();
 
-        if (this.canPick) {
+        if (this.canPick ) {
 
             this.onCandySelect.dispatch();
 
             this.pickedCandy = this.candyAt(this.getColFromXCoord(x), this.getRowFromYCoord(y));
 
-            if (this.pickedCandy != -1) {
+            if (this.pickedCandy != -1 && !this.pickedCandy.fixed) {
                 if (this.selectedCandy == null || this.selectedCandy == undefined) {
                     this.selectedCandy = this.pickedCandy;
                     this.game.input.addMoveCallback(this.candyMove, this);
@@ -415,7 +515,7 @@ class Board extends Phaser.Group {
             }
             if (deltaRow + deltaCol != 0) {
                 this.pickedCandy = this.candyAt(this.getColFromXCoord(this.selectedCandy.world.x) + deltaCol, this.getRowFromYCoord(this.selectedCandy.world.y) + deltaRow);
-                if (this.pickedCandy != -1) {
+                if (this.pickedCandy != -1 && !this.pickedCandy.fixed) {
                     this.swapCandies(this.selectedCandy, this.pickedCandy, true);
                     this.game.input.deleteMoveCallback(this.candyMove, this);
                 }
@@ -451,6 +551,8 @@ class Board extends Phaser.Group {
                 this.handleMatches();
             } else {
                 var matchInBoard = this.matchInBoard();
+
+
                 if (!matchInBoard && swapBack && !this.pause) {
                     this.swapCandies(candy1, candy2, false);
                 } else {
@@ -475,7 +577,10 @@ class Board extends Phaser.Group {
         for (var i = 0; i < this.args.board.length; i++) {
             this.removeMap[i] = [];
             for (var j = 0; j < this.args.board[0].length; j++) {
-                this.removeMap[i].push(0);
+                if (this.args.board[i][j] != 0) {
+                    this.removeMap[i].push(0);
+                }
+
             }
         }
 
@@ -659,6 +764,133 @@ class Board extends Phaser.Group {
             this.removeMap[row][col] = value;
         }
     }
+
+
+    createFox(x, y) {
+        return new Fox(this.game, {
+            posX: x,
+            posY: y
+        });
+        
+    }
+
+
+    createFoxPath(board) {
+        var foxPathGrp = new Phaser.Group(this.game);
+        this.add(foxPathGrp);
+
+        var foxPathIndex = 0,
+            foxDirection;
+        var wayRotation = 0,
+            boardColor;
+        var previousFoxDirection;
+        var foxPathTile;
+
+
+        this.foxPathArray = [];
+
+        if (Util.isPortrait()) {
+            this.foxPath = PiecSettings.foxPathPortrait;
+        } else {
+            this.foxPath = PiecSettings.foxPathLandscape;
+        }
+
+        for (var i = 0; i < board.length; i++) {
+
+            for (var j = 0; j < board[0].length; j++) {
+
+                wayRotation = 0;
+
+                if (foxPathIndex <= this.foxPath.length - 1 && i == this.foxPath[foxPathIndex][0] && j == this.foxPath[foxPathIndex][1]) {
+
+                    boardColor = "way";
+
+                    if (foxPathIndex == 0 || foxPathIndex == this.foxPath.length - 1) {
+                        if (previousFoxDirection == null) {
+                            foxDirection = this.checkDirection(foxPathIndex, i, j);
+                            previousFoxDirection = foxDirection;
+                            console.log(foxDirection);
+                            if (foxDirection == 'l') {
+                                wayRotation = 180;
+                            } else if (foxDirection == 'u') {
+                                wayRotation = 90;
+                            } else if (foxDirection == 'd') {
+                                wayRotation = 270;
+                            }
+                        } else {
+                            if (foxDirection == 'r') {
+                                wayRotation = 180;
+                            } else if (foxDirection == 'u') {
+                                wayRotation = 270;
+                            } else if (foxDirection == 'd') {
+                                wayRotation = 90;
+                            }
+
+                        }
+
+
+                        boardColor += "_end";
+
+                    } else {
+                        foxDirection = this.checkDirection(foxPathIndex, i, j);
+
+                        if (previousFoxDirection == foxDirection) {
+                            boardColor += "_straight";
+                            if (foxDirection == 'u' || foxDirection == 'd') {
+                                wayRotation = 90;
+                            }
+                        } else {
+                            boardColor += "_turn";
+
+                            var turn = previousFoxDirection + foxDirection;
+
+                            if (turn == 'rd' || turn == 'ul') {
+
+                                wayRotation = 270;
+
+                            } else if (turn == 'ul' || turn == 'rd') {
+                                wayRotation = 180;
+                            } else if (turn == 'dr' || turn == 'lu') {
+
+                                wayRotation = 90;
+
+                            }
+                        }
+                    }
+
+
+                    foxPathTile = new Phaser.Sprite(this.game, 0, 0, boardColor);
+
+                    foxPathTile.anchor.set(0.5);
+
+                    foxPathTile.x = (j + 0.5) * foxPathTile.height;
+                    foxPathTile.y = (i + 0.5) * foxPathTile.width;
+
+                    foxPathTile.angle = wayRotation;
+                    this.add(foxPathTile);
+                    this.tileWidth = foxPathTile.width;
+
+                    foxPathTile.row = i;
+                    foxPathTile.column = j;
+
+
+                    this.foxPathArray.push(foxPathTile);
+
+                    previousFoxDirection = foxDirection;
+
+                    foxPathIndex++;
+                }
+
+
+            }
+        }
+
+        this.foxCurrentAt = 0;
+
+        // this.createFox(this.foxPathArray[this.foxCurrentAt].x, this.foxPathArray[this.foxCurrentAt].y);
+
+    }
+
 
     applyFishCandyCombo(fishCandy, candyType = "", repeat = true) {
 
@@ -1685,11 +1917,16 @@ class Board extends Phaser.Group {
     makeCandiesFall() {
         var fallen = 0;
         var restart = false;
+
+        console.log('------------candy Fall-------')
         for (var i = this.args.board.length - 2; i >= 0; i--) { //-2 because it's -1 length, and then another extra row. Last one doesn't need to fall
             for (var j = 0; j < this.args.board[0].length; j++) {
+
                 var candy = this.candyAt(j, i);
-                if (candy != -1) {
-                    var fallTiles = this.holesBelow(j, i);
+                if (candy != -1 && !candy.fixed) {
+                    var fallTiles = this.holesBelow(j, i) + this.fixedCandiesBelow(j, i);
+
+                    console.log("fallTiles (", i, j, ")", fallTiles)
                     if (fallTiles > 0) {
                         var finalPos = candy.y + fallTiles * this.tileWidth;
                         var animationDuration = this.fallSpeed * fallTiles;
@@ -1737,21 +1974,80 @@ class Board extends Phaser.Group {
 
     holesBelow(col, row) {
         var result = 0;
+
         for (var i = row + 1; i < this.args.board.length; i++) {
-            if (this.candyAt(col, i) == -1) {
-                result++;
+
+            if (this.candyAt(col, i) == -1 ) {
+                if (this.args.board[i][col] != 0) {
+                    result++;
+                }
             }
+
         }
+
+        if(col == 0 ) {
+            console.log("holesBelow", result);
+        }
+
         return result;
     }
 
     holesInCol(col) {
         var result = 0;
-        for (var i = 0; i < this.args.board.length; i++) {
-            if (this.candyAt(col, i) == -1) {
-                result++;
+        for (var i = this.topRow[col]; i < this.args.board.length; i++) {
+            if (this.candyAt(col, i) == -1 ) {
+                
+                if (this.args.board[i][col] != 0) {
+                    result++;
+                }
             }
         }
+
+
+        if(col == 0 ) {
+            console.log("holesInCol", result);
+        }
+
+        return result;
+    }
+    fixedCandiesBelow(col, row) {
+        var result = 0;
+
+        for (var i = row + 1; i < this.args.board.length; i++) {
+            
+            if (this.candyAt(col, i) != -1 && this.candyAt(col, i).fixed ) {
+                
+                    result++;
+                
+            }
+        }
+
+
+        if(col == 0 ) {
+            console.log("fixedCandiesBelow", result);
+        }
+        
+        return result;
+    }
+
+    fixedCandiesInCol(col) {
+        var result = 0;
+
+        for (var i = this.topRow[col]; i < this.args.board.length; i++) {
+            
+            if (this.candyAt(col, i) != -1 && this.candyAt(col, i).fixed ) {
+                
+                    result++;
+                
+            }
+        }
+
+        
+        if(col == 0 ) {
+            console.log("fixedCandiesInCol", result);
+        }
+        
+        
         return result;
     }
 
@@ -1759,23 +2055,42 @@ class Board extends Phaser.Group {
         var respawned = 0;
         var restart = false;
 
+        var topRow;
+        
+        console.log('----------candy respawned--------');
+        //each column
         for (var j = 0; j < this.args.board[0].length; j++) {
+
+            //spawn from the top row
+            topRow = this.topRow[j];
+
+            //get all the spots that is -1 and is not supposed to have a candy
             var emptySpots = this.holesInCol(j);
+            console.log('---', emptySpots, "column", j);
+
+
             if (emptySpots > 0) {
-                for (var i = 0; i < emptySpots; i++) {
+
+                //fall from the top row
+                for (var i = topRow; i < emptySpots + topRow; i++) {
 
                     var color = this.getRandomColor();
                     var special = Math.random() > .97 ? "_fish" : "";
                     // if (special == "_fish"){
                     //     color += "_fish";
                     // }
+
+                    var candyRow = i + this.fixedCandiesInCol(j);
+
                     var candy = this.createCandy(color, j, i, special);
+
                     //TODO - RANDOMLY CHOOSE TO CREATE A FISH
                     candy.y = -this.tileWidth * (emptySpots - i) + this.tileWidth / 2;
+                    // candy.y = -this.tileWidth * topRow + this.tileWidth / 2;
 
                     var animationDuration = this.fallSpeed * emptySpots;
                     var animationDelay = 50 + 50 * (this.args.board[0].length - i);
-                    var finalPos = this.getTileYFromRow(i);
+                    var finalPos = this.getTileYFromRow(candyRow);
 
                     this.showAfterDelay(candy, animationDelay);
 
@@ -1881,10 +2196,11 @@ class Board extends Phaser.Group {
 
     candyAt(col, row) {
 
-        if (this.candies[col + "," + row] != undefined)
+        if (this.candies[col + "," + row] != undefined && this.candies[col + "," + row] != null) // && !this.candies[col + ',' + row].fixed)
             return this.candies[col + "," + row];
         else
             return -1;
+
     }
 
 
@@ -1911,9 +2227,12 @@ class Board extends Phaser.Group {
     matchInBoard() {
         for (var i = 0; i < this.args.board.length; i++) {
             for (var j = 0; j < this.args.board[0].length; j++) {
-                if (this.isMatch(j, i)) {
-                    return true;
+                if (this.args.board[i][j] != 0) {
+                    if (this.isMatch(j, i)) {
+                        return true;
+                    }
                 }
+
             }
         }
         this.canPick = true;
