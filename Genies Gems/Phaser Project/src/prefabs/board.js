@@ -295,7 +295,7 @@ class Board extends Phaser.Group {
                 if (i == this.foxPathArray[this.foxCurrentAt].row && j == this.foxPathArray[this.foxCurrentAt].column) {
 
                     this.createCandy('fox', j, i);
-                
+
                 } else {
 
                     //customised random generate paws
@@ -312,6 +312,10 @@ class Board extends Phaser.Group {
 
     createCandy(id, col, row, special = "") {
         var type = special;
+
+        if (special == '_paw') {
+            console.log(type);
+        }
 
         if (id == 0) {
             return;
@@ -334,21 +338,28 @@ class Board extends Phaser.Group {
             candy.anchor.set(0.5);
 
             candy.id = id;
-            
+
 
         } else {
             var candy = this.createFox(this.getTileXFromCol(col), this.getTileYFromRow(row));
-            
+            ContainerUtil.fitInContainer(candy, 'fox');
+
+            candy.x = this.getTileXFromCol(col);
+            candy.y = this.getTileYFromRow(row);
+
             candy.fixed = true;
 
-            candy.id = 0;
+            candy.id = 'fox';
 
-            this.fox = candy;
+            // this.fox = candy;
+            candy.paws = 0;
+
+            // candy.addMoves(0);
 
         }
         candy.col = col;
         candy.row = row;
-        
+
         candy.type = type;
 
         this.add(candy);
@@ -458,7 +469,7 @@ class Board extends Phaser.Group {
         this.animateParticlesOnTouch(x, y);
         this.cancelHand();
 
-        if (this.canPick ) {
+        if (this.canPick) {
 
             this.onCandySelect.dispatch();
 
@@ -540,20 +551,55 @@ class Board extends Phaser.Group {
         candy1.row = candy2.row;
         candy2.col = auxCol;
         candy2.row = auxRow;
+
+
         this.candies[candy1.col + "," + candy1.row] = candy1;
         this.candies[candy2.col + "," + candy2.row] = candy2;
 
-        var candy1Tween = this.game.add.tween(candy1).to({
-            x: this.getTileXFromCol(candy1.col),
-            y: this.getTileYFromRow(candy1.row),
-        }, 300, Phaser.Easing.Quadratic.InOut, true);
+
+        // ifconsole.log()
+        if (candy1.id != 'fox') {
+
+            var candy1Tween = this.game.add.tween(candy1).to({
+                x: this.getTileXFromCol(candy1.col),
+                y: this.getTileYFromRow(candy1.row),
+            }, 300, Phaser.Easing.Quadratic.InOut, true);
+        } else {
+
+            candy1.moveTo(this.getTileXFromCol(candy1.col), this.getTileYFromRow(candy1.row), 300, 0).onComplete.add(function() {
+                this.getCandyOnFoxPath(this.foxCurrentAt).paws--;
+
+                // console.log(candy1);
+
+
+                if (candy1.paws > 0) {
+                    this.moveFox();
+                }
+            }, this);
+        }
+
+
+        // if(candy2.id != 0) {
 
         var candy2Tween = this.game.add.tween(candy2).to({
             x: this.getTileXFromCol(candy2.col),
             y: this.getTileYFromRow(candy2.row),
         }, 300, Phaser.Easing.Quadratic.InOut, true);
 
+
+        // }else {
+
+        //     candy2.moveTo(this.getTileXFromCol(candy2.col), this.getTileYFromRow(candy2.row))   
+        //     this.fox.paws--;
+        // }
+
         candy2Tween.onComplete.add(function() {
+
+            for (var j = 0; j < this.args.board[0].length; j++) {
+                console.log(this.candies[j + ',' + candy1.row]);
+            }
+
+
             if (this.isColorbombMatch() || this.isSpecialCandyMatch() && !this.pause) {
                 this.handleMatches();
             } else {
@@ -584,9 +630,10 @@ class Board extends Phaser.Group {
         for (var i = 0; i < this.args.board.length; i++) {
             this.removeMap[i] = [];
             for (var j = 0; j < this.args.board[0].length; j++) {
-                if (this.args.board[i][j] != 0) {
+                // if (this.args.board[i][j] != 0) {
+                    // console.log("handle", i, j)
                     this.removeMap[i].push(0);
-                }
+                // }
 
             }
         }
@@ -598,6 +645,7 @@ class Board extends Phaser.Group {
         this.handleHorizontalMatches();
         this.handleVerticalMatches();
         this.destroyCandies();
+
     }
 
     handleRandomUpgrades() {
@@ -778,7 +826,7 @@ class Board extends Phaser.Group {
             posX: x,
             posY: y
         });
-        
+
     }
 
 
@@ -816,7 +864,7 @@ class Board extends Phaser.Group {
                         if (previousFoxDirection == null) {
                             foxDirection = this.checkDirection(foxPathIndex, i, j);
                             previousFoxDirection = foxDirection;
-                            console.log(foxDirection);
+                            
                             if (foxDirection == 'l') {
                                 wayRotation = 180;
                             } else if (foxDirection == 'u') {
@@ -894,8 +942,11 @@ class Board extends Phaser.Group {
 
         this.foxCurrentAt = 0;
 
-        // this.createFox(this.foxPathArray[this.foxCurrentAt].x, this.foxPathArray[this.foxCurrentAt].y);
+    }
 
+    //find the fox candy by checking the path
+    getCandyOnFoxPath(foxPathIndex) {
+        return this.candyAt(this.foxPathArray[foxPathIndex].column, this.foxPathArray[foxPathIndex].row);
     }
 
 
@@ -1352,11 +1403,9 @@ class Board extends Phaser.Group {
     }
 
     destroyCandies() {
-        
+
         //====special for genies & gem
         //============================ 
-        
-        var paws = 0;
 
         var candyToClone = [];
 
@@ -1365,7 +1414,10 @@ class Board extends Phaser.Group {
             for (var j = 0; j < this.args.board[0].length; j++) {
                 if (this.removeMap[i][j] >= 1 && this.removeMap[i][j] < 2) {
                     var candy = this.candyAt(j, i);
-
+                    // if (candy.fixed) {
+                    //     console.log('candy fixed', candy.id);
+                    //     continue;
+                    // }
                     var destroyTween;
                     //Normal candy
                     if (candy.type == "") {
@@ -1381,16 +1433,17 @@ class Board extends Phaser.Group {
                     } else if (candy.type == "colorbomb") {
                         destroyTween = this.animateColorBomb(candy, this.removeMap[i][j]);
                     } else if (candy.type == '_paw') {
-                        paws++;
 
-                        console.log(paws);
+                        this.getCandyOnFoxPath(this.foxCurrentAt).paws++;
 
-                        candyToClone.push(candy);
-                        
+                        candyToClone.push(candy);                        
+
                         destroyTween = this.destroyCandy(candy, this.removeMap[i][j]);
+
+
                     } else {
                         destroyTween = this.destroyCandy(candy, this.removeMap[i][j]);
-                    } 
+                    }
 
                     if (destroyTween == null) {
                         this.autoTriggerCandies.push(candy);
@@ -1403,6 +1456,7 @@ class Board extends Phaser.Group {
                                 this.makeCandiesFall();
                                 this.respawnCandies();
                             }
+
                         }, this);
                         this.candies[j + "," + i] = null;
                     }
@@ -1422,11 +1476,16 @@ class Board extends Phaser.Group {
             }
         }
 
-        
-        if(paws > 0) {
+        if (candyToClone.length > 0) {
+
             var toClone;
-            for(var i = 0; i < paws; i++){
+
+            // console.log('toClone', toClone);
+
+            for (var i = 0; i < candyToClone.length; i++) {
                 toClone = candyToClone[i];
+
+                // console.log("toClone", toClone);
                 var clone = new Phaser.Sprite(this.game, 0, 0, toClone.id + '_paw');
                 clone.x = toClone.x;
                 clone.y = toClone.y;
@@ -1439,21 +1498,33 @@ class Board extends Phaser.Group {
 
                 clone.bringToTop();
 
-                // console.log(this.fox.getPos().x, this.fox.getPos().y);
-                Tweener.scaleAndFlyToGoal(clone, this.fox.getPos().x, this.fox.getPos().y, 0, 800, Phaser.Easing.Quadratic.InOut).onComplete.add(function(e){
+                Tweener.scaleAndFlyToGoal(clone, this.getCandyOnFoxPath(this.foxCurrentAt).x, this.getCandyOnFoxPath(this.foxCurrentAt).y, 0, 800, Phaser.Easing.Quadratic.InOut).onComplete.add(function(e) {
                     e.destroy();
                 }, this);
-                
-                this.moveFox();
+
+
                 // console.log(this.fox.moveDuration)
             }
-        }    
+
+            candyToClone = [];
+
+
+        }
     }
 
     moveFox() {
-        // this.
-        //get fox.index, fox currentAt++ 
-        
+
+        var foxTile, nextFoxTile;
+
+        this.foxCurrentAt++;
+
+        var fox = this.getCandyOnFoxPath(this.foxCurrentAt - 1);
+
+        var nextCandy = this.getCandyOnFoxPath(this.foxCurrentAt);
+
+
+        this.swapCandies(fox, nextCandy);
+
     }
 
     idleColorbomb(candy) {
@@ -1976,10 +2047,20 @@ class Board extends Phaser.Group {
             for (var j = 0; j < this.args.board[0].length; j++) {
 
                 var candy = this.candyAt(j, i);
-                if (candy != -1 && !candy.fixed) {
-                    var fallTiles = this.holesBelow(j, i) + this.fixedCandiesBelow(j, i);
+                if (candy != -1 && !candy.fixed && this.args.board[i][j] != 0) {
+
+                    var fallTiles = this.holesBelow(j, i);
 
                     if (fallTiles > 0) {
+                        console.log('initialFallTile', fallTiles, j, i);
+
+                        if (j == this.foxPathArray[this.foxCurrentAt].column) {
+                            if (candy.row == this.foxPathArray[this.foxCurrentAt].row -1) {
+                                fallTiles += 1;
+                            }
+                            console.log("fallTiles", fallTiles)
+                        }
+
                         var finalPos = candy.y + fallTiles * this.tileWidth;
                         var animationDuration = this.fallSpeed * fallTiles;
                         var animationDelay = 0;
@@ -2025,50 +2106,63 @@ class Board extends Phaser.Group {
         return candy.id + candy.type;
     }
 
+
+    //get how many rows the candy can go down
     holesBelow(col, row) {
         var result = 0;
 
         for (var i = row + 1; i < this.args.board.length; i++) {
 
-            if (this.candyAt(col, i) == -1 ) {
+            if (this.candyAt(col, i) == -1) {
                 if (this.args.board[i][col] != 0) {
                     result++;
                 }
             }
 
+
+
         }
+
 
 
         return result;
     }
 
+
     holesInCol(col) {
         var result = 0;
         for (var i = this.topRow[col]; i < this.args.board.length; i++) {
-            if (this.candyAt(col, i) == -1 ) {
-                
+            if (this.candyAt(col, i) == -1) {
+
                 if (this.args.board[i][col] != 0) {
                     result++;
                 }
             }
         }
-
+        if(col == 0){
+            console.log(this.candyAt(col, i));
+            console.log("holesInCol", result)
+        }
         return result;
     }
     fixedCandiesBelow(col, row) {
         var result = 0;
 
+        // var fixedCandiesRow = []''
+
         for (var i = row + 1; i < this.args.board.length; i++) {
-            
-            if (this.candyAt(col, i) != -1 && this.candyAt(col, i).fixed ) {
-                
-                    result++;
-                
+
+            if (this.candyAt(col, i) != -1 && this.candyAt(col, i).fixed) {
+
+                result++;
+                // fixedCandiesRow.push(i);
+                // return i;
+
             }
         }
 
 
-        
+
         return result;
     }
 
@@ -2076,25 +2170,27 @@ class Board extends Phaser.Group {
         var result = 0;
 
         for (var i = this.topRow[col]; i < this.args.board.length; i++) {
-            
-            if (this.candyAt(col, i) != -1 && this.candyAt(col, i).fixed ) {
-                
-                    result++;
-                
+
+            if (this.candyAt(col, i) != -1 && this.candyAt(col, i).fixed) {
+
+                result++;
+
             }
         }
 
-        
-        
+
+
         return result;
     }
 
     respawnCandies() {
+
+
         var respawned = 0;
         var restart = false;
 
         var topRow;
-        
+
         //each column
         for (var j = 0; j < this.args.board[0].length; j++) {
 
@@ -2102,12 +2198,21 @@ class Board extends Phaser.Group {
             topRow = this.topRow[j];
 
             //get all the spots that is -1 and is not supposed to have a candy
-            var emptySpots = this.holesInCol(j);
+            var emptySpots = this.holesInCol(j) - this.fixedCandiesInCol(j);
 
+            if (j == this.foxPathArray[this.foxCurrentAt].column)
+                console.log('emptySpots', emptySpots)
+
+            
+            if(i == this.foxPathArray[this.foxCurrentAt] && j == this.foxPathArray[this.foxCurrentAt]){
+                emptySpots--;
+            }
+            
             if (emptySpots > 0) {
 
                 //fall from the top row
                 for (var i = topRow; i < emptySpots + topRow; i++) {
+
 
                     var color = this.getRandomColor();
                     var special = Math.random() > .8 ? "_paw" : "";
@@ -2116,7 +2221,7 @@ class Board extends Phaser.Group {
                     // }
 
                     // var candyRow = i + this.fixedCandiesInCol(j);
-                    var candyRow = i + this.fixedCandiesBelow(j, i-1);
+                    var candyRow = i + this.fixedCandiesBelow(j, i - 1);
 
                     var candy = this.createCandy(color, j, candyRow, special);
 
@@ -2158,6 +2263,11 @@ class Board extends Phaser.Group {
                                         } else {
                                             this.canPick = true;
                                             this.animateMessage();
+
+                                            if (this.getCandyOnFoxPath(this.foxCurrentAt).paws > 0) {
+
+                                                this.moveFox();
+                                            }
                                         }
                                         this.setSelectedCandiesToNull();
                                     }
@@ -2249,7 +2359,7 @@ class Board extends Phaser.Group {
     }
 
     isFourMatch(col, row) {
-        return this.candyAt(col, row).id == this.candyAt(col, row - 1).id && this.candyAt(col, row).id == this.candyAt(col-1, row -1).id && this.id == this.candyAt(col-1, row).id;
+        return this.candyAt(col, row).id == this.candyAt(col, row - 1).id && this.candyAt(col, row).id == this.candyAt(col - 1, row - 1).id && this.id == this.candyAt(col - 1, row).id;
     }
 
     isColorbombMatch() {
@@ -2261,7 +2371,7 @@ class Board extends Phaser.Group {
     }
 
     isMatch(col, row) {
-        return this.isHorizontalMatch(col, row) || this.isVerticalMatch(col, row) || this.isFourMatch(col, row);
+        return this.isHorizontalMatch(col, row) || this.isVerticalMatch(col, row) //|| this.isFourMatch(col, row);
     }
 
     matchInBoard() {

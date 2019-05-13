@@ -11,19 +11,32 @@ class Fox extends Phaser.Group {
 
         this.createFox();
 
+        this.paws = 0;
+
     }
 
-    createFox (x, y){
-        // this.fox = new Phaser.Sprite(this.game, 0, 0, 'fox');
-        // ContainerUtil.fitInContainer(this.fox, 'fox', 0.5, 0.5);
+    createFox(x, y) {
+        
         this.fox = CustomPngSequencesRenderer.playPngSequence(this.game, 'fox-idle', this);
-        ContainerUtil.fitInContainer(this.fox, 'fox', 0.5, 0.5);
 
-        this.fox.x = this.args.posX;
-        this.fox.y = this.args.posY;
 
+        
         this.add(this.fox);
 
+        // this.x = this.fox
+        
+
+        this.fox.x -= this.fox.width / 2;
+        this.fox.y -= this.fox.height / 2;
+
+        // console.log(this.x, this.y, this.width, this.height);
+        
+
+
+    }
+
+    addMoves(value) {
+        this.paws+= value;
     }
 
 
@@ -32,7 +45,7 @@ class Fox extends Phaser.Group {
         this.moveTo(
             tile,
             (x * this.tileWidth) + (0.5 * this.tileWidth),
-            [finalY*0.8, finalY],
+            [finalY * 0.8, finalY],
             duration,
             Phaser.Easing.Linear.easeInOut,
             function() {
@@ -44,45 +57,54 @@ class Fox extends Phaser.Group {
 
                     this.playAnimation(tile, 'fox-happy', true);
 
-                    this.game.time.events.add(1800, function(){
+                    this.game.time.events.add(1800, function() {
                         tile.alpha = 1;
                         this.finishInteraction();
-                    },this);
-                }else{
+                    }, this);
+                } else {
 
                     tile.alpha = 1;
                     this.finishInteraction();
                 }
-                
 
-                 
+
+
             });
     }
 
     getPos() {
-        
+
         return {
-            x: this.fox.world.x,
-            y: this.fox.world.y
+            x: this.x,
+            y: this.y 
         }
     }
 
-    moveTo(tile, x, y, duration, easing, cb) {
 
-        var tween = this.game.add.tween(tile).to({
-                x: x,
-                y: y
-            },
-            duration,
-            easing,
-            true,
-            0);
-
-        if (cb) {
-            tween.onComplete.add(cb, this);
-        }
+    moveTo(x, y, duration, delay) {
+        console.log('here');
+        return this.game.add.tween(this).to({
+            x: x,
+            y: y,
+        }, duration, Phaser.Easing.Linear.None, true, delay);
     }
-   
+
+    // moveTo(tile, x, y, duration, easing, cb) {
+
+    //     var tween = this.game.add.tween(tile).to({
+    //             x: x,
+    //             y: y
+    //         },
+    //         duration,
+    //         easing,
+    //         true,
+    //         0);
+
+    //     if (cb) {
+    //         tween.onComplete.add(cb, this);
+    //     }
+    // }
+
 
 }
 
