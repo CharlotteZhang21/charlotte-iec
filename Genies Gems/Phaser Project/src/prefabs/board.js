@@ -569,7 +569,9 @@ class Board extends Phaser.Group {
 
 
                 if (candy1.paws > 0) {
+                    
                     this.moveFox();
+
                 }
             }, this);
         }
@@ -819,10 +821,26 @@ class Board extends Phaser.Group {
 
 
     createFox(x, y) {
-        return new Fox(this.game, {
-            posX: x,
-            posY: y
-        });
+        var fox = new Fox(this.game);
+
+        this.foxAnimations = [];
+
+        fox.onAnimationDone.add(function(){
+            
+            this.canPick = true;
+
+
+            // if(this.foxAnimations.length != 0) {
+
+            //     fox.changeTo(this.foxAnimations[0]);
+                
+            //     this.foxAnimations.splice(0, 1);
+            // }
+
+        }, this);
+
+
+        return fox;
 
     }
 
@@ -1498,6 +1516,9 @@ class Board extends Phaser.Group {
                 clone.bringToTop();
 
                 Tweener.scaleAndFlyToGoal(clone, this.getCandyOnFoxPath(this.foxCurrentAt).x, this.getCandyOnFoxPath(this.foxCurrentAt).y, 0, 800, Phaser.Easing.Quadratic.InOut).onComplete.add(function(e) {
+                    var fox = this.getCandyOnFoxPath(this.foxCurrentAt);
+                    this.foxAnimations.push('catch');
+                    fox.changeTo('catch');
                     e.destroy();
                 }, this);
 
@@ -1519,12 +1540,15 @@ class Board extends Phaser.Group {
 
         var fox = this.getCandyOnFoxPath(this.foxCurrentAt - 1);
 
+        fox.changeTo('jump');
+
         var nextCandy = this.getCandyOnFoxPath(this.foxCurrentAt);
 
 
         this.swapCandies(fox, nextCandy);
 
     }
+
 
     idleColorbomb(candy) {
         if (candy.tween == undefined) {
@@ -2291,7 +2315,7 @@ class Board extends Phaser.Group {
                                             this.animateMessage();
 
                                             if (this.getCandyOnFoxPath(this.foxCurrentAt).paws > 0) {
-
+                                                this.canPick = false;
                                                 this.moveFox();
                                             }
                                         }

@@ -9,80 +9,54 @@ class Fox extends Phaser.Group {
 
         this.fox = {};
 
-        this.createFox('idle');
+        this.initSignals();
 
-        // this.paws = 0;
+        this.animationSequences = [];
 
+        this.defaultStatus = 'idle';
+
+        this.createFox(this.defaultStatus);
+
+    }
+
+    initSignals(){
+        this.onAnimationDone = new Phaser.Signal();
+    }
+
+    callBack() {
+        this.animationSequences.splice(0, 1);
+        if(this.fox[this.defaultStatus] != undefined){
+            if(this.animationSequences.length <= 0){
+                this.fox[this.defaultStatus].alpha = 1; 
+                this.onAnimationDone.dispatch();    
+            }else{
+                this.createFox(this.animationSequences[0]);
+            }
+            
+        }
+        
     }
 
     createFox(status) {
-        
-        this.fox[status] = CustomPngSequencesRenderer.playPngSequence(this.game, 'fox-idle', this),
 
-        // for(var key in this.fox){
-            this.add(this.fox[status]);
-
-            // this.x = this.fox
-            
-
-            this.fox[status].x -= this.fox[status].width / 2;
-            this.fox[status].y -= this.fox[status].height / 2;
-            // console.log(this.fox[key])
-            
-    
-        // }
+        this.fox[status] = CustomPngSequencesRenderer.playPngSequence(this.game, 'fox-' + status, this, this.callBack()),
 
 
-        
-        
-        // console.log(this.x, this.y, this.width, this.height);
-        
+        this.add(this.fox[status]);
+
+
+        this.fox[status].x -= this.fox[status].width / 2;
+        this.fox[status].y -= this.fox[status].height / 2;
 
 
     }
 
-    // addMoves(value) {
-    //     this.paws+= value;
-    // }
-
-
-    // foxMoveToLinear(tile, x, y, duration, foxWin = false) {
-    //     var finalY = (y * this.tileWidth) + (0.5 * this.tileWidth);
-    //     this.moveTo(
-    //         tile,
-    //         (x * this.tileWidth) + (0.5 * this.tileWidth),
-    //         [finalY * 0.8, finalY],
-    //         duration,
-    //         Phaser.Easing.Linear.easeInOut,
-    //         function() {
-
-    //             tile.settings.x = x;
-    //             tile.settings.y = y;
-
-    //             if (foxWin) {
-
-    //                 this.playAnimation(tile, 'fox-happy', true);
-
-    //                 this.game.time.events.add(1800, function() {
-    //                     tile.alpha = 1;
-    //                     this.finishInteraction();
-    //                 }, this);
-    //             } else {
-
-    //                 tile.alpha = 1;
-    //                 this.finishInteraction();
-    //             }
-
-
-
-    //         });
-    // }
 
     getPos() {
 
         return {
             x: this.x,
-            y: this.y 
+            y: this.y
         }
     }
 
@@ -96,26 +70,16 @@ class Fox extends Phaser.Group {
     }
 
     changeTo(status) {
-        this.fox.alpha = 0;
-        
+
+        this.fox['idle'].alpha = 0;
+
+        this.animationSequences.push(status);
+
+        this.createFox(status);
+
 
     }
 
-    // moveTo(tile, x, y, duration, easing, cb) {
-
-    //     var tween = this.game.add.tween(tile).to({
-    //             x: x,
-    //             y: y
-    //         },
-    //         duration,
-    //         easing,
-    //         true,
-    //         0);
-
-    //     if (cb) {
-    //         tween.onComplete.add(cb, this);
-    //     }
-    // }
 
 
 }

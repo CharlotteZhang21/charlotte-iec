@@ -21,7 +21,7 @@ function preloadPngSequence(game, pngSequence) {
         pngSequence.spriteNumber);
 }
 
-export function playPngSequence(game, sequenceKey, layer) {
+export function playPngSequence(game, sequenceKey, layer, callback = null) {
     var pngSequence = PiecSettings.pngAnimations[sequenceKey];
     var pngSequenceName = pngSequence.src.substr(0, pngSequence.src.indexOf('.'));
 
@@ -46,8 +46,18 @@ export function playPngSequence(game, sequenceKey, layer) {
     if (pngSequence.isReversed != null && pngSequence.isReversed) {
         sprite.animations.currentAnim.isReversed = true;
     }
+
+    if(callback!=null){
+        AnimationsUtil.initSignal();    
+
+        AnimationsUtil.onAnimationCompleted.add(callback(), this);
+    }
+    
     //Play animation
     AnimationsUtil.playAnimation(game, sprite, pngSequence.delay, pngSequence.fps, pngSequence.loopReverse, pngSequence.loops);
+
+
+
     if (pngSequence.angle != null && pngSequence.angle != 0) {
         var extraAngle = 0;
         if (this.game.global.windowWidth > this.game.global.windowHeight) {
