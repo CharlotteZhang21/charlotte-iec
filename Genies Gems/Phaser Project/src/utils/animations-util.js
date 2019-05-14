@@ -1,3 +1,8 @@
+export function initSignal(){
+    if(this.onAnimationCompleted == undefined)
+        this.onAnimationCompleted = new Phaser.Signal();
+}
+
 export function onLoop(sprite, animation) {
     if (sprite.loopReverse) {
         sprite.animations.currentAnim.isReversed = true;
@@ -29,6 +34,7 @@ export function playAnimation(game, sprite, delay, speed, loopReverse, loops) {
                 sprite.animations.currentAnim.onComplete.add(onCompleteNoLooping, this);
         });
     }
+
 }
 
 export function onComplete(sprite, animation) {
@@ -39,6 +45,7 @@ export function onComplete(sprite, animation) {
 export function onCompleteNoLooping(sprite, animation) {
     if (!sprite.persistent)
         sprite.alpha = 0;
+    this.animationCompleted.dispatch();
 }
 
 export function playAnimations(spritesheet, xPositions, yPositions, delays, loops, anchor, speed, scale, persistent, container, game, layer) {

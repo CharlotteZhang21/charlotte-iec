@@ -7,70 +7,76 @@ class Fox extends Phaser.Group {
     constructor(game, args) {
         super(game);
 
-        this.args = args;
+        this.fox = {};
 
-        this.createFox();
+        this.createFox('idle');
 
-        this.paws = 0;
+        // this.paws = 0;
 
     }
 
-    createFox(x, y) {
+    createFox(status) {
         
-        this.fox = CustomPngSequencesRenderer.playPngSequence(this.game, 'fox-idle', this);
+        this.fox[status] = CustomPngSequencesRenderer.playPngSequence(this.game, 'fox-idle', this),
+
+        // for(var key in this.fox){
+            this.add(this.fox[status]);
+
+            // this.x = this.fox
+            
+
+            this.fox[status].x -= this.fox[status].width / 2;
+            this.fox[status].y -= this.fox[status].height / 2;
+            // console.log(this.fox[key])
+            
+    
+        // }
 
 
         
-        this.add(this.fox);
-
-        // this.x = this.fox
         
-
-        this.fox.x -= this.fox.width / 2;
-        this.fox.y -= this.fox.height / 2;
-
         // console.log(this.x, this.y, this.width, this.height);
         
 
 
     }
 
-    addMoves(value) {
-        this.paws+= value;
-    }
+    // addMoves(value) {
+    //     this.paws+= value;
+    // }
 
 
-    foxMoveToLinear(tile, x, y, duration, foxWin = false) {
-        var finalY = (y * this.tileWidth) + (0.5 * this.tileWidth);
-        this.moveTo(
-            tile,
-            (x * this.tileWidth) + (0.5 * this.tileWidth),
-            [finalY * 0.8, finalY],
-            duration,
-            Phaser.Easing.Linear.easeInOut,
-            function() {
+    // foxMoveToLinear(tile, x, y, duration, foxWin = false) {
+    //     var finalY = (y * this.tileWidth) + (0.5 * this.tileWidth);
+    //     this.moveTo(
+    //         tile,
+    //         (x * this.tileWidth) + (0.5 * this.tileWidth),
+    //         [finalY * 0.8, finalY],
+    //         duration,
+    //         Phaser.Easing.Linear.easeInOut,
+    //         function() {
 
-                tile.settings.x = x;
-                tile.settings.y = y;
+    //             tile.settings.x = x;
+    //             tile.settings.y = y;
 
-                if (foxWin) {
+    //             if (foxWin) {
 
-                    this.playAnimation(tile, 'fox-happy', true);
+    //                 this.playAnimation(tile, 'fox-happy', true);
 
-                    this.game.time.events.add(1800, function() {
-                        tile.alpha = 1;
-                        this.finishInteraction();
-                    }, this);
-                } else {
+    //                 this.game.time.events.add(1800, function() {
+    //                     tile.alpha = 1;
+    //                     this.finishInteraction();
+    //                 }, this);
+    //             } else {
 
-                    tile.alpha = 1;
-                    this.finishInteraction();
-                }
+    //                 tile.alpha = 1;
+    //                 this.finishInteraction();
+    //             }
 
 
 
-            });
-    }
+    //         });
+    // }
 
     getPos() {
 
@@ -82,11 +88,17 @@ class Fox extends Phaser.Group {
 
 
     moveTo(x, y, duration, delay) {
-        console.log('here');
+        
         return this.game.add.tween(this).to({
             x: x,
             y: y,
         }, duration, Phaser.Easing.Linear.None, true, delay);
+    }
+
+    changeTo(status) {
+        this.fox.alpha = 0;
+        
+
     }
 
     // moveTo(tile, x, y, duration, easing, cb) {

@@ -313,10 +313,6 @@ class Board extends Phaser.Group {
     createCandy(id, col, row, special = "") {
         var type = special;
 
-        if (special == '_paw') {
-            console.log(type);
-        }
-
         if (id == 0) {
             return;
         }
@@ -595,9 +591,9 @@ class Board extends Phaser.Group {
 
         candy2Tween.onComplete.add(function() {
 
-            for (var j = 0; j < this.args.board[0].length; j++) {
-                console.log(this.candies[j + ',' + candy1.row]);
-            }
+            // for (var j = 0; j < this.args.board[0].length; j++) {
+            //     console.log(this.candies[j + ',' + candy1.row]);
+            // }
 
 
             if (this.isColorbombMatch() || this.isSpecialCandyMatch() && !this.pause) {
@@ -614,6 +610,7 @@ class Board extends Phaser.Group {
                             this.game.time.events.add(200, function() {
                                 this.playSoundMatch();
                             }, this);
+
                             this.handleMatches();
                         } else {
                             this.canPick = true;
@@ -1414,10 +1411,12 @@ class Board extends Phaser.Group {
             for (var j = 0; j < this.args.board[0].length; j++) {
                 if (this.removeMap[i][j] >= 1 && this.removeMap[i][j] < 2) {
                     var candy = this.candyAt(j, i);
-                    // if (candy.fixed) {
-                    //     console.log('candy fixed', candy.id);
-                    //     continue;
-                    // }
+
+                    if (candy.fixed) {
+                        // console.log('candy fixed', candy.id);
+                        continue;
+                    }
+
                     var destroyTween;
                     //Normal candy
                     if (candy.type == "") {
@@ -2047,18 +2046,19 @@ class Board extends Phaser.Group {
             for (var j = 0; j < this.args.board[0].length; j++) {
 
                 var candy = this.candyAt(j, i);
+                    
                 if (candy != -1 && !candy.fixed && this.args.board[i][j] != 0) {
-
+                    
                     var fallTiles = this.holesBelow(j, i);
 
-                    if (fallTiles > 0) {
-                        console.log('initialFallTile', fallTiles, j, i);
+                    // console.log('there are ', fallTiles, 'fallTiles in column', j);
 
-                        if (j == this.foxPathArray[this.foxCurrentAt].column) {
-                            if (candy.row == this.foxPathArray[this.foxCurrentAt].row -1) {
-                                fallTiles += 1;
-                            }
-                            console.log("fallTiles", fallTiles)
+                    if (fallTiles > 0) {
+                        
+                        if (this.fixedCandiesInCol(j) > 0 ){
+                            // console.log('there is',this.fixedCandiesInCol(j),' fixed candies in col', j)
+                            fallTiles += this.fixedCandiesInBetween(candy.col, candy.row, candy.row+fallTiles);
+                            
                         }
 
                         var finalPos = candy.y + fallTiles * this.tileWidth;
@@ -2072,19 +2072,27 @@ class Board extends Phaser.Group {
                         }, animationDuration, Phaser.Easing.Quadratic.Out, true, animationDelay);
 
                         fallen++;
+                        // console.log('originalCandy at row:', candy.row, 'column', candy.col, ' is going to', candy.row+fallTiles)
+                        candy.row = candy.row + fallTiles;
+
+
+                        this.candies[candy.col + "," + candy.row] = candy;
+                        this.candies[j + "," + i] = null;
+
 
                         tween.onComplete.add(function(candy) {
                             // if (!(typeof candy.loadTexture === 'undefined'))
                             //     candy.loadTexture(this.getTexture(candy));
                             fallen--;
                             if (fallen == 0 && !this.pause) {
+
                                 this.respawnCandies();
                             }
                         }, this);
-                        candy.row = candy.row + fallTiles;
-                        this.candies[candy.col + "," + candy.row] = candy;
-                        this.candies[j + "," + i] = null;
 
+                        
+
+                        
                         this.game.time.events.add((animationDuration + animationDelay) / 3.3, function() {
                             this.playSoundFallingCandy();
                         }, this);
@@ -2119,8 +2127,6 @@ class Board extends Phaser.Group {
                 }
             }
 
-
-
         }
 
 
@@ -2133,18 +2139,26 @@ class Board extends Phaser.Group {
         var result = 0;
         for (var i = this.topRow[col]; i < this.args.board.length; i++) {
             if (this.candyAt(col, i) == -1) {
-
                 if (this.args.board[i][col] != 0) {
                     result++;
                 }
             }
         }
-        if(col == 0){
-            console.log(this.candyAt(col, i));
-            console.log("holesInCol", result)
-        }
         return result;
     }
+
+    fixedCandiesInBetween(col, topRow, bottomRow) {
+        var result = 0;
+
+        for (var i = bottomRow; i >= topRow; i--) {
+            if (this.candyAt(col, i) != -1 && this.candyAt(col, i).fixed) {
+                result++;
+            }
+        }
+        // console.log("fixedCandiesBetween", topRow, 'and', bottomRow, 'is', result);
+        return result;
+    }
+
     fixedCandiesBelow(col, row) {
         var result = 0;
 
@@ -2155,9 +2169,7 @@ class Board extends Phaser.Group {
             if (this.candyAt(col, i) != -1 && this.candyAt(col, i).fixed) {
 
                 result++;
-                // fixedCandiesRow.push(i);
-                // return i;
-
+                
             }
         }
 
@@ -2184,7 +2196,7 @@ class Board extends Phaser.Group {
     }
 
     respawnCandies() {
-
+        // console.log('==============spawn new things========');
 
         var respawned = 0;
         var restart = false;
@@ -2197,36 +2209,49 @@ class Board extends Phaser.Group {
             //spawn from the top row
             topRow = this.topRow[j];
 
+            // console.log('respawning from row', topRow, 'column', j);
+
             //get all the spots that is -1 and is not supposed to have a candy
-            var emptySpots = this.holesInCol(j) - this.fixedCandiesInCol(j);
+            var emptySpots = this.holesInCol(j); 
 
-            if (j == this.foxPathArray[this.foxCurrentAt].column)
-                console.log('emptySpots', emptySpots)
+            // console.log('there are ', emptySpots, 'emptySpots in column', j);
 
-            
-            if(i == this.foxPathArray[this.foxCurrentAt] && j == this.foxPathArray[this.foxCurrentAt]){
-                emptySpots--;
-            }
-            
             if (emptySpots > 0) {
 
                 //fall from the top row
                 for (var i = topRow; i < emptySpots + topRow; i++) {
-
-
+                    
                     var color = this.getRandomColor();
                     var special = Math.random() > .8 ? "_paw" : "";
                     // if (special == "_fish"){
                     //     color += "_fish";
                     // }
 
-                    // var candyRow = i + this.fixedCandiesInCol(j);
-                    var candyRow = i + this.fixedCandiesBelow(j, i - 1);
+                    // console.log('generate at row', i );
+                    
+                    var candyRow = i;
 
+                    if(this.fixedCandiesInBetween(j, topRow, candyRow) > 0){
+
+                        // if(this.candyAt(j, candyRow) != -1){
+                        // console.log('between', topRow, 'AND', candyRow);
+                        candyRow += this.fixedCandiesInBetween(j, topRow, candyRow);
+                        // }   
+
+
+                    }
+
+                    if(this.candyAt(j, candyRow) != -1 ){
+                        // console.log('here is something already');
+                        continue;
+                    }
+
+                    // console.log('is going to row', candyRow );
+                    
                     var candy = this.createCandy(color, j, candyRow, special);
 
                     //TODO - RANDOMLY CHOOSE TO CREATE A FISH
-                    candy.y = -this.tileWidth * (emptySpots - i) + this.tileWidth / 2;
+                    candy.y = -this.tileWidth * (emptySpots - candyRow) + this.tileWidth / 2;
                     // candy.y = -this.tileWidth * topRow + this.tileWidth / 2;
 
                     var animationDuration = this.fallSpeed * emptySpots;
@@ -2237,6 +2262,7 @@ class Board extends Phaser.Group {
 
                     // this.addMotionBlurEffect(candy, animationDuration * .3);
 
+                    // candy.y = finalPos;
                     var candyTween = this.game.add.tween(candy).to({
                         y: [finalPos, finalPos * .95, finalPos]
                     }, animationDuration, Phaser.Easing.Quadratic.Out, true, animationDelay);
