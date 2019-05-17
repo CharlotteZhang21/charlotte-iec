@@ -605,7 +605,9 @@ class Board extends Phaser.Group {
             if (candy2.id == 'chest') {
                 candy2.destroy();
                 this.candies[candy2.col + ',' + candy2.row] = null;
-                // this.makeCandiesFall();
+
+                // this.pause = true;
+                this.canPick = false;
             }
         }, this);
 

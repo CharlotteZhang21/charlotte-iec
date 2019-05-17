@@ -32,17 +32,15 @@ class Fox extends Phaser.Group {
         _this.animationToDo.shift();
         console.log('--------fox Paws', _this.paws);
         console.log('--------animation just played', animation.key);
+        console.log('win: ', _this.win);
 
-
-        if(_this.paws <= 0 || animation.key.indexOf('win') != -1 || _this.animationToDo.length == 0){
-            console.log('finished animation')
-            _this.changeTo(_this.defaultStatus);
-        }
-        else if(_this.win){
+        if(_this.win){
             _this.win = false;
             _this.changeTo('win');
-        }
-        else{
+        }else if(_this.paws <= 0 || animation.key.indexOf('win') != -1 || _this.animationToDo.length == 0){
+            console.log('finished animation')
+            _this.changeTo(_this.defaultStatus);
+        }else{
             console.log('SET default TO 0')
 
             _this.fox[_this.defaultStatus].alpha = 0;
