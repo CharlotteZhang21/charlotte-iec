@@ -1,6 +1,9 @@
+var onAnimationCompleted;
+
 export function initSignal(){
-    if(this.onAnimationCompleted == undefined)
-        this.onAnimationCompleted = new Phaser.Signal();
+    
+    return onAnimationCompleted = new Phaser.Signal();
+
 }
 
 export function onLoop(sprite, animation) {
@@ -11,6 +14,7 @@ export function onLoop(sprite, animation) {
         if (!sprite.persistent) {
             sprite.alpha = 0;
             animation.loop = false;
+            onAnimationCompleted.dispatch(sprite);
         }
     }
 }
@@ -26,7 +30,7 @@ export function playAnimation(game, sprite, delay, speed, loopReverse, loops) {
         });
     } else {
         var shouldLoop = (loops !== undefined || loops >= 0) ? true : false;
-        // console.log(loops >= 0);
+        
         game.time.events.add(delay, function() {
             sprite.alpha = 1;
             sprite.animations.play('animation', speed, shouldLoop);
@@ -43,13 +47,14 @@ export function onComplete(sprite, animation) {
 }
 
 export function onCompleteNoLooping(sprite, animation) {
-    if (!sprite.persistent)
+    if (!sprite.persistent){
         sprite.alpha = 0;
-    this.animationCompleted.dispatch();
+    }
+    
 }
 
 export function playAnimations(spritesheet, xPositions, yPositions, delays, loops, anchor, speed, scale, persistent, container, game, layer) {
-    // console.log("play animations");
+    
     var containerWidth = container.offsetWidth * window.devicePixelRatio;
     var containerHeight = container.offsetHeight * window.devicePixelRatio;
     var containerX = container.offsetLeft * window.devicePixelRatio;

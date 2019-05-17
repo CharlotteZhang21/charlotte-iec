@@ -102,6 +102,9 @@
 
          this.game.load.image('logo', PiecSettings.assetsDir + 'logo.png');
 
+         this.game.load.image('chest', PiecSettings.assetsDir + 'chest.png');
+         this.game.load.image('chest-open', PiecSettings.assetsDir + 'chest-open.png');
+
 
          this.game.load.image('btn-yellow', PiecSettings.assetsDir + 'btn_green.png');
 

@@ -21,7 +21,7 @@ function preloadPngSequence(game, pngSequence) {
         pngSequence.spriteNumber);
 }
 
-export function playPngSequence(game, sequenceKey, layer, callback = null) {
+export function playPngSequence(game, sequenceKey, layer, callback) {
     var pngSequence = PiecSettings.pngAnimations[sequenceKey];
     var pngSequenceName = pngSequence.src.substr(0, pngSequence.src.indexOf('.'));
 
@@ -46,11 +46,13 @@ export function playPngSequence(game, sequenceKey, layer, callback = null) {
     if (pngSequence.isReversed != null && pngSequence.isReversed) {
         sprite.animations.currentAnim.isReversed = true;
     }
-
-    if(callback!=null){
-        AnimationsUtil.initSignal();    
-
-        AnimationsUtil.onAnimationCompleted.add(callback(), this);
+    
+    if(callback){
+        var signal = AnimationsUtil.initSignal();   
+        signal.add(function(sprite){
+            
+            callback(layer, sprite);
+        }, this); 
     }
     
     //Play animation

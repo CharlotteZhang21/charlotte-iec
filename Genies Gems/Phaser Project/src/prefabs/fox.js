@@ -9,46 +9,77 @@ class Fox extends Phaser.Group {
 
         this.fox = {};
 
-        this.initSignals();
-
-        this.animationSequences = [];
-
         this.defaultStatus = 'idle';
 
-        this.createFox(this.defaultStatus);
+        this.animationToDo = [];
+        this.animationIndex = 0;
+
+        this.createFox(this.defaultStatus);;
+
+        this.paws = 0;
 
     }
 
-    initSignals(){
-        this.onAnimationDone = new Phaser.Signal();
+    addMove(value){
+        this.paws += value;
     }
 
-    callBack() {
-        this.animationSequences.splice(0, 1);
-        if(this.fox[this.defaultStatus] != undefined){
-            if(this.animationSequences.length <= 0){
-                this.fox[this.defaultStatus].alpha = 1; 
-                this.onAnimationDone.dispatch();    
-            }else{
-                this.createFox(this.animationSequences[0]);
-            }
-            
+    getPaws(){
+        return this.paws;
+    }
+
+    resetStatus(_this, animation) {
+        _this.animationToDo.shift();
+        console.log('--------fox Paws', _this.paws);
+        console.log('--------animation just played', animation.key);
+
+
+        if(_this.paws <= 0 || animation.key.indexOf('win') != -1 || _this.animationToDo.length == 0){
+            console.log('finished animation')
+            _this.changeTo(_this.defaultStatus);
         }
-        
+        else if(_this.win){
+            _this.win = false;
+            _this.changeTo('win');
+        }
+        else{
+            console.log('SET default TO 0')
+
+            _this.fox[_this.defaultStatus].alpha = 0;
+        }
+            
     }
 
     createFox(status) {
 
-        this.fox[status] = CustomPngSequencesRenderer.playPngSequence(this.game, 'fox-' + status, this, this.callBack()),
+
+        if (this.fox != {})
+            for (var key in this.fox) {
+
+                if (this.fox[key] != null) {
+
+                    this.fox[key].alpha = 0;
+                }
+            }
+
+        this.fox[status] = CustomPngSequencesRenderer.playPngSequence(this.game, 'fox-' + status, this, this.resetStatus),
 
 
         this.add(this.fox[status]);
+
 
 
         this.fox[status].x -= this.fox[status].width / 2;
         this.fox[status].y -= this.fox[status].height / 2;
 
 
+    }
+
+    resize(scale, offsetX, offsetY) {
+        console.log(offsetX, offsetY)
+        this.fixedScale = scale;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
     }
 
 
@@ -61,26 +92,37 @@ class Fox extends Phaser.Group {
     }
 
 
-    moveTo(x, y, duration, delay) {
+    moveTo(x, y, duration, delay, direction, win = false) {
         
+        this.changeTo('jump-' + direction);
+
+        this.win = win;
+
+
         return this.game.add.tween(this).to({
             x: x,
             y: y,
-        }, duration, Phaser.Easing.Linear.None, true, delay);
+        }, duration, Phaser.Easing.Quadratic.InOut, true, delay);
     }
 
     changeTo(status) {
+        this.animationToDo.push(status);
 
-        this.fox['idle'].alpha = 0;
+        
+        if (this.fox[status] == undefined || !this.fox[status].persistent) {
+            
+            // this.createFox(status);
+            
+            this.createFox(status);
+            
 
-        this.animationSequences.push(status);
-
-        this.createFox(status);
+        } else {
+        
+            this.fox[status].alpha = 1;
+        }
 
 
     }
-
-
 
 }
 
