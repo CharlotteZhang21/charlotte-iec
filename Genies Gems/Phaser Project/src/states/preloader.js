@@ -56,19 +56,7 @@
          this.game.load.image('5_paw', PiecSettings.assetsDir + 'orange_paw.png');
          this.game.load.image('6_paw', PiecSettings.assetsDir + 'purple_paw.png');
 
-         // this.game.load.image('1_sfish', PiecSettings.assetsDir + 'red_sfish.png');
-         // this.game.load.image('2_sfish', PiecSettings.assetsDir + 'blue_sfish.png');
-         // this.game.load.image('3_sfish', PiecSettings.assetsDir + 'yellow_sfish.png');
-         // this.game.load.image('4_sfish', PiecSettings.assetsDir + 'green_sfish.png');
-         // this.game.load.image('5_sfish', PiecSettings.assetsDir + 'orange_sfish.png');
-         // this.game.load.image('6_sfish', PiecSettings.assetsDir + 'purple_sfish.png');
-
-         // this.game.load.image('1_wfish', PiecSettings.assetsDir + 'red_wfish.png');
-         // this.game.load.image('2_wfish', PiecSettings.assetsDir + 'blue_wfish.png');
-         // this.game.load.image('3_wfish', PiecSettings.assetsDir + 'yellow_wfish.png');
-         // this.game.load.image('4_wfish', PiecSettings.assetsDir + 'green_wfish.png');
-         // this.game.load.image('5_wfish', PiecSettings.assetsDir + 'orange_wfish.png');
-         // this.game.load.image('6_wfish', PiecSettings.assetsDir + 'purple_wfish.png');
+         this.game.load.image('magic_cloud', PiecSettings.assetsDir + 'magic_cloud.png');
 
          this.game.load.image('1_stripes', PiecSettings.assetsDir + 'zoom_red.png');
          this.game.load.image('2_stripes', PiecSettings.assetsDir + 'zoom_blue.png');
@@ -108,14 +96,13 @@
 
          this.game.load.image('btn-yellow', PiecSettings.assetsDir + 'btn_green.png');
 
-         this.game.load.image('tiffi', PiecSettings.assetsDir + 'tiffi.png');
-         this.game.load.image('yeti', PiecSettings.assetsDir + 'yeti.png');
+         this.game.load.image('characters', PiecSettings.assetsDir + 'characters.png');
 
-         this.game.load.image('sweet', PiecSettings.assetsDir + 'sweet.png');
+         this.game.load.image('omgenie', PiecSettings.assetsDir + 'omgenie.png');
 
-         this.game.load.image('tasty', PiecSettings.assetsDir + 'tasty.png');
+         this.game.load.image('genieous', PiecSettings.assetsDir + 'genieous.png');
 
-         this.game.load.image('divine', PiecSettings.assetsDir + 'divine.png');
+         this.game.load.image('gemazing', PiecSettings.assetsDir + 'gemazing.png');
 
          this.game.load.image('hand', PiecSettings.assetsDir + 'hand.png');
 

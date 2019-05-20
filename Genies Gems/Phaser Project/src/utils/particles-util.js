@@ -33,7 +33,7 @@ export function particleBurst(game, particlesSrc, particleContainer, x, y, amoun
         var tween = Tweener.moveTo(
             particle,
             particle.x + xRandomDirection * particle.width * 15,
-            [yRandomPosition, yRandomPosition + particle.height * 3 + particle.height * (Math.random() * 5)],
+            [yRandomPosition, yRandomPosition + particle.height * (Math.random() * 7)],
             delay,
             duration,
             Phaser.Easing.Quadratic.Out);
@@ -207,13 +207,14 @@ export function particleShoot(game, particlesSrc, particleContainer, x, y, amoun
     }
 }
 
-function getRandomParticleFromArray(game, particlesSrc) {
+function getRandomParticleFromArray(game, particlesSrc, isAnimation = false) {
+
     var randomParticleSrc = particlesSrc[Math.min(Math.floor(Math.random() * particlesSrc.length), particlesSrc.length - 1)];
-    // if (randomParticleSrc.indexOf(".png") != -1) {
+    if (!isAnimation) {
         return new Phaser.Sprite(game, 0, 0, randomParticleSrc);
-    // } else { //png sequence!
-        // return CustomPngSequenceRender.playPngSequence(game, randomParticleSrc, null);
-    // }
+    } else { //png sequence!
+        return CustomPngSequenceRender.playPngSequence(game, randomParticleSrc, null);
+    }
 }
 
 export function particleSpawn(game, particlesSrc, particleContainer, x, y, amount, angleRange = 360) {

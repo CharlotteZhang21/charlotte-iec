@@ -60,12 +60,13 @@ class Endcard extends Phaser.State {
         }, this);
 
         this.board = new Board(this.game, { "container": 'board-container', "board": chosenBoard, "hand": handPositions, "chances": chances });
-        this.numOfInteractions = 0;
+        // this.numOfInteractions = 0;
         this.endcardPlayed = false;
-        this.board.onCandySelect.add(function() {
-            this.numOfInteractions++;
-            if (PiecSettings.endcardAfterXInteractions !== undefined && this.numOfInteractions >= PiecSettings.endcardAfterXInteractions) {
-                this.game.time.events.add(1000, function() {
+        // this.board.onCandySelect.add(function() {
+        this.board.onSuccess.add(function() {
+            // this.numOfInteractions++;
+            // if (PiecSettings.endcardAfterXInteractions !== undefined && this.numOfInteractions >= PiecSettings.endcardAfterXInteractions) {
+                this.game.time.events.add(2000, function() {
                     if (!this.endcardPlayed) {
                         this.endcard();
                         this.endcardPlayed = true;
@@ -74,7 +75,7 @@ class Endcard extends Phaser.State {
                         }, this);
                     }
                 }, this);
-            }
+            // }
         }, this);
 
         this.game.add.existing(this.board);
@@ -83,6 +84,7 @@ class Endcard extends Phaser.State {
         this.createLogo();
 
         this.endcardCounter();
+
 
     }
 
@@ -116,69 +118,42 @@ class Endcard extends Phaser.State {
     }
 
     animateChars() {
-        var yeti = new Phaser.Sprite(this.game, 0, 0, 'yeti');
-        this.game.add.existing(yeti);
-        ContainerUtil.fitInContainer(yeti, 'yeti', 0, 0);
+        var magicCloud = new Phaser.Sprite(this.game, 0, 0, 'magic_cloud');
+        this.game.add.existing(magicCloud);
+        ContainerUtil.fitInContainer(magicCloud, 'characters', 0.5, 0.5);
+        magicCloud.alpha = 0;
+        var magicCloudScale = magicCloud.scale.x;
 
-        var tiffi = new Phaser.Sprite(this.game, 0, 0, 'tiffi');
-        this.game.add.existing(tiffi);
-        ContainerUtil.fitInContainer(tiffi, 'tiffi', 0, 0);
+        magicCloud.scale.x = 0.01;
+        magicCloud.scale.y = magicCloud.scale.x;
 
-        tiffi.anchor.set(.5, .95);
-        yeti.anchor.set(.5, .98);
+        this.game.add.tween(magicCloud.scale).to({
+            x: [magicCloudScale, magicCloudScale * 1.2],
+            y: [magicCloudScale, magicCloudScale * 1.2], 
+        }, 800, Phaser.Easing.Quadratic.InOut, 0, true);
 
+        this.game.add.tween(magicCloud).to({ 
+            alpha: 1
+        }, 800, Phaser.Easing.Quadratic.InOut, 0, true);
+
+        var characters = new Phaser.Sprite(this.game, 0, 0, 'characters');
+        this.game.add.existing(characters);
+        ContainerUtil.fitInContainer(characters, 'characters', 0.5, 0.5);
+
+        
+        this.game.add.existing(characters);
+        
         this.game.world.bringToTop(this.game.cta);
         this.game.world.bringToTop(this.game.ctaText);
 
-        tiffi.y = this.game.global.windowHeight;
-        yeti.y = this.game.global.windowHeight;
+        var characterY = characters.y;
 
-        tiffi.x = 0 - tiffi.width;
-        yeti.x = this.game.global.windowWidth + yeti.width;
-
-        this.game.add.tween(tiffi).to({
-                x: [tiffi.width * .1, tiffi.width * .25],
-                y: [this.game.global.windowHeight - tiffi.height * .1,
-                    this.game.global.windowHeight
-                ],
-                angle: [5, 0],
-            }, 350, Phaser.Easing.Quadratic.InOut, true, 0)
-            .interpolation(Phaser.Math.bezierInterpolation).onComplete.add(function() {
-                this.game.add.tween(tiffi).to({
-                    x: [tiffi.width * .33, tiffi.width * .47],
-                    y: [this.game.global.windowHeight - tiffi.height * .15,
-                        this.game.global.windowHeight
-                    ],
-                    angle: [-5, 3],
-                }, 350, Phaser.Easing.Quadratic.InOut, true, 0).interpolation(Phaser.Math.bezierInterpolation).onComplete.add(function() {
-                    this.game.add.tween(tiffi).to({
-                        angle: -3,
-                    }, 700, Phaser.Easing.Quadratic.InOut, true, 0).loop(true).yoyo(true);
-                }, this);
-            }, this);
-
-        this.game.add.tween(yeti).to({
-                x: [this.game.global.windowWidth + yeti.width * .5, this.game.global.windowWidth],
-                y: [this.game.global.windowHeight - yeti.height * .1,
-                    this.game.global.windowHeight
-                ],
-                angle: [5, 0],
-            }, 400, Phaser.Easing.Quadratic.InOut, true, 0)
-            .interpolation(Phaser.Math.bezierInterpolation).onComplete.add(function() {
-                this.game.add.tween(yeti).to({
-                    x: [this.game.global.windowWidth - yeti.width * .07,
-                        this.game.global.windowWidth - yeti.width * .18
-                    ],
-                    y: [this.game.global.windowHeight - yeti.width * .15,
-                        this.game.global.windowHeight,
-                    ],
-                    angle: [3, -10],
-                }, 400, Phaser.Easing.Quadratic.InOut, true, 0).interpolation(Phaser.Math.bezierInterpolation).onComplete.add(function() {
-                    this.game.add.tween(yeti).to({
-                        angle: -15,
-                    }, 800, Phaser.Easing.Quadratic.InOut, true, 0).loop(true).yoyo(true);
-                }, this);
-            }, this);
+        this.game.add.tween(characters).to({
+                
+                y: [characterY + characters.height * 0.25],
+                
+        }, 1000, Phaser.Easing.Quadratic.InOut, true, 0).yoyo(0, true);
+            
     }
 
     animateCandies() {

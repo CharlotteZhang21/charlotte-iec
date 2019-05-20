@@ -290,7 +290,7 @@ a {
   height: 15%; }
 
 #chest-final {
-  width: 40%;
+  width: 60%;
   height: 10%;
   top: 30%;
   left: 0;
@@ -299,13 +299,13 @@ a {
 #logo {
   width: 70%;
   height: 20%;
-  top: 18%;
+  top: 10%;
   left: 50%;
   transform: translateX(-50%);
   -webkit-transform: translateX(-50%); }
 
 #message {
-  width: 60%;
+  width: 80%;
   top: 40%;
   left: 50%;
   height: 9%;
@@ -336,13 +336,12 @@ a {
   transform: translateX(-50%);
   -webkit-transform: translateX(-50%); }
 
-#tiffi {
-  width: 65%;
-  height: 1%; }
-
-#yeti {
-  width: 95%;
-  height: 1%; }
+#characters {
+  width: 80%;
+  height: 1%;
+  left: 0;
+  right: 0;
+  bottom: 50%; }
 
 #hand {
   width: 50%; }
@@ -360,7 +359,7 @@ a {
   width: 54%;
   height: 11%;
   top: auto;
-  bottom: 6%;
+  bottom: 4.5%;
   left: 49.5%;
   transform: translateX(-50%);
   -webkit-transform: translateX(-50%); }
@@ -400,7 +399,7 @@ a {
     width: 30%; }
   #logo {
     width: 40%;
-    top: 30%; }
+    top: 20%; }
   #hand {
     width: 30%; }
   #particle {
