@@ -3,6 +3,7 @@ import * as Util from '../utils/util';
 import CustomText from '../prefabs/custom-text';
 import Fox from '../prefabs/fox';
 import * as Tweener from '../utils/tweener';
+import * as ParticlesUtil from '../utils/particles-util';
 
 class Board extends Phaser.Group {
     constructor(game, args) {
@@ -224,10 +225,10 @@ class Board extends Phaser.Group {
 
     initSounds() {
         this.game.audioController.initAudio("land1", PiecSettings.assetsDir + 'land1.mp3');
-        this.game.audioController.initAudio("colorbomb_created", PiecSettings.assetsDir + 'colour_bomb_created.mp3');
-        this.game.audioController.initAudio("colorbomb", PiecSettings.assetsDir + 'color_bomb.mp3');
-        this.game.audioController.initAudio("striped_created", PiecSettings.assetsDir + 'striped_created.mp3');
-        this.game.audioController.initAudio("wrapped_created", PiecSettings.assetsDir + 'wrapped_created.mp3');
+        this.game.audioController.initAudio("special_candy_created", PiecSettings.assetsDir + 'special_candy_created.mp3');
+        // this.game.audioController.initAudio("colorbomb", PiecSettings.assetsDir + 'color_bomb.mp3');
+        // this.game.audioController.initAudio("striped_created", PiecSettings.assetsDir + 'striped_created.mp3');
+        this.game.audioController.initAudio("special_candy_created_2", PiecSettings.assetsDir + 'special_candy_created_2.mp3');
         this.game.audioController.initAudio("line_blast", PiecSettings.assetsDir + 'line_blast.mp3');
 
         this.game.audioController.initAudio("match1", PiecSettings.assetsDir + 'match1.mp3');
@@ -236,14 +237,14 @@ class Board extends Phaser.Group {
         this.game.audioController.initAudio("match4", PiecSettings.assetsDir + 'match4.mp3');
         this.game.audioController.initAudio("match5", PiecSettings.assetsDir + 'match5.mp3');
 
-        this.game.audioController.initAudio("pop_sound", PiecSettings.assetsDir + 'pop.mp3');
+        this.game.audioController.initAudio("pop_sound", PiecSettings.assetsDir + 'land1.mp3');
 
-        this.game.audioController.initAudio("fish_pop", PiecSettings.assetsDir + 'fish_pop.mp3');
-        this.game.audioController.initAudio("fish_move", PiecSettings.assetsDir + 'fish_move.mp3');
+        // this.game.audioController.initAudio("fish_pop", PiecSettings.assetsDir + 'fish_pop.mp3');
+        // this.game.audioController.initAudio("fish_move", PiecSettings.assetsDir + 'fish_move.mp3');
         this.game.audioController.initAudio("bomb", PiecSettings.assetsDir + 'bomb_sound.mp3');
 
-        this.game.audioController.initAudio('compliment-text', PiecSettings.assetsDir +'compliment-text.mp3');
-        
+        this.game.audioController.initAudio('compliment-text', PiecSettings.assetsDir + 'compliment-text.mp3');
+
         this.game.audioController.initAudio("chest_opened", PiecSettings.assetsDir + 'chest_opened.mp3');
         this.game.audioController.initAudio("fox_move", PiecSettings.assetsDir + 'fox_move.mp3');
 
@@ -255,6 +256,8 @@ class Board extends Phaser.Group {
     initSignals() {
         this.onCandySelect = new Phaser.Signal();
         this.onSuccess = new Phaser.Signal();
+
+        this.onRespawnFinished = new Phaser.Signal();
     }
 
     randomHelper() {
@@ -271,9 +274,7 @@ class Board extends Phaser.Group {
     }
 
     upgradeCandy(candy) {
-        var randomUpgrade = Math.floor(Math.random() * 2) + 4;
-        // var randomUpgrade = '_paw';
-        // randomUpgrade = Math.random() > .9 ? 5 : randomUpgrade;
+        var randomUpgrade = Math.floor(Math.random() * 2) + 3;
 
         this.randomUpgrade = [];
         this.randomUpgrade[0] = candy.col;
@@ -290,8 +291,13 @@ class Board extends Phaser.Group {
 
     resize() {
         ContainerUtil.fitInContainer(this, this.args.container, 0, 0);
-        this.getCandyOnFoxPath(this.foxCurrentAt).scale.x *= 1.2;
-        this.getCandyOnFoxPath(this.foxCurrentAt).scale.y = this.getCandyOnFoxPath(this.foxCurrentAt).scale.x;
+        var fox = this.getCandyOnFoxPath(this.foxCurrentAt);
+        fox.scale.x = this.getCandyOnFoxPath(this.foxCurrentAt + 1).width * 1.5 / (fox.width / fox.scale.x);
+        fox.scale.y = fox.scale.x;
+
+        var chest = this.getCandyOnFoxPath(this.foxPathArray.length - 1);
+        chest.scale.x = this.getCandyOnFoxPath(this.foxCurrentAt + 1).width / (fox.width / fox.scale.x);
+        chest.scale.y = chest.scale.x;
     }
 
 
@@ -310,9 +316,9 @@ class Board extends Phaser.Group {
 
                     //customised random generate paws
                     // var special = Math.random() > 0.95 ? "_paw" : '';
-                    console.log(board[0].length)
+                    // console.log(board[0].length)
                     var special = '';
-                    if(i == Math.floor((board.length - 1) / 2) && j == Math.floor((board[0].length - 1) / 2))
+                    if (i == Math.floor((board.length) / 2) && j == Math.floor((board[0].length) / 2))
                         special = '_paw';
 
                     this.createCandy(board[i][j], j, i, special);
@@ -322,6 +328,36 @@ class Board extends Phaser.Group {
 
             }
         }
+
+
+        this.onRespawnFinished.add(function() {
+
+            if (!this.pause && !this.finished) {
+
+                if (this.matchInBoard() || this.thereAreAutoTriggerCandies()) {
+                    this.game.time.events.add(250, function() {
+                        console.log(this.autoTriggerCandies)
+                        this.handleMatches();
+                    }, this);
+                } else {
+
+
+                    this.canPick = true;
+                    this.animateMessage();
+
+                    var currentCandy = this.getCandyOnFoxPath(this.foxCurrentAt);
+
+                    if (currentCandy != null && currentCandy.id == 'fox' && currentCandy.getPaws() > 0) {
+                        this.canPick = false;
+
+                        this.moveFox();
+
+
+                    }
+                }
+                this.setSelectedCandiesToNull();
+            }
+        }, this);
 
         this.bringToTop(this.getCandyOnFoxPath(this.foxCurrentAt));
     }
@@ -411,8 +447,8 @@ class Board extends Phaser.Group {
             candy.y = this.getTileYFromRow(row);
 
 
-            candy.scale.x *= 1.2;
-            candy.scale.y *= candy.scale.x;
+            // candy.scale.x *= 1.2;
+            // candy.scale.y *= candy.scale.x;
         }
 
 
@@ -630,7 +666,9 @@ class Board extends Phaser.Group {
             if (candy2.id == 'chest') {
                 win = true;
             }
-            var candy1Tween = candy1.moveTo(this.getTileXFromCol(candy1.col), this.getTileYFromRow(candy1.row), 500, 0, this.checkDirection(this.foxCurrentAt - 1, candy2.row, candy2.col), win);
+            candy1.addMove(-1);
+
+            var candy1Tween = candy1.moveTo(this.getTileXFromCol(candy1.col), this.getTileYFromRow(candy1.row), 600, 0, this.checkDirection(this.foxCurrentAt - 1, candy2.row, candy2.col), win);
             this.playFoxMove();
         }
 
@@ -652,7 +690,7 @@ class Board extends Phaser.Group {
             if (candy1.id == 'fox') {
 
                 // this.getCandyOnFoxPath(this.foxCurrentAt).addMove(-1);
-                candy1.addMove(-1);
+
                 if (candy1.getPaws() > 0 && this.foxCurrentAt < this.foxPathArray.length - 1) {
                     // this.canMove = false;
                     this.game.time.events.add(500, function() {
@@ -704,10 +742,9 @@ class Board extends Phaser.Group {
         for (var i = 0; i < this.args.board.length; i++) {
             this.removeMap[i] = [];
             for (var j = 0; j < this.args.board[0].length; j++) {
-                // if (this.args.board[i][j] != 0) {
-                // console.log("handle", i, j)
+
                 this.removeMap[i].push(0);
-                // }
+
 
             }
         }
@@ -1368,8 +1405,20 @@ class Board extends Phaser.Group {
     getRandomCandy() {
         var randX = Math.floor(Math.random() * this.args.board[0].length);
         var randY = Math.floor(Math.random() * this.args.board.length);
-        var candy = this.candyAt(randX, randY);
+        var candy;
+        // if(this.args.board != undefined){
+        if (this.args.board[randY][randX] == 0) {
+            // candy = this.getRandomCandy();
+
+        } else {
+            candy = this.candyAt(randX, randY);
+        }
+
+
         return candy;
+
+
+
     }
 
     handleFishCombo(col, row, currentColor) {
@@ -1485,7 +1534,11 @@ class Board extends Phaser.Group {
                     var candy = this.candyAt(j, i);
 
                     if (candy.fixed) {
-                        console.log('candy fixed', candy.id);
+
+                        continue;
+                    }
+                    if (this.args.board[i][j] == 0) {
+
                         continue;
                     }
 
@@ -1522,7 +1575,8 @@ class Board extends Phaser.Group {
                     }
 
                     if (destroyTween == null) {
-                        this.autoTriggerCandies.push(candy);
+                        if (candy != -1)
+                            this.autoTriggerCandies.push(candy);
                     } else {
                         destroyed++;
                         destroyTween.onComplete.add(function(candyObj) {
@@ -1573,7 +1627,7 @@ class Board extends Phaser.Group {
                 clone.bringToTop();
 
                 Tweener.scaleAndFlyToGoal(clone, this.getCandyOnFoxPath(this.foxCurrentAt).x, this.getCandyOnFoxPath(this.foxCurrentAt).y, 0, 800, Phaser.Easing.Quadratic.InOut).onComplete.add(function(e) {
-
+                    this.destroyPawAnimation(clone, 0);
                     e.destroy();
                 }, this);
 
@@ -1586,6 +1640,7 @@ class Board extends Phaser.Group {
     }
 
     moveFox() {
+
 
         var foxTile, nextFoxTile;
 
@@ -1601,22 +1656,46 @@ class Board extends Phaser.Group {
 
         var nextCandy = this.getCandyOnFoxPath(this.foxCurrentAt);
 
+
+        if (nextCandy == undefined || nextCandy == -1 || nextCandy == null) {
+            return;
+        }
         if (nextCandy.id == 'chest') {
-            var chestClone = new Phaser.Sprite(this.game, 0, 0, 'chest');
+            var chestClone1 = new Phaser.Sprite(this.game, 0, 0, 'chest');
 
-            chestClone.scale.x = nextCandy.width / (chestClone.width / chestClone.scale.x);
-            chestClone.scale.y = chestClone.scale.y;
-            chestClone.anchor.set(0.5);
+            chestClone1.scale.x = nextCandy.width / (chestClone1.width / chestClone1.scale.x);
+            chestClone1.scale.y = chestClone1.scale.x;
+            chestClone1.anchor.set(0.5);
 
-            chestClone.x = nextCandy.x;
-            chestClone.y = nextCandy.y;
+            chestClone1.x = nextCandy.x;
+            chestClone1.y = nextCandy.y;
 
-            // this.game.add.existing(chestClone);
-            this.add(chestClone);
+            // this.game.add.existing(chestClone1);
+            this.add(chestClone1);
             this.bringToTop(fox);
-            this.animateChest(chestClone);
+
+            var chestClone2 = new Phaser.Sprite(this.game, 0, 0, 'chest');
+
+            chestClone2.scale.x = nextCandy.width * 1.05 / (chestClone2.width / chestClone2.scale.x);
+            chestClone2.scale.y = chestClone2.scale.x;
+            chestClone2.anchor.set(0.5);
+
+            chestClone2.x = nextCandy.worldPosition.x;
+            chestClone2.y = nextCandy.worldPosition.y;
+
+            chestClone2.alpha = 0;
+            this.game.add.existing(chestClone2);
+
+
+            this.animateChest(chestClone1, chestClone2);
+
+
 
             nextCandy.alpha = 0;
+
+            // fox.setWinTrue();
+
+            this.finished = true;
 
 
             this.onSuccess.dispatch();
@@ -1624,16 +1703,16 @@ class Board extends Phaser.Group {
 
 
         }
-        this.game.time.events.add(100, function() {
-            this.swapCandies(fox, nextCandy);
-        }, this);
+        // this.game.time.events.add(100, function() {
+        this.swapCandies(fox, nextCandy);
+        // }, this);
 
 
 
 
     }
 
-    animateChest(chest) {
+    animateChest(chest, chestClone) {
 
         var chestInitialScale = chest.scale.x;
 
@@ -1644,46 +1723,57 @@ class Board extends Phaser.Group {
 
         newChest.alpha = 0;
 
+
         this.game.add.existing(newChest);
 
-        this.playAudio('magic_time_appear', {
-                    loop: false,
-                    volume: 1,
-                })
+        this.game.time.events.add(1000, function() {
+
+            this.playAudio('magic_time_appear', {
+                loop: false,
+                volume: 1,
+            })
+        }, this);
+
 
         var _this = this;
 
-        // chest.scale.x *= 0.9
-        // chest.scale.y = chest.scale.x;
+        // this.chestClone = chestClone;
 
-        Tweener.scaleTo(chest, chestInitialScale* 1.05, chestInitialScale* 1.05, 500, 500, Phaser.Easing.Quadratic.InOut).onComplete.add(function() {
-            Tweener.moveTo(chest, 'chest-final', 500, 800, Phaser.Easing.Quadratic.InOut, function(e) {
-                // e.alpha = 0;
-                
-                newChest.scale.x = e.width / (newChest.width / newChest.scale.x);
-                newChest.scale.x = e.scale.y;
-                newChest.x = e.x;
-                newChest.y = e.y;
-                e.destroy();
-                newChest.alpha = 1;
-                var scale = newChest.scale.x;
-                
-                _this.game.add.tween(newChest.scale).to({
-                    x: [scale * 0.95, scale * 1.05, scale],
-                    y: [scale * 1.05, scale * 0.95, scale],
-                }, 500, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function(){
-                    Tweener.scaleOut(newChest, 1000, 1000, Phaser.Easing.Quadratic.InOut);    
-                })
-                
-                _this.playAudio('chest_opened', {
-                    loop: false,
-                    volume: 1,
-                })
 
-                
+        // Tweener.scaleTo(chest, chestInitialScale * 1.05, chestInitialScale * 1.05, 500, 500, Phaser.Easing.Quadratic.InOut).onComplete.add(function() {
+        this.game.time.events.add(800, function() {
 
-            }, this);
+            chestClone.alpha = 1;
+            chest.alpha = 0;
+        }, this)
+
+        Tweener.moveToContainer(chest, 'chest-final', 500, 800, Phaser.Easing.Quadratic.InOut);
+
+        Tweener.moveToContainer(chestClone, 'chest-final', 500, 800, Phaser.Easing.Quadratic.InOut, function(e) {
+
+            newChest.alpha = 1;
+            chestClone.alpha = 0;
+
+            newChest.x = chestClone.worldPosition.x;
+            newChest.y = chestClone.worldPosition.y;
+            var scale = newChest.scale.x;
+
+            e.game.add.tween(newChest.scale).to({
+                x: [scale * 0.95, scale * 1.05, scale],
+                y: [scale * 1.05, scale * 0.95, scale],
+            }, 500, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function() {
+                Tweener.scaleOut(newChest, 1000, 1000, Phaser.Easing.Quadratic.InOut);
+            })
+
+            _this.playAudio('chest_opened', {
+                loop: false,
+                volume: 1,
+            })
+
+
+
         }, this);
+        // }, this);
 
     }
 
@@ -1875,6 +1965,30 @@ class Board extends Phaser.Group {
 
     }
 
+    destroyPawAnimation(candy, delay) {
+        var circle = new Phaser.Sprite(this.game, 0, 0, 'circle');
+        circle.anchor.set(0.5);
+        circle.x = candy.x;
+        circle.y = candy.y;
+        this.add(circle);
+
+        circle.scale.set(0.01);
+
+        this.game.add.tween(circle.scale).to({
+            x: 1.2,
+            y: 1.2
+        }, 450, Phaser.Easing.Quadratic.Out, true, delay);
+
+        ParticlesUtil.particleExplosion(this.game, ['star'], 'particle-container', 'fox', candy.worldPosition.x, candy.worldPosition.y, 3 + Math.random() * 2);
+
+        this.game.add.tween(circle).to({
+            alpha: [1, 0],
+        }, 150, Phaser.Easing.Quadratic.InOut, true, 300 + delay).onComplete.add(function(circleObj) {
+            circleObj.destroy();
+        }, this);
+
+    }
+
     animateCandyParticles(candy, amount, delay) {
         for (var i = 0; i < amount; i++) {
 
@@ -2037,9 +2151,9 @@ class Board extends Phaser.Group {
             alpha: 0,
         }, 100, Phaser.Easing.Quadratic.InOut, true, finalDuration + finalDelay);
 
-        this.playFishMoveSound();
+        // this.playFishMoveSound();
         this.game.time.events.add(finalDuration - 100 + finalDelay, function() {
-            this.playFishPopSound();
+            // this.playFishPopSound();
         }, this);
 
         return destroyTween;
@@ -2383,7 +2497,7 @@ class Board extends Phaser.Group {
 
                     var color = this.getRandomColor();
 
-                    var special = Math.random() > .8 ? "_paw" : "";
+                    var special = Math.random() > .7 ? "_paw" : "";
 
 
                     // console.log('generate at row', i );
@@ -2440,24 +2554,10 @@ class Board extends Phaser.Group {
                                 if (restart && !this.pause) {
                                     this.respawnCandies();
                                 } else {
-                                    if (!this.pause) {
-                                        if (this.matchInBoard() || this.thereAreAutoTriggerCandies()) {
-                                            this.game.time.events.add(250, function() {
-                                                this.handleMatches();
-                                            }, this);
-                                        } else {
-                                            this.canPick = true;
-                                            this.animateMessage();
 
-                                            var currentCandy = this.getCandyOnFoxPath(this.foxCurrentAt);
+                                    this.onRespawnFinished.dispatch();
 
-                                            if (currentCandy != null && currentCandy.id == 'fox' && currentCandy.getPaws() > 0) {
-                                                this.canPick = false;
-                                                this.moveFox();
-                                            }
-                                        }
-                                        this.setSelectedCandiesToNull();
-                                    }
+
                                 }
                             }
                         } else {
@@ -2599,25 +2699,25 @@ class Board extends Phaser.Group {
         this.game.audioController.play(keyName, src, args);
     }
 
-    playFishMoveSound() {
-        var keyName = "fish_move",
-            src = PiecSettings.assetsDir + 'fish_move.mp3',
-            args = {
-                loop: false,
-                volume: 1,
-            };
-        this.game.audioController.play(keyName, src, args);
-    }
+    // playFishMoveSound() {
+    //     var keyName = "fish_move",
+    //         src = PiecSettings.assetsDir + 'fish_move.mp3',
+    //         args = {
+    //             loop: false,
+    //             volume: 1,
+    //         };
+    //     this.game.audioController.play(keyName, src, args);
+    // }
 
-    playFishPopSound() {
-        var keyName = "fish_pop",
-            src = PiecSettings.assetsDir + 'fish_pop.mp3',
-            args = {
-                loop: false,
-                volume: 1,
-            };
-        this.game.audioController.play(keyName, src, args);
-    }
+    // playFishPopSound() {
+    //     var keyName = "fish_pop",
+    //         src = PiecSettings.assetsDir + 'fish_pop.mp3',
+    //         args = {
+    //             loop: false,
+    //             volume: 1,
+    //         };
+    //     this.game.audioController.play(keyName, src, args);
+    // }
 
     playSoundStripeBlast() {
         var keyName = "line_blast",
@@ -2662,8 +2762,8 @@ class Board extends Phaser.Group {
     }
 
     playSoundColorbombCreated() {
-        var keyName = "colorbomb_created",
-            src = PiecSettings.assetsDir + 'colour_bomb_created.mp3',
+        var keyName = "special_candy_created",
+            src = PiecSettings.assetsDir + 'special_candy_created.mp3',
             args = {
                 loop: false,
                 volume: 1,
@@ -2672,8 +2772,8 @@ class Board extends Phaser.Group {
     }
 
     playSoundStripedCreated() {
-        var keyName = "striped_created",
-            src = PiecSettings.assetsDir + 'striped_created.mp3',
+        var keyName = "special_candy_created_2",
+            src = PiecSettings.assetsDir + 'special_candy_created_2.mp3',
             args = {
                 loop: false,
                 volume: 1,
@@ -2683,7 +2783,7 @@ class Board extends Phaser.Group {
 
     playSoundWrappedCreated() {
         var keyName = "wrapped_created",
-            src = PiecSettings.assetsDir + 'wrapped_created.mp3',
+            src = PiecSettings.assetsDir + 'special_candy_created.mp3',
             args = {
                 loop: false,
                 volume: 1,
@@ -2712,8 +2812,8 @@ class Board extends Phaser.Group {
         this.game.audioController.play(keyName, src, args);
     }
 
-    playAudio(keyName, args){
-        var src =  PiecSettings.assetsDir + keyName + '.mp3';
+    playAudio(keyName, args) {
+        var src = PiecSettings.assetsDir + keyName + '.mp3';
         this.game.audioController.play(keyName, src, args);
     }
 

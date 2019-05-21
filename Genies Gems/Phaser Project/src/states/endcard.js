@@ -66,15 +66,16 @@ class Endcard extends Phaser.State {
         this.board.onSuccess.add(function() {
             // this.numOfInteractions++;
             // if (PiecSettings.endcardAfterXInteractions !== undefined && this.numOfInteractions >= PiecSettings.endcardAfterXInteractions) {
-                this.game.time.events.add(2000, function() {
-                    if (!this.endcardPlayed) {
-                        this.endcard();
-                        this.endcardPlayed = true;
-                        this.game.time.events.add(2500, function() {
-                            parent.postMessage("complete", "*");
-                        }, this);
-                    }
-                }, this);
+            this.game.time.events.add(1000, function() {
+                if (!this.endcardPlayed) {
+                    this.endcard();
+                    this.endcardPlayed = true;
+                    this.game.time.events.add(2500, function() {
+                        console.log('complete');
+                        parent.postMessage("complete", "*");
+                    }, this);
+                }
+            }, this);
             // }
         }, this);
 
@@ -99,6 +100,7 @@ class Endcard extends Phaser.State {
                     this.endcard();
                     this.endcardPlayed = true;
                     this.game.time.events.add(2500, function() {
+                        console.log('complete');
                         parent.postMessage("complete", "*");
                     }, this);
                 }
@@ -118,42 +120,40 @@ class Endcard extends Phaser.State {
     }
 
     animateChars() {
-        var magicCloud = new Phaser.Sprite(this.game, 0, 0, 'magic_cloud');
-        this.game.add.existing(magicCloud);
-        ContainerUtil.fitInContainer(magicCloud, 'characters', 0.5, 0.5);
-        magicCloud.alpha = 0;
-        var magicCloudScale = magicCloud.scale.x;
-
-        magicCloud.scale.x = 0.01;
-        magicCloud.scale.y = magicCloud.scale.x;
-
-        this.game.add.tween(magicCloud.scale).to({
-            x: [magicCloudScale, magicCloudScale * 1.2],
-            y: [magicCloudScale, magicCloudScale * 1.2], 
-        }, 800, Phaser.Easing.Quadratic.InOut, 0, true);
-
-        this.game.add.tween(magicCloud).to({ 
-            alpha: 1
-        }, 800, Phaser.Easing.Quadratic.InOut, 0, true);
 
         var characters = new Phaser.Sprite(this.game, 0, 0, 'characters');
         this.game.add.existing(characters);
         ContainerUtil.fitInContainer(characters, 'characters', 0.5, 0.5);
 
-        
+
         this.game.add.existing(characters);
-        
+
         this.game.world.bringToTop(this.game.cta);
         this.game.world.bringToTop(this.game.ctaText);
 
-        var characterY = characters.y;
+        var characterY = characters.y,
+            originalScale = characters.scale.x;
 
-        this.game.add.tween(characters).to({
-                
-                y: [characterY + characters.height * 0.25],
-                
-        }, 1000, Phaser.Easing.Quadratic.InOut, true, 0).yoyo(0, true);
-            
+        characters.scale.x *= 0.1;
+        characters.scale.y = characters.scale.x;
+
+        characters.y = ContainerUtil.getContainerY('chest-final');
+        this.characters = characters;
+
+        this.game.add.tween(characters.scale).to({
+            x: originalScale,
+            y: originalScale,
+
+        }, 1000, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function() {
+
+            this.game.add.tween(characters).to({
+
+                y: [characterY + characters.height * 0.15],
+
+            }, 1000, Phaser.Easing.Quadratic.InOut, true, 0).yoyo(0, true);
+        }, this);
+
+
     }
 
     animateCandies() {
@@ -187,8 +187,8 @@ class Endcard extends Phaser.State {
 
             var directionX = Math.random() > .5 ? -1 : 1;
             var directionY = Math.random() > .5 ? -1 : 1;
-            particle.x = this.logo.x + (Math.random() / 2 * directionX) * this.logoWidth / 1.5;
-            particle.y = this.logo.y + (Math.random() / 2 * directionY) * this.logoWidth / 4;
+            particle.x = this.characters.x + (Math.random() / 2 * directionX) * this.logoWidth / 1.5;
+            particle.y = this.characters.y + (Math.random() / 2 * directionY) * this.logoWidth / 4;
 
             var randomRotation = Math.random() * 90;
             particle.angle = randomRotation;
@@ -261,22 +261,22 @@ class Endcard extends Phaser.State {
         }
 
         this.game.cta.tween = this.game.add.tween(this.game.cta.scale).to({
-            x: this.game.cta.initialScale * 1.3,
-            y: this.game.cta.initialScale * 1.3,
+            x: this.game.cta.initialScale * 1.2,
+            y: this.game.cta.initialScale * 1.2,
         }, 400, Phaser.Easing.Quadratic.InOut, true, 0);
         var tween = this.game.ctaText.tween = this.game.add.tween(this.game.ctaText.scale).to({
-            x: this.game.ctaText.initialScale * 1.3,
-            y: this.game.ctaText.initialScale * 1.3,
+            x: this.game.ctaText.initialScale * 1.2,
+            y: this.game.ctaText.initialScale * 1.2,
         }, 400, Phaser.Easing.Quadratic.InOut, true, 0);
 
         tween.onComplete.add(function() {
             this.game.cta.tween = this.game.add.tween(this.game.cta.scale).to({
-                x: this.game.cta.initialScale * 1.4,
-                y: this.game.cta.initialScale * 1.4,
+                x: this.game.cta.initialScale * 1.3,
+                y: this.game.cta.initialScale * 1.3,
             }, 400, Phaser.Easing.Quadratic.InOut, true, 0).loop(true).yoyo(true);
             this.game.ctaText.tween = this.game.add.tween(this.game.ctaText.scale).to({
-                x: this.game.ctaText.initialScale * 1.4,
-                y: this.game.ctaText.initialScale * 1.4,
+                x: this.game.ctaText.initialScale * 1.3,
+                y: this.game.ctaText.initialScale * 1.3,
             }, 400, Phaser.Easing.Quadratic.InOut, true, 0).loop(true).yoyo(true);
         }, this);
     }

@@ -1,3 +1,5 @@
+@import '_media-queries';
+
 html {
     height: 100%;
 }
@@ -68,16 +70,21 @@ a {
 }
 
 #fox {
-    width: 30%;
+    width: 15%;
     height: 15%;
 }
 
 #chest-final {
     width: 60%;
-    height: 10%;
+    height: 30%;
     top: 30%;
     left: 0;
     right: 0;
+
+    @include iphoneLandscape() {
+        width: 30%;
+
+    }
 }
 
 #logo {
@@ -87,6 +94,11 @@ a {
     left: 50%;
     transform: translateX(-50%);
     -webkit-transform: translateX(-50%);
+
+    @include iPadPortrait() {
+        width: 60%;
+        top: 5%;
+    }
 }
 
 #message {
@@ -100,15 +112,16 @@ a {
 
 #prompt {
     width: 80%;
-    top: 20%;
+    top: 10%;
     left: 50%;
     height: 9%;
     transform: translateX(-50%);
     -webkit-transform: translateX(-50%);
 }
+
 #prompt2 {
     width: 80%;
-    top: 27%;
+    top: 17%;
     left: 50%;
     height: 9%;
     transform: translateX(-50%);
@@ -122,6 +135,16 @@ a {
     left: 50%;
     transform: translateX(-50%);
     -webkit-transform: translateX(-50%);
+
+    @include iPadPortrait(){
+        width: 85%;
+        top: 1%; 
+    }
+}
+
+#particle-container {
+    width: 10%;
+    height: 5%;
 }
 
 #characters {
@@ -130,6 +153,12 @@ a {
     left: 0;
     right: 0;
     bottom: 50%;
+
+    @include iphoneLandscape() {
+        width: 40%;
+        bottom: 55%;
+
+    }
 }
 
 #hand {
@@ -171,7 +200,7 @@ a {
         height: 11%;
         left: auto;
         right: 4%;
-        bottom: 6.5%;
+        bottom: 5.5%;
         transform: none;
         -webkit-transform: none;
     }
@@ -186,6 +215,7 @@ a {
         top: 10%;
         height: 13%;
     }
+
     #prompt2 {
         width: 60%;
         top: 18%;
@@ -195,6 +225,9 @@ a {
     #board-container {
         width: 90%;
         top: 5%;
+        @include iPhoneXLandscape {
+            width: 75%;
+        }
     }
 
     #yeti {
@@ -206,8 +239,11 @@ a {
     }
 
     #logo {
-        width: 40%;
-        top: 20%;
+        width: 0%;
+        top: 5%;
+        left: 35%;
+
+
     }
 
     #hand {
@@ -219,6 +255,7 @@ a {
         height: 7%;
         top: 0;
         right: 0;
+
     }
 }
 

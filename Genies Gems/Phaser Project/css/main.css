@@ -286,15 +286,18 @@ a {
   left: 80%; }
 
 #fox {
-  width: 30%;
+  width: 15%;
   height: 15%; }
 
 #chest-final {
   width: 60%;
-  height: 10%;
+  height: 30%;
   top: 30%;
   left: 0;
   right: 0; }
+  @media all and (orientation: landscape) {
+    #chest-final {
+      width: 30%; } }
 
 #logo {
   width: 70%;
@@ -303,6 +306,10 @@ a {
   left: 50%;
   transform: translateX(-50%);
   -webkit-transform: translateX(-50%); }
+  @media all and (min-width: 768px) and (orientation: portrait) {
+    #logo {
+      width: 60%;
+      top: 5%; } }
 
 #message {
   width: 80%;
@@ -314,7 +321,7 @@ a {
 
 #prompt {
   width: 80%;
-  top: 20%;
+  top: 10%;
   left: 50%;
   height: 9%;
   transform: translateX(-50%);
@@ -322,7 +329,7 @@ a {
 
 #prompt2 {
   width: 80%;
-  top: 27%;
+  top: 17%;
   left: 50%;
   height: 9%;
   transform: translateX(-50%);
@@ -335,6 +342,14 @@ a {
   left: 50%;
   transform: translateX(-50%);
   -webkit-transform: translateX(-50%); }
+  @media all and (min-width: 768px) and (orientation: portrait) {
+    #board-container {
+      width: 85%;
+      top: 1%; } }
+
+#particle-container {
+  width: 10%;
+  height: 5%; }
 
 #characters {
   width: 80%;
@@ -342,6 +357,10 @@ a {
   left: 0;
   right: 0;
   bottom: 50%; }
+  @media all and (orientation: landscape) {
+    #characters {
+      width: 40%;
+      bottom: 55%; } }
 
 #hand {
   width: 50%; }
@@ -376,7 +395,7 @@ a {
     height: 11%;
     left: auto;
     right: 4%;
-    bottom: 6.5%;
+    bottom: 5.5%;
     transform: none;
     -webkit-transform: none; }
   #message {
@@ -392,14 +411,21 @@ a {
     height: 13%; }
   #board-container {
     width: 90%;
-    top: 5%; }
+    top: 5%;
+    /*iPhone X landscape*/ } }
+  @media all and (orientation: landscape) and (min-aspect-ratio: 724 / 354) and (orientation: landscape) {
+    #board-container {
+      width: 75%; } }
+
+@media all and (orientation: landscape) {
   #yeti {
     width: 45%; }
   #tiffi {
     width: 30%; }
   #logo {
-    width: 40%;
-    top: 20%; }
+    width: 0%;
+    top: 5%;
+    left: 35%; }
   #hand {
     width: 30%; }
   #particle {
@@ -443,37 +469,6 @@ a {
  * ==========================================================================================================
  */
 /* iphone X */
-@media all and (orientation: landscape) {
-  #vungle-header.landscape-light a {
-    color: #ffffff;
-    text-shadow: rgba(0, 0, 0, 0.37) 0 1px 2px; }
-  #vungle-header.landscape-light a:active {
-    color: #b4b4b4; }
-  #vungle-header.landscape-dark a {
-    color: #7e7e7e;
-    text-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px; }
-  #vungle-header.landscape-dark a:active {
-    color: #363636; }
-  #vungle-footer.landscape-center {
-    left: 0;
-    right: 0;
-    margin: auto;
-    text-align: center; }
-  #vungle-footer.landscape-left {
-    left: 5px;
-    right: auto;
-    text-align: left; }
-  #vungle-footer.landscape-right {
-    left: auto;
-    right: 5px;
-    text-align: right; }
-  #vungle-footer.landscape-light span {
-    color: rgba(255, 255, 255, 0.8); }
-  #vungle-footer.landscape-dark span {
-    color: rgba(126, 126, 126, 0.8); }
-  #level-complete {
-    width: 40%; } }
-
 @-webkit-keyframes swinging {
   0% {
     -webkit-transform: rotate(5deg); }

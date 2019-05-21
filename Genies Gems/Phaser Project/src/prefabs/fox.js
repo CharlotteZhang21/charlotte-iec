@@ -18,6 +18,9 @@ class Fox extends Phaser.Group {
 
         this.paws = 0;
 
+        this.canMove = true;
+        this.win = false;
+
         this.initSignals();
 
     }
@@ -34,31 +37,37 @@ class Fox extends Phaser.Group {
         return this.paws;
     }
 
+
     resetStatus(_this, animation) {
        
-
-        var nextAnimation = _this.animationToDo.shift();
+        
+        _this.animationToDo.shift();
 
         if (_this.win) {
             _this.win = false;
-            _this.changeTo('win');
+            _this.changeTo('win', false);
+            _this.animationToDo = []
         } else if (_this.paws <= 0 || animation.key.indexOf('win') != -1) {
-            
-            // console.log(animation.key, 'finished')
-            // console.log(_this.animationToDo)
 
+            if(animation.key.indexOf('win') != -1) {
+                
 
-            if(_this.animationToDo.length > 0 && _this.animationToDo[0] != _this.defaultStatus){
-                 // 
-                _this.changeTo(nextAnimation, false);
+                _this.changeTo(_this.defaultStatus, false);    
+
+            }else if(_this.animationToDo.length > 0 && _this.animationToDo[0] != _this.defaultStatus){
+                var next = _this.animationToDo.shift()
+                              
+                _this.changeTo(next, false);
+
             }else{
+                              
                 _this.changeTo(_this.defaultStatus, false);    
             }
-            
 
             _this.onAnimationFinish.dispatch();
+
         } else {
-            // console.log('SET default TO 0')
+            
 
             _this.fox[_this.defaultStatus].alpha = 0;
         }
@@ -80,7 +89,7 @@ class Fox extends Phaser.Group {
         this.fox[status] = CustomPngSequencesRenderer.playPngSequence(this.game, 'fox-' + status, this, this.resetStatus),
 
 
-            this.add(this.fox[status]);
+        this.add(this.fox[status]);
 
 
 
@@ -109,6 +118,9 @@ class Fox extends Phaser.Group {
 
     moveTo(x, y, duration, delay, direction, win = false) {
 
+        // console.log('move to ', direction);
+        // console.log('win ', this.win)
+
         this.changeTo('jump-' + direction);
 
         this.win = win;
@@ -126,6 +138,7 @@ class Fox extends Phaser.Group {
         if(pushToArray)
             this.animationToDo.push(status);
 
+        // console.log('playing', status)
 
         if (this.fox[status] == undefined || !this.fox[status].persistent) {
 

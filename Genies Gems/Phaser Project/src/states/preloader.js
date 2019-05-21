@@ -21,12 +21,12 @@
          this.game.load.image('5', PiecSettings.assetsDir + 'orange.png');
          this.game.load.image('6', PiecSettings.assetsDir + 'purple.png');
 
-         this.game.load.image('1_blur', PiecSettings.assetsDir + 'red_blur.png');
-         this.game.load.image('2_blur', PiecSettings.assetsDir + 'blue_blur.png');
-         this.game.load.image('3_blur', PiecSettings.assetsDir + 'yellow_blur.png');
-         this.game.load.image('4_blur', PiecSettings.assetsDir + 'green_blur.png');
-         this.game.load.image('5_blur', PiecSettings.assetsDir + 'orange_blur.png');
-         this.game.load.image('6_blur', PiecSettings.assetsDir + 'purple_blur.png');
+         // this.game.load.image('1_blur', PiecSettings.assetsDir + 'red_blur.png');
+         // this.game.load.image('2_blur', PiecSettings.assetsDir + 'blue_blur.png');
+         // this.game.load.image('3_blur', PiecSettings.assetsDir + 'yellow_blur.png');
+         // this.game.load.image('4_blur', PiecSettings.assetsDir + 'green_blur.png');
+         // this.game.load.image('5_blur', PiecSettings.assetsDir + 'orange_blur.png');
+         // this.game.load.image('6_blur', PiecSettings.assetsDir + 'purple_blur.png');
 
          this.game.load.image('1_hor', PiecSettings.assetsDir + 'red_hor.png');
          this.game.load.image('2_hor', PiecSettings.assetsDir + 'blue_hor.png');
@@ -92,6 +92,8 @@
 
          this.game.load.image('chest', PiecSettings.assetsDir + 'chest.png');
          this.game.load.image('chest-open', PiecSettings.assetsDir + 'chest-open.png');
+
+         this.game.load.image('star', PiecSettings.assetsDir + 'star.png');
 
 
          this.game.load.image('btn-yellow', PiecSettings.assetsDir + 'btn_green.png');
