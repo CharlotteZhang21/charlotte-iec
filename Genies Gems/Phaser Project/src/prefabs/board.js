@@ -1921,7 +1921,7 @@ class Board extends Phaser.Group {
             }, randomDuration, Phaser.Easing.Quadratic.InOut, true).loop(true);
 
             this.game.time.events.add(200 + randomDelay, function() {
-                this.playSoundColorbomb();
+                // this.playSoundColorbomb();
             }, this);
         }
 

@@ -40,13 +40,19 @@ class Fox extends Phaser.Group {
 
     resetStatus(_this, animation) {
        
-        
+ 
         _this.animationToDo.shift();
 
         if (_this.win) {
-            _this.win = false;
-            _this.changeTo('win', false);
-            _this.animationToDo = []
+            // _this.win = false;
+    
+            if(!_this.winPlayed){
+    
+                _this.changeTo('win', false);
+                _this.animationToDo = []                
+                _this.winPlayed = true;
+            }
+
         } else if (_this.paws <= 0 || animation.key.indexOf('win') != -1) {
 
             if(animation.key.indexOf('win') != -1) {
@@ -55,12 +61,13 @@ class Fox extends Phaser.Group {
                 _this.changeTo(_this.defaultStatus, false);    
 
             }else if(_this.animationToDo.length > 0 && _this.animationToDo[0] != _this.defaultStatus){
+                
                 var next = _this.animationToDo.shift()
-                              
+                
                 _this.changeTo(next, false);
 
             }else{
-                              
+                                
                 _this.changeTo(_this.defaultStatus, false);    
             }
 
@@ -117,7 +124,9 @@ class Fox extends Phaser.Group {
 
 
     moveTo(x, y, duration, delay, direction, win = false) {
-
+        if(this.win){
+            return;
+        }
         // console.log('move to ', direction);
         // console.log('win ', this.win)
 
