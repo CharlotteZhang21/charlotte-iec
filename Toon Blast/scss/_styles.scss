@@ -1,0 +1,193 @@
+@import '_media-queries';
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-width: 100% auto;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-color: black;
+    /*background-image: url(../assets/bg.jpg);*/
+}
+
+canvas {
+    display: block;
+    cursor: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+#background {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#hand {
+    width: 30%;
+    height: 10%;
+    left: 0;
+    right: 0;
+}
+
+
+#cloud-1 {
+    width: 75%;
+    height: 5%;
+    top: 8%;
+    left: 0;
+    right: 0;
+}
+#cloud-2 {
+    width: 30%;
+    height: 5%;
+    top: 21%;
+    left: 5%;
+}
+#cloud-3 {
+    width: 28%;
+    height: 5%;
+    top: 30%;
+    right: 3%;
+}
+
+/*bruno*/
+#character-1 {
+    width: 45%;
+    height: 5%;
+    top: 38%;
+    left: 0;
+    right: 0;
+}
+/*wally*/
+#character-2 {
+    width: 50%;
+    height: 5%;
+    top: 48%;
+    left: 20%;
+}
+/*cooper*/
+#character-3 {
+    width: 45%;
+    height: 5%;
+    top: 58%;
+    left: 0;
+    right: 0;
+}
+
+
+#fixed-block-1 {
+    
+    width: 15%;
+    height: 10%;
+    top: 59%;
+    left: 10%;
+}
+
+#fixed-block-2 {
+    
+    width: 19%;
+    height: 10%;
+    top: 62%;
+    left: 27%;
+}
+#fixed-block-3 {
+    
+    width: 20%;
+    height: 10%;
+    top: 71%;
+    left: 55%;
+}
+
+
+#random-block-area {
+    width: 100%;
+    height: 20%;
+    // top: 0%
+    bottom: 0;
+}
+
+/*
+ * ==========================================================================================================
+ * PIEC Basic Elements - NO NEED TO TWEAK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
+
+
+
+#wrap {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    background-color: #061628;
+}
+
+#piec-wrap {
+    position: absolute;
+    margin: auto;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.layout-item {
+    position: absolute;
+    margin: auto;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.layout-item img {
+    width: 100%;
+}
+
+#game {
+    position: absolute;
+    margin: auto;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    z-index: 10;
+}
+
+#videoBg {
+    width: 100%;
+    height: 100%;
+    transform-origin: left top;
+    -webkit-transform-origin: left top;
+    overflow-x: hidden;
+    position: absolute;
+}
+
+/*
+ * ==========================================================================================================
+ */
+// @media all and (orientation: landscape) {}
+
+// @media all and (min-width: 768px) and (orientation: portrait) {}
+
+// @media all and (min-height: 768px) and (orientation: landscape) {}
+
+
+
+/* iphone X */
+
+// @media (min-aspect-ratio: 724/354) and (orientation: landscape) {}
