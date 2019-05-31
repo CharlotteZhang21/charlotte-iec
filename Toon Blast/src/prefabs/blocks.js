@@ -1,6 +1,7 @@
 import * as ContainerUtil from '../utils/container-util';
 import * as Util from '../utils/util';
 import CustomText from '../prefabs/custom-text';
+import CustomSprite from '../prefabs/custom-sprite';
 import * as CustomPngSequencesRenderer from '../utils/custom-png-sequences-renderer';
 import * as Tweener from '../utils/tweener';
 
@@ -43,14 +44,11 @@ class Blocks extends Phaser.Group {
                 block = new Phaser.Sprite(this.game, 0, 0, 'block_' + PiecSettings.blocks[Math.floor(Math.random() * 6)]);
                 this.add(block);
 
-                ContainerUtil.fitInContainer(block, 'fixed-block-1', 0, 0);
+                ContainerUtil.fitInContainer(block, 'fixed-block-1', 0.5, 1);
 
                 //j is col, i is row
 
                 var leftBlockCoor, bottomBlock;
-
-                block.x = block.width * j;
-                block.y = block.height * i;
 
 
                 if (i < this.maxRow) {
@@ -58,7 +56,7 @@ class Blocks extends Phaser.Group {
                     bottomBlock = i + 1;
                     block.y = this.blocks[j + ',' + bottomBlock].y - this.blocks[j + ',' + bottomBlock].height * 0.9;
                 } else {
-                    block.y = 0;
+                    block.y = -this.game.global.windowHeight * window.devicePixelRatio * 0.03 * Math.abs(Math.floor(size.length / 2) - j);
                 }
 
 
@@ -66,7 +64,7 @@ class Blocks extends Phaser.Group {
 
                     leftBlockCoor = j - 1;
                     if (this.blocks[leftBlockCoor + ',' + i] != undefined)
-                        block.x = this.blocks[leftBlockCoor + ',' + i].x + this.blocks[leftBlockCoor + ',' + i].width;
+                        block.x = this.blocks[leftBlockCoor + ',' + i].x + this.blocks[leftBlockCoor + ',' + i].width * (1 + 0.1 * Math.random());
                     else {
                         block.x = this.blocks[j + ',' + this.maxRow].x;
                     }
@@ -74,10 +72,13 @@ class Blocks extends Phaser.Group {
                     block.x = 0;
                 }
 
-
-
                 block.scale.x = (1 - Math.abs(j - size.length / 2) / 10) * block.scale.x;
                 block.scale.y = block.scale.x;
+
+
+                block.row = i;
+                block.col = j;
+
 
                 this.blocks[j + ',' + i] = block;
 
@@ -88,7 +89,7 @@ class Blocks extends Phaser.Group {
 
     }
 
-    animateBlocks(){
+    animateBlocks() {
         var index = 0;
         for (var key in this.blocks) {
             var block = this.blocks[key];
@@ -96,16 +97,122 @@ class Blocks extends Phaser.Group {
                 col = key.split(',')[0];
 
 
-            if (row <= this.maxRow / 2 || col==0 || (col == (this.maxCol -1) && row < this.maxRow)) {
+            if (row <= this.maxRow / 2 || col == 0 || (col == (this.maxCol - 1) && row < this.maxRow)) {
 
                 var finalY = block.y;
                 var finalX = block.x;
                 block.y = finalY - this.game.global.windowHeight * window.devicePixelRatio;
-                Tweener.moveTo(block, finalX, finalY,  index++ * 100, 800, Phaser.Easing.Quadratic.In);
+                var originalScale = block.scale.x;
+
+                this.game.add.tween(block.scale).to({
+                    x: [originalScale * 0.98, originalScale * 0.98, originalScale * 1.02, originalScale],
+                    y: [originalScale * 1.02, originalScale * 1.02, originalScale * 0.98, originalScale]
+                }, 400, Phaser.Easing.Quadratic.InOut, true, index * 100 + 400);
+
+
+                Tweener.moveTo(block, finalX, [finalY * 1.05, finalY * 0.95, finalY], index++ * 100, 800, Phaser.Easing.Quadratic.InOut);
             }
 
 
         }
+    }
+
+    levelUp(minigame) {
+        console.log(minigame);
+    }
+
+    explodeAll() {
+
+        for (var key in this.blocks) {
+
+            var particle = this.blocks[key];
+
+            //Rotation
+            var randomRotation = Math.random() * 90;
+            particle.angle = randomRotation;
+
+
+            var delay = Math.random() * 100;
+            var duration = 600 + Math.random() * 200;
+
+            var xRandomDirection = Math.random() - 0.5;
+
+            var yRandomPosition = particle.y - particle.height * (Math.random() * 3);
+
+            var tween = Tweener.moveTo(
+                particle,
+                particle.x + xRandomDirection * particle.width * 15,
+                [yRandomPosition, yRandomPosition + particle.height * (Math.random() * 5)],
+                delay,
+                duration,
+                Phaser.Easing.Quadratic.Out);
+
+            particle.tween = tween;
+
+            //Rotation animation
+            this.game.add.tween(particle).to({
+                angle: randomRotation + xRandomDirection * 25 + 100 * (xRandomDirection < 0 ? -1 : 1),
+            }, duration, Phaser.Easing.Quadratic.InOut, true, delay);
+
+            //Scale down
+            Tweener.scaleOut(particle, duration - 200, 100, Phaser.Easing.Quadratic.In);
+
+            tween.onComplete.add(function(particleSprite) {
+                particleSprite.destroy();
+            });
+            // Tweener.moveTo(this.blocks[key], 0, Math.random() * this.game.global.windowHeight * window.devicePixelRatio, 0, 500 + Math.random() * 300, Phaser.Easing.Quadratic.InOut);
+
+        }
+
+        this.generateSmoke();
+    }
+
+    generateSmoke() {
+        // this.smokes1 = new CustomSprite(this.game, {
+        //     src: 'smoke',
+        //     container: 'smoke-1',
+        //     anchor: {
+        //         x: 0,
+        //         y: 0,
+        //     }
+        // });
+
+        // this.smokes2 = new CustomSprite(this.game, {
+        //     src: 'smoke',
+        //     container: 'smoke-2',
+        //     anchor: {
+        //         x: 0,
+        //         y: 0,
+        //     }
+        // });
+
+        for (var i = 0; i < 50; i++) {
+            var smoke = new CustomSprite(this.game, {
+                src: 'smoke',
+                container: 'smoke',
+                anchor: {
+                    x: 0.5,
+                    y: 0.5,
+                }
+            });
+
+            smoke.scale.x *= (1 + Math.random());
+            smoke.x = ContainerUtil.getRandomXWithinContainer('smoke');
+            smoke.y = ContainerUtil.getRandomYWithinContainer('smoke');
+
+            // this.game.time.events.add(, function() {
+                var delay = Math.random() * i * 50;
+
+                Tweener.fadeIn(smoke, delay, 200 + 100 * Math.random(), Phaser.Easing.Linear.None);
+
+                Tweener.moveTo(smoke, smoke.x + smoke.width * (Math.random() - 0.5), -smoke.height, delay, 1000 + Math.random() * 300, Phaser.Easing.Linear.None)
+                .onComplete.add(function(e){
+                    e.destroy();
+                },this);
+            // }, this);
+
+        }
+
     }
 
 }

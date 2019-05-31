@@ -6,14 +6,22 @@ import * as Tweener from '../utils/tweener';
 import * as CustomPngSequenceRender from '../utils/custom-png-sequences-renderer';
 import AudioController from '../prefabs/audio-controller';
 
+//intereactionElement: the element that will change the status according to the game result
 class PowerUpGame extends Phaser.Group {
-    constructor(game, handGestureController, videoPlayableAudioController, hudElementsController, args) {
+    constructor(game, handGestureController, audioController, args, interactionElement) {
         super(game);
 
         this.initSignals();
         this.args = args;
         this.handGestureController = handGestureController;
-        this.hudElementsController = hudElementsController;
+
+        this.interactionElement = interactionElement;
+
+
+        this.graphics = this.game.add.graphics(0, 0);
+
+
+        // this.hudElementsController = hudElementsController;
         this.poweredUp = false;
         this.completeInitialTween = false;
         this.currentCheckpoint = 0;
@@ -24,6 +32,8 @@ class PowerUpGame extends Phaser.Group {
         this.maxPower = args.valueRange.max;
         this.valueIncrementPerInteraction = args.valueIncrementPerInteraction;
 
+        args.particles.src = this.getParticlesSrc();
+
         if (this.args.checkpoints !== undefined && this.args.checkpoints.length > 1) {
             this.checkpoints = this.args.checkpoints;
         } else {
@@ -33,21 +43,31 @@ class PowerUpGame extends Phaser.Group {
 
         this.particles = [];
 
+        this.canInteract = true;
+
+
         if (args.sounds !== undefined) {
-            this.audioController = videoPlayableAudioController;
+            this.audioController = audioController;
         }
 
         this.initialised = false;
+
+        this.direction = '';
+        this.directionChangeTimes = 0;
+
+        this.disableInteraction(); // disable it untill there are things to interact
 
     }
 
     //Can only be called once!
     init() {
         if (!this.initialised) {
+
             this.createCounter();
             this.createInteractiveArea();
             this.initCounter();
-            this.createFollowFinger();
+            // this.createCurves();
+            // this.createFollowFinger();
             if (this.args.tutorial !== undefined && this.args.tutorial.tagName !== undefined) {
                 this.createTutorial();
             }
@@ -58,7 +78,7 @@ class PowerUpGame extends Phaser.Group {
     initSignals() {
         this.onSuccess = new Phaser.Signal();
         this.onFail = new Phaser.Signal();
-        this.onHudCreate = new Phaser.Signal();
+
     }
 
     createCounter() {
@@ -67,9 +87,7 @@ class PowerUpGame extends Phaser.Group {
             this.args.counter.maxValue = this.args.valueRange.max;
             this.args.counter.minValue = this.args.valueRange.min;
             this.counter = new Counter(this.game, this.args.counter);
-            this.game.time.events.add(10, function() {
-                this.onHudCreate.dispatch(this.args.counter.tag, this.counter);
-            }, this);
+
 
             this.counter.scale.x = 0.01;
             this.counter.scale.y = 0.01;
@@ -86,14 +104,18 @@ class PowerUpGame extends Phaser.Group {
     initCounter() {
         if (this.args.valueDecreasePerHalfSecond > 0) {
             this.game.time.events.loop(500, function() {
-                if (!this.poweredUp)
+                if (!this.poweredUp) {
                     this.decreasePower(this.args.valueDecreasePerHalfSecond);
+                    // this.interactionElement.decreaseCoins();
+                }
             }, this);
         }
         if (this.args.valueDecreasePerQuarterSecond > 0) {
             this.game.time.events.loop(250, function() {
-                if (!this.poweredUp)
+                if (!this.poweredUp) {
                     this.decreasePower(this.args.valueDecreasePerQuarterSecond);
+                    // this.interactionElement.decreaseCoins();
+                }
             }, this);
         }
         this.initAutoplayEvent();
@@ -157,19 +179,107 @@ class PowerUpGame extends Phaser.Group {
         this.button.inputEnabled = true;
         this.button.input.useHandCursor = true;
         this.button.events.onInputDown.add(function() {
-            this.increasePower(this.valueIncrementPerInteraction);
-            if (this.args.particles !== undefined && this.args.particles.src !== undefined && this.args.particles.htmlTag !== undefined && this.args.particles.src.length > 0) {
+            if (this.canInteract) {
+                this.increasePower(this.valueIncrementPerInteraction);
+                if (this.args.particles !== undefined && this.args.particles.src !== undefined && this.args.particles.htmlTag !== undefined && this.args.particles.src.length > 0) {
 
-                if (this.args.particles.effect !== undefined && !this.poweredUp) {
-                    this.playEffect(this.args.particles.effect);
-                }
+                    if (this.args.particles.effect !== undefined && !this.poweredUp) {
+                        this.playEffect(this.args.particles.effect);
+                    }
 
-                if (this.args.sounds !== undefined && this.args.sounds.interact !== undefined) {
-                    this.audioController.playAudio(this.args.sounds.interact + "_" + audioIndex, PiecSettings.assetsDir + this.args.sounds.interact);
-                    audioIndex++;
+                    if (this.args.sounds !== undefined && this.args.sounds.interact !== undefined) {
+                        this.audioController.play(this.args.sounds.interact + "_" + audioIndex, PiecSettings.assetsDir + this.args.sounds.interact);
+                        audioIndex++;
+                    }
                 }
             }
+
         }, this);
+    }
+
+    // createCurves() {
+    //     this.curvePathStart = null;
+
+    //     this.game.input.onDown.add(this.onDown, this);
+
+    //     this.game.input.onUp.add(this.onUp, this);
+
+    //     this.game.input.addMoveCallback(this.updatePath, this);
+    // }
+
+    onUp() {
+
+        this.canDrawPath = false;
+
+        this.audioController.setCanPlay();
+
+        this.graphics.clear();
+
+        // this.updatePath();
+    }
+
+    onDown() {
+
+        this.canDrawPath = true;
+    }
+
+
+    updatePath() {
+
+        if (Util.isPortrait()) {
+            this.graphics.lineStyle(20, '0xffffff', 1);
+        } else {
+            this.graphics.lineStyle(10, '0xffffff', 1);
+        }
+
+
+
+        if (this.curvePathStart == null) {
+            this.graphics.moveTo(this.getGameXInput(), this.getGameYInput());
+            this.curvePathStart = {
+                x: this.getGameXInput(),
+                y: this.getGameYInput(),
+            }
+        } else {
+            this.drawLineToPoint(this.prevX, this.prevY, this.getGameXInput(), this.getGameYInput())
+        }
+
+        var direction;
+
+        if (this.prevX < this.getGameXInput()) {
+            direction = 'LEFT';
+        } else {
+            direction = 'RIGHT';
+        }
+
+        if (this.direction != direction) {
+            //play sound when direction change
+            if (this.args.sounds !== undefined && this.args.sounds.interact !== undefined) {
+                this.audioController.play(this.args.sounds.interact, PiecSettings.assetsDir + this.args.sounds.interact, { "loop": false });
+            }
+
+            this.direction = direction;
+            this.directionChangeTimes++;
+        }
+
+        //every 2 times of the direction change, redo the lines
+        if (this.directionChangeTimes > 2) {
+            this.graphics.clear();
+            this.directionChangeTimes = 0;
+            this.graphics.moveTo(this.getGameXInput(), this.getGameYInput());
+            this.curvePathStart = {
+                x: this.getGameXInput(),
+                y: this.getGameYInput(),
+            }
+        }
+        this.prevX = this.getGameXInput();
+        this.prevY = this.getGameYInput();
+    }
+
+    drawLineToPoint(prevX, prevY, newX, newY) {
+
+        this.graphics.lineTo(newX, newY);
+
     }
 
     createFollowFingerSprite() {
@@ -191,9 +301,10 @@ class PowerUpGame extends Phaser.Group {
     }
 
     createTutorial() {
-        this.tutorialElement = this.hudElementsController.hudObjects[this.args.tutorial.tagName];
+        this.tutorialElement = new Phaser.Sprite(this.game, 0, 0, this.args.tagName);
+        ContainerUtil.fitInContainer(this.tutorialElement, 'hand', 0.5, 0.5);
 
-        this.tutorialElement.show();
+        this.game.add.existing(this.tutorialElement);
 
         var spawnContainer = this.args.htmlTag;
         if (this.args.tutorial.htmlTagSpawn !== undefined)
@@ -251,10 +362,16 @@ class PowerUpGame extends Phaser.Group {
         x = x1;
         y = y1;
 
-        Tweener.moveTo(this.tutorialElement, x2, y2, 0, 350, Phaser.Easing.Quadratic.InOut).onComplete.add(function() {
-            x = x2;
-            y = y2;
-        }, this);
+        this.tutorialTween = Tweener.moveTo(this.tutorialElement, x2, y2, 0, 350, Phaser.Easing.Quadratic.InOut);
+
+        if (this.tutorialTween)
+            this.tutorialTween.onComplete.add(function() {
+                x = x2;
+                y = y2;
+            }, this);
+
+
+        var tutorialLoopTween;
 
         this.tutorialLoop = this.game.time.events.loop(400, function() {
             if (x == x1)
@@ -265,7 +382,11 @@ class PowerUpGame extends Phaser.Group {
                 y = y2;
             else
                 y = y1;
-            var tween = Tweener.moveTo(this.tutorialElement, x, y, 0, 500, Phaser.Easing.Quadratic.InOut);
+
+            if (this.tutorialElement != null) {
+                tutorialLoopTween = Tweener.moveTo(this.tutorialElement, x, y, 0, 500, Phaser.Easing.Quadratic.InOut);
+
+            }
         }, this);
     }
 
@@ -300,6 +421,15 @@ class PowerUpGame extends Phaser.Group {
         Tweener.swipe(this.tutorialElement, 0, 600, Phaser.Easing.Quadratic.InOut, 300, swipeDirection);
     }
 
+    getParticlesSrc() {
+        // if(this.interactionElement.getCurrentLevel() != undefined && this.interactionElement.getCurrentLevel().flyingParticles != undefined){
+        //     return this.interactionElement.getCurrentLevel().flyingParticles;
+        // }else {
+        return this.args.particles.src;
+        // }
+
+    }
+
     playEffect(effect) {
 
         var inputX = this.getGameXInput();
@@ -307,6 +437,14 @@ class PowerUpGame extends Phaser.Group {
 
         if (this.game != null) {
             switch (effect) {
+                case 'explodeInCircle': 
+                    ParticlesUtil.particleExplosion(this.game, this.args.particles.src, 'single-particle-container', this.args.particles.htmlTag, inputX, inputY, 10);
+                    break;
+                // case 'cropsHarvest': //customised for idle farming, it can call the interaction elements animation
+                //     this.args.particles.src = this.getParticlesSrc();
+                //     ParticlesUtil.particleBurst(this.game, this.args.particles.src, this.args.particles.htmlTag, ContainerUtil.getXCenterWithinContainer(this.interactionElement.getContainer()), ContainerUtil.getYCenterWithinContainer(this.interactionElement.getContainer()), Math.round(1 * Math.random()));
+                //     this.interactionElement.harvest();
+                //     break;
                 case "burst":
                     ParticlesUtil.particleBurst(this.game, this.args.particles.src, this.args.particles.htmlTag, inputX, inputY, 10);
                     break;
@@ -339,7 +477,7 @@ class PowerUpGame extends Phaser.Group {
                     ParticlesUtil.particleRain(this.game, this.args.particles.src, this.args.particles.htmlTag, this.args.particles.htmlTagGoal, inputX, inputY, 15, 0, 10);
                     break;
                 case "glitterBurst":
-                    ParticlesUtil.particleRain(this.game, this.args.particles.src, this.args.particles.htmlTag, this.args.particles.htmlTagGoal, inputX, inputY, 15, 10, 40);
+                    ParticlesUtil.particleRain(this.game, this.args.particles.src, this.args.particles.htmlTag, this.args.particles.htmlTagGoal, inputX, inputY, 8, 20, 30);
                     break;
                 default:
                     ParticlesUtil.particleBurst(this.game, this.args.particles.src, this.args.particles.htmlTag, inputX, inputY, 10);
@@ -370,6 +508,7 @@ class PowerUpGame extends Phaser.Group {
 
     swipeDetected(direction) {
         var swipeDirection = this.args.typeOfInteraction;
+
         if (swipeDirection == "swipeUp" && direction == "UP") {
             this.increasePower(this.valueIncrementPerInteraction);
         } else if (swipeDirection == "swipeDown" && direction == "DOWN") {
@@ -388,9 +527,14 @@ class PowerUpGame extends Phaser.Group {
             this.increasePower(this.valueIncrementPerInteraction);
         }
         if (this.args.sounds !== undefined && this.args.sounds.interact !== undefined) {
-            this.audioController.playAudio(this.args.sounds.interact + "_" + this.audioIndex, PiecSettings.assetsDir + this.args.sounds.interact);
+            this.audioController.play(this.args.sounds.interact + "_" + this.audioIndex, PiecSettings.assetsDir + this.args.sounds.interact);
             this.audioIndex++;
         }
+
+
+
+
+
     }
 
     createScratchInteractiveArea() {
@@ -400,6 +544,14 @@ class PowerUpGame extends Phaser.Group {
         this.game.time.events.loop(100, function() {
             this.updateCounter = true;
         }, this);
+
+        this.curvePathStart = null;
+
+        this.game.input.onDown.add(this.onDown, this);
+
+        this.game.input.onUp.add(this.onUp, this);
+
+        // this.game.input.addMoveCallback(this.updatePath, this);
 
         this.game.input.addMoveCallback(this.updateCounterOnMove, this);
 
@@ -454,12 +606,17 @@ class PowerUpGame extends Phaser.Group {
     }
 
     updateCounterOnMove() {
-        if (this.updateCounter) {
-            this.increasePower(this.valueIncrementPerInteraction);
-            if (this.args.particles !== undefined)
-                this.playEffect(this.args.particles.effect);
-            this.updateCounter = false;
+        if (this.canInteract) {
+            this.updatePath();
+            if (this.updateCounter) {
+                this.increasePower(this.valueIncrementPerInteraction);
+                if (this.args.particles !== undefined)
+                    this.playEffect(this.args.particles.effect);
+                this.updateCounter = false;
+            }
+
         }
+
     }
 
     fingerSpriteFollowPositionDown() {
@@ -469,7 +626,7 @@ class PowerUpGame extends Phaser.Group {
             this.followFingerSprite.y = this.getGameYInput();
         }
         if (this.args.sounds !== undefined && this.args.sounds.interact !== undefined) {
-            this.audioController.playAudio(this.args.sounds.interact, PiecSettings.assetsDir + this.args.sounds.interact, { "loop": true });
+            this.audioController.play(this.args.sounds.interact, PiecSettings.assetsDir + this.args.sounds.interact, { "loop": true });
         }
     }
 
@@ -486,7 +643,7 @@ class PowerUpGame extends Phaser.Group {
         if (this.followFingerSprite && !this.followFingerSpritePersistent)
             this.followFingerSprite.alpha = 0;
         if (this.args.sounds !== undefined && this.args.sounds.interact !== undefined) {
-            this.audioController.pauseAudio(this.args.sounds.interact);
+            this.audioController.pause(this.args.sounds.interact);
         }
     }
 
@@ -494,8 +651,10 @@ class PowerUpGame extends Phaser.Group {
         if (this.followFingerSprite) {
             this.followFingerSprite.angle = Util.getAngleBetweenTwoPoints(this.followFingerSprite.x, this.followFingerSprite.y, x, y) + 90;
         }
+
+
         if (this.args.sounds !== undefined && this.args.sounds.interact !== undefined) {
-            this.audioController.playAudio(this.args.sounds.interact, PiecSettings.assetsDir + this.args.sounds.interact, { "loop": true });
+            this.audioController.play(this.args.sounds.interact, PiecSettings.assetsDir + this.args.sounds.interact, { "loop": true });
         }
     }
 
@@ -506,8 +665,21 @@ class PowerUpGame extends Phaser.Group {
             }, 300, Phaser.Easing.Quadratic.Out, true, 0);
         }
         if (this.args.sounds !== undefined && this.args.sounds.interact !== undefined) {
-            this.audioController.pauseAudio(this.args.sounds.interact);
+            this.audioController.pause(this.args.sounds.interact);
         }
+    }
+
+    disableInteraction() {
+        this.canInteract = false;
+        if (this.graphics != null)
+            this.graphics.clear();
+        console.log('disableInteraction');
+    }
+
+    enableInteraction() {
+        this.canInteract = true;
+
+        console.log('enableInteraction');
     }
 
     increasePower(amount) {
@@ -525,6 +697,22 @@ class PowerUpGame extends Phaser.Group {
             if (this.currentPower == nextCheckpointAmount && !this.poweredUp) {
                 Tweener.pulseOnce(this.counter, 0, 300, Phaser.Easing.Quadratic.InOut);
                 this.game.time.events.remove(this.autoplayEvent);
+                this.interactionElement.levelUp(this);
+
+                if (this.args.sounds !== undefined && this.args.sounds.interact !== undefined) {
+
+                    this.audioController.pause(this.args.sounds.interact);
+                }
+
+                // if (this.args.sounds !== undefined && this.args.sounds.upgrade !== undefined) {
+                //     this.audioController.play(this.args.sounds.upgrade);
+                // }
+
+                if (this.args.sounds !== undefined && this.args.sounds.upgrade !== undefined) {
+                    this.audioController.play(this.args.sounds.upgrade + "_" + this.audioIndex, PiecSettings.assetsDir + this.args.sounds.upgrade);
+                    this.audioIndex++;
+                }
+
                 // console.log("dispatching on success on arrival with power " + this.currentPower);
                 this.dispatchOnSuccess();
             }
@@ -532,23 +720,45 @@ class PowerUpGame extends Phaser.Group {
             if (this.currentPower == this.maxPower && !this.poweredUp) {
                 Tweener.pulseOnce(this.counter, 0, 300, Phaser.Easing.Quadratic.InOut);
                 // console.log("dispatching on success on completion " + this.currentPower);
+
                 this.dispatchOnSuccess();
             }
         }
         this.counter.setCounterTo(Math.min(this.currentPower, this.maxPower));
 
-        if (this.currentCheckpoint == this.checkpoints.length - 1) {
-            this.scaleCounter(1.4);
+
+
+        if (this.currentCheckpoint == this.checkpoints.length - 1 && (this.args.cancelScaleAni == undefined || !this.args.cancelScaleAni)) {
+
+            if (Util.isPortrait()) {
+                this.scaleCounter(1.3);
+            } else {
+                this.scaleCounter(1.1);
+            }
+
+
         }
 
         this.cancelTutorial();
     }
 
     dispatchOnSuccess() {
-        if (this.currentPower == this.maxPower)
+        if (this.currentPower == this.maxPower) {
             this.poweredUp = true;
+        }
         this.clearParticles();
+
         this.onSuccess.dispatch(this, Math.max(0, this.currentCheckpoint - 1));
+    }
+
+
+    //for disappear the UI
+    slideOutCounter() {
+        //sprite, delay, duration, easing
+        Tweener.slideOutUp(this.counter, 0, 800, Phaser.Easing.Back.In).onComplete.add(function(e){
+            // e.alpha = 0;
+            // e.destroy();
+        }, this);
     }
 
     getCheckpointAmount(checkpointIndex) {
@@ -560,6 +770,8 @@ class PowerUpGame extends Phaser.Group {
         if (this.checkpoints.length > 1)
             this.currentCheckpoint++;
     }
+
+
 
     decreasePower(amount) {
         if (!this.poweredUp) {
@@ -574,7 +786,7 @@ class PowerUpGame extends Phaser.Group {
             }
 
             this.counter.setCounterTo(this.currentPower);
-            if (this.currentPower <= this.maxPower * 1 / 2) {
+            if (this.currentPower <= this.maxPower * 1 / 2 && (this.args.cancelScaleAni == undefined || !this.args.cancelScaleAni)) {
                 this.scaleCounter(1);
             }
         }
@@ -592,15 +804,22 @@ class PowerUpGame extends Phaser.Group {
                 x: scale,
                 y: scale,
             }, 400, Phaser.Easing.Linear.None, true, 0);
+
         }
     }
 
     cancelTutorial() {
+        if (this.tutorialTween) {
+            this.tutorialTween.stop(false);
+        }
         if (this.tutorialLoop) {
             this.game.time.events.remove(this.tutorialLoop);
         }
         if (this.tutorialElement) {
-            this.tutorialElement.hide();
+            Tweener.fade(this.tutorialElement, 0, 0, 200, Phaser.Easing.Linear.None, true, function(e) {
+                e.destroy();
+            });
+
         }
     }
 
@@ -674,7 +893,7 @@ class PowerUpGame extends Phaser.Group {
                 this.cancelTutorial();
 
                 if (this.args.sounds !== undefined && this.args.sounds.interact !== undefined) {
-                    this.audioController.pauseAudio(this.args.sounds.interact);
+                    this.audioController.pause(this.args.sounds.interact);
                 }
 
                 tween = this.followFingerSpriteFlyOut();

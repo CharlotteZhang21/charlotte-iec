@@ -210,7 +210,7 @@ export function particleShoot(game, particlesSrc, particleContainer, x, y, amoun
 function getRandomParticleFromArray(game, particlesSrc) {
     var randomParticleSrc = particlesSrc[Math.min(Math.floor(Math.random() * particlesSrc.length), particlesSrc.length - 1)];
     if (randomParticleSrc.indexOf(".png") != -1) {
-        return new Phaser.Sprite(game, 0, 0, randomParticleSrc);
+        return new Phaser.Sprite(game, 0, 0, randomParticleSrc.split('.')[0]);
     } else { //png sequence!
         return CustomPngSequenceRender.playPngSequence(game, randomParticleSrc, null);
     }

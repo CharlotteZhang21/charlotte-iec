@@ -287,7 +287,7 @@ export function jiggle(sprite, xScalar, yScalar, duration, yoyo = true) {
         delay, -1).yoyo(yoyo, 0);
 }
 
-export function jiggleAngle(sprite, angle, duration, delay = 0, anchorX, anchorY) {
+export function jiggleAngle(sprite, angle, duration, delay = 0, anchorX, anchorY, loop = -1) {
 
     angle = angle || 10;
 
@@ -304,14 +304,16 @@ export function jiggleAngle(sprite, angle, duration, delay = 0, anchorX, anchorY
         sprite.anchor.y = anchorY;
 
 
-    sprite.game.add.tween(sprite).to({
+    return sprite.game.add.tween(sprite).to({
             angle: newAngle
         },
         duration,
         Phaser.Easing.Linear.None,
         true,
-        delay, -1).yoyo(true, 0);
+        delay, loop).yoyo(true, 0);
 }
+
+
 
 
 
@@ -612,6 +614,8 @@ export function smallSwipeUpDown(sprite, delay, duration, easing) {
     }, this);
 }
 
+
+
 export function slideInDown(sprite, delay, duration, easing) {
     var yOffset = sprite.height * 2 * (-1);
     return this.slideIn(sprite, 0, yOffset, delay, duration, easing);
@@ -647,6 +651,25 @@ export function slideIn(sprite, xOffset, yOffset, delay, duration, easing) {
     }, duration, easing, true, delay);
 }
 
+export function slideOutUp(sprite, delay, duration, easing){
+
+    var yOffset = sprite.height * (-1);
+
+    return this.slideOut(sprite, 0, yOffset, delay, duration, easing);
+
+}
+
+export function slideOut(sprite, xOffset, yOffset, delay, duration, easing) {
+
+    this.fadeOut(sprite, duration / 2, duration / 2, Phaser.Easing.Quadratic.InOut);
+
+    return sprite.game.add.tween(sprite).to({
+        x: sprite.x + xOffset,
+        y: sprite.y + yOffset,
+        // alpha: 0
+    }, duration, easing, true, delay);
+}
+
 export function pulse(sprite, delay, duration, easing) {
     var initialScale = sprite.scale.x;
 
@@ -676,4 +699,27 @@ export function rubberBand(sprite, delay, duration, easing) {
         x: initialScale,
         y: initialScale,
     }, duration, easing, true, delay);
+}
+
+export function characterScare(sprite, delay, duration, easing) {
+
+    var initialScale = sprite.scale.x;
+
+
+    return sprite.game.add.tween(sprite.scale).to({
+
+        x: [initialScale * .9, initialScale],
+        y: [initialScale * 1.1, initialScale]
+    }, duration, easing, true, delay);
+}
+
+export function characterBreath(sprite, delay, duration, easing) {
+
+    var initialScale = sprite.scale.x;
+
+    return sprite.game.add.tween(sprite.scale).to({
+
+        x: initialScale * 1.02,
+        y: initialScale * .98
+    }, duration, easing, true, delay, -1).yoyo(true, 0);
 }

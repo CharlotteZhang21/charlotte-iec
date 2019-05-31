@@ -170,24 +170,23 @@ a {
 
 /*bruno*/
 #character-1 {
-  width: 45%;
+  width: 55%;
   height: 5%;
-  top: 38%;
-  left: 0;
-  right: 0; }
+  top: 55%;
+  left: 25%; }
 
 /*wally*/
 #character-2 {
   width: 50%;
   height: 5%;
-  top: 48%;
-  left: 20%; }
+  top: 57%;
+  left: 18%; }
 
 /*cooper*/
 #character-3 {
   width: 45%;
   height: 5%;
-  top: 58%;
+  top: 64%;
   left: 0;
   right: 0; }
 
@@ -210,9 +209,145 @@ a {
   left: 55%; }
 
 #random-block-area {
-  width: 100%;
+  width: 90%;
   height: 20%;
+  left: 0;
+  right: 0;
+  bottom: 8%; }
+
+/*======== power up game =========*/
+#anvil {
+  width: 30%;
+  height: 10%;
+  top: 2%;
+  right: 5%; }
+  #anvil-final {
+    width: 30%;
+    height: 10%;
+    top: 70%;
+    left: 0;
+    right: 0; }
+
+#powerup-container {
+  width: 70%;
+  height: 50%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0; }
+  @media all and (orientation: landscape) {
+    #powerup-container {
+      width: 80%; } }
+
+#powerup-container-spawn {
+  width: 50%;
+  height: 20%;
+  top: 50%;
+  left: 0;
+  right: 0; }
+
+#powerup-counter {
+  top: 1%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 15%; }
+  @media all and (orientation: landscape) {
+    #powerup-counter {
+      width: 50%; } }
+  @media all and (min-width: 768px) and (orientation: portrait) {
+    #powerup-counter {
+      top: 65%; } }
+  #powerup-counter-text {
+    width: 16%;
+    height: 3%;
+    top: 77.5%;
+    left: 0%;
+    right: 6.5%; }
+  #powerup-counter-fill {
+    top: 3.8%;
+    width: 72%;
+    height: 3.5%;
+    left: 0;
+    right: 14.3%;
+    /*iPhone X landscape*/
+    /*iPhone X portrait*/ }
+    @media all and (orientation: landscape) {
+      #powerup-counter-fill {
+        width: 28.5%;
+        right: 3.8%;
+        top: 79.3%; } }
+    @media all and (min-width: 768px) and (orientation: portrait) {
+      #powerup-counter-fill {
+        top: 71.3%; } }
+    @media all and (min-height: 768px) and (orientation: landscape) {
+      #powerup-counter-fill {
+        top: 77%; } }
+    @media (min-aspect-ratio: 724 / 354) and (orientation: landscape) {
+      #powerup-counter-fill {
+        width: 28;
+        top: 80.8%; } }
+    @media (min-device-height: 724px) and (max-device-width: 376px) and (min-aspect-ratio: 354 / 724) and (orientation: portrait) {
+      #powerup-counter-fill {
+        top: 74.3%; } }
+  #powerup-counter-icon {
+    width: 18%;
+    height: 10%;
+    top: 0.5%;
+    right: 45%; }
+    @media all and (orientation: landscape) {
+      #powerup-counter-icon {
+        width: 12%;
+        top: 72.5%; } }
+    @media all and (min-width: 768px) and (orientation: portrait) {
+      #powerup-counter-icon {
+        top: 67%; } }
+
+#single-particle-container {
+  width: 5%;
+  height: 5%; }
+
+#particle-container {
+  width: 10%;
+  height: 10%;
+  left: 0;
+  right: 0;
+  top: 0;
   bottom: 0; }
+  @media all and (orientation: landscape) {
+    #particle-container {
+      width: 10%;
+      height: 10%; } }
+
+#particle-container-goal {
+  height: 10%;
+  width: 100%;
+  bottom: 0; }
+
+#cta-container {
+  width: 50%;
+  height: 5%;
+  right: 50%;
+  bottom: 8%;
+  transform: translate(50%, 50%); }
+
+#cta-text {
+  width: 45%;
+  height: 8%;
+  right: 50%;
+  bottom: 9.5%;
+  transform: translate(50%, 50%); }
+
+#smoke {
+  width: 100%;
+  height: 40%;
+  bottom: 0; }
+
+#crack {
+  width: 90%;
+  height: 10%;
+  left: 12.5%;
+  bottom: 12%; }
 
 /*
  * ==========================================================================================================
