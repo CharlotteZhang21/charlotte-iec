@@ -22,14 +22,14 @@ class Blocks extends Phaser.Group {
     }
 
     initSignals() {
-        // this.onAnimationFinish = new Phaser.Signal();
+        this.onBlocksFinished = new Phaser.Signal();
     }
 
 
     createRandomBlocks() {
         var block;
 
-        var size = PiecSettings.blockArraySize;
+        var size = Util.isPortrait()? PiecSettings.blockArraySize.portrait : PiecSettings.blockArraySize.landscape;
 
         this.maxCol = size.length;
 
@@ -56,6 +56,7 @@ class Blocks extends Phaser.Group {
                     bottomBlock = i + 1;
                     block.y = this.blocks[j + ',' + bottomBlock].y - this.blocks[j + ',' + bottomBlock].height * 0.9;
                 } else {
+
                     block.y = -this.game.global.windowHeight * window.devicePixelRatio * 0.03 * Math.abs(Math.floor(size.length / 2) - j);
                 }
 
@@ -91,6 +92,7 @@ class Blocks extends Phaser.Group {
 
     animateBlocks() {
         var index = 0;
+        var lastTween = null;
         for (var key in this.blocks) {
             var block = this.blocks[key];
             var row = key.split(',')[1],
@@ -101,7 +103,14 @@ class Blocks extends Phaser.Group {
 
                 var finalY = block.y;
                 var finalX = block.x;
-                block.y = finalY - this.game.global.windowHeight * window.devicePixelRatio;
+
+                if(Util.isPortrait()){
+                    block.y = finalY - this.game.global.windowHeight * window.devicePixelRatio;    
+                }else {
+                    block.y = finalY - this.game.global.windowHeight * window.devicePixelRatio * 1.6;    
+                }
+
+                
                 var originalScale = block.scale.x;
 
                 this.game.add.tween(block.scale).to({
@@ -110,15 +119,22 @@ class Blocks extends Phaser.Group {
                 }, 400, Phaser.Easing.Quadratic.InOut, true, index * 100 + 400);
 
 
-                Tweener.moveTo(block, finalX, [finalY * 1.05, finalY * 0.95, finalY], index++ * 100, 800, Phaser.Easing.Quadratic.InOut);
+                lastTween = Tweener.moveTo(block, finalX, [finalY * 1.05, finalY * 0.95, finalY], index++ * 100, 800, Phaser.Easing.Quadratic.InOut);
+
             }
 
 
         }
+
+        lastTween.onComplete.add(function(){
+            
+            this.onBlocksFinished.dispatch();
+        }, this);
+
     }
 
     levelUp(minigame) {
-        console.log(minigame);
+        
     }
 
     explodeAll() {
@@ -168,24 +184,7 @@ class Blocks extends Phaser.Group {
     }
 
     generateSmoke() {
-        // this.smokes1 = new CustomSprite(this.game, {
-        //     src: 'smoke',
-        //     container: 'smoke-1',
-        //     anchor: {
-        //         x: 0,
-        //         y: 0,
-        //     }
-        // });
-
-        // this.smokes2 = new CustomSprite(this.game, {
-        //     src: 'smoke',
-        //     container: 'smoke-2',
-        //     anchor: {
-        //         x: 0,
-        //         y: 0,
-        //     }
-        // });
-
+    
         for (var i = 0; i < 50; i++) {
             var smoke = new CustomSprite(this.game, {
                 src: 'smoke',
@@ -201,14 +200,14 @@ class Blocks extends Phaser.Group {
             smoke.y = ContainerUtil.getRandomYWithinContainer('smoke');
 
             // this.game.time.events.add(, function() {
-                var delay = Math.random() * i * 50;
+            var delay = Math.random() * i * 50;
 
-                Tweener.fadeIn(smoke, delay, 200 + 100 * Math.random(), Phaser.Easing.Linear.None);
+            Tweener.fadeIn(smoke, delay, 200 + 100 * Math.random(), Phaser.Easing.Linear.None);
 
-                Tweener.moveTo(smoke, smoke.x + smoke.width * (Math.random() - 0.5), -smoke.height, delay, 1000 + Math.random() * 300, Phaser.Easing.Linear.None)
-                .onComplete.add(function(e){
+            Tweener.moveTo(smoke, smoke.x + smoke.width * (Math.random() - 0.5), -smoke.height, delay, 1000 + Math.random() * 300, Phaser.Easing.Linear.None)
+                .onComplete.add(function(e) {
                     e.destroy();
-                },this);
+                }, this);
             // }, this);
 
         }

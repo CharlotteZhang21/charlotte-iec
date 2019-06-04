@@ -383,6 +383,16 @@ export function scaleOut(sprite, delay, duration, easing, cb) {
     return tween;
 }
 
+export function scale(sprite, scaleMultiplier, delay, duration, easing) {
+    var initialScale = sprite.scale.x;
+    return sprite.game.add.tween(sprite.scale).to({
+            x: initialScale * scaleMultiplier,
+            y: initialScale * scaleMultiplier
+        },
+        duration || 800,
+        easing, true, delay || 0);
+}
+
 export function fadeFloat(sprite, positionX, positionY, delay, duration) {
 
     var fadeDuration = duration * 0.30;
@@ -722,4 +732,12 @@ export function characterBreath(sprite, delay, duration, easing) {
         x: initialScale * 1.02,
         y: initialScale * .98
     }, duration, easing, true, delay, -1).yoyo(true, 0);
+}
+
+export function squeeze(sprite, delay, duration, easing) {
+    var initialScale = sprite.scale.x;
+    return sprite.game.add.tween(sprite.scale).to({
+        x: [initialScale * 1.05, initialScale * 1.1, initialScale * 1.2, initialScale * 0.8, initialScale],
+        y: initialScale
+    }, duration, easing, true, delay);
 }

@@ -65,10 +65,11 @@ class PowerUpGame extends Phaser.Group {
 
             this.createCounter();
             this.createInteractiveArea();
-            this.initCounter();
+            // this.initCounter();
             // this.createCurves();
             // this.createFollowFinger();
             if (this.args.tutorial !== undefined && this.args.tutorial.tagName !== undefined) {
+
                 this.createTutorial();
             }
             this.initialised = true;
@@ -301,24 +302,33 @@ class PowerUpGame extends Phaser.Group {
     }
 
     createTutorial() {
-        this.tutorialElement = new Phaser.Sprite(this.game, 0, 0, this.args.tagName);
+
+        this.tutorialElement = new Phaser.Sprite(this.game, 0, 0, this.args.tutorial.tagName);
+
         ContainerUtil.fitInContainer(this.tutorialElement, 'hand', 0.5, 0.5);
 
         this.game.add.existing(this.tutorialElement);
 
         var spawnContainer = this.args.htmlTag;
+
         if (this.args.tutorial.htmlTagSpawn !== undefined)
             spawnContainer = this.args.tutorial.htmlTagSpawn;
+
 
         if (this.args.typeOfInteraction == "tap") {
 
             this.tutorialLoop = this.game.time.events.loop(300, function() {
+
                 var randomX = ContainerUtil.getRandomXWithinContainer(spawnContainer);
                 var randomY = ContainerUtil.getRandomYWithinContainer(spawnContainer);
+                
+
                 this.tutorialElement.x = randomX;
                 this.tutorialElement.y = randomY;
                 var tween = Tweener.quickTap(this.tutorialElement, 0, 300, Phaser.Easing.Quadratic.InOut);
             }, this);
+
+
 
         } else if (this.args.typeOfInteraction == "scratch") {
 
@@ -809,6 +819,7 @@ class PowerUpGame extends Phaser.Group {
     }
 
     cancelTutorial() {
+
         if (this.tutorialTween) {
             this.tutorialTween.stop(false);
         }
