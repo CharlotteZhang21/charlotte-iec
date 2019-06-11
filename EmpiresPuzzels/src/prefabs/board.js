@@ -769,7 +769,7 @@ class Board extends Phaser.Group {
                     this.removeMap[bottomCandy.row][bottomCandy.col] = 1;
                 }
                 
-                
+
                 this.destroyCandies();
 
             } if (candy.type == '_match5') {
@@ -1902,7 +1902,7 @@ class Board extends Phaser.Group {
             return;
         }
 
-        var delay = 500;
+        var delay = 100;
         // if (delayedAnim == 1.5) { //WRAPPED combo
         //     delay = 300;
         // } else if (delayedAnim == 1.6) { //Destroyed by FISH
@@ -1938,11 +1938,11 @@ class Board extends Phaser.Group {
 
             var enemyNum = 0;
             if (candy.col < this.args.board.length / 3)
-                enemyNum = 0;
-            else if (candy.col < this.args.board.length / 3 * 2) {
-                enemyNum = 1;
-            } else {
                 enemyNum = 2;
+            else if (candy.col < this.args.board.length / 3 * 2) {
+                enemyNum = 0;
+            } else {
+                enemyNum = 1;
             }
 
             this.onMatch.dispatch(candy, enemyNum);
@@ -2687,7 +2687,7 @@ class Board extends Phaser.Group {
                         candy.y = this.tileWidth * (candyRow + emptySpots) + this.tileWidth / 2;
 
                         var animationDuration = this.fallSpeed * emptySpots;
-                        var animationDelay = 50 + 50 * (this.args.board[0].length - i);
+                        var animationDelay = 200 - 50 * (this.args.board[0].length - i);
                         var finalPos = this.getTileYFromRow(candyRow);
 
                         this.showAfterDelay(candy, animationDelay);

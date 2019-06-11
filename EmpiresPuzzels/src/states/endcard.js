@@ -22,8 +22,9 @@ import * as Tweener from '../utils/tweener';
 ;
 
 //======= custom
-import Board from '../prefabs/board'
-import Enemy from '../prefabs/enemy'
+import Board from '../prefabs/board';
+import Enemy from '../prefabs/enemy';
+import Heroes from '../prefabs/hero'
 
 
 
@@ -87,7 +88,10 @@ class Endcard extends Phaser.State {
             }, this);
         }, this);
 
-        this.enemies = new Enemy(this.game, {});
+        this.enemies = new Enemy(this.game, {
+            enemyAmount: 3
+        });
+        
 
         this.board = new Board(this.game, { "container": 'board-container', "board": chosenBoard, "hand": handPositions, "chances": chances });
         
@@ -96,7 +100,8 @@ class Endcard extends Phaser.State {
             army.anchor.set(0.5);
             this.game.add.existing(army);
 
-
+            army.scale.x = candy.width * 0.7 / (army.width / army.scale.x);
+            army.scale.y = army.scale.x;
             army.x = candy.worldPosition.x;
             army.y = candy.worldPosition.y;
 
@@ -105,11 +110,15 @@ class Endcard extends Phaser.State {
             this.game.add.tween(army).to({
                 y: enemy.y - enemy.height / 2, // change to enemy's position Y
                 alpha: [1, 1, 0]
-            }, 500, Phaser.Easing.Quadratic.InOut, true, 0)
+            }, 500, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function(){
+                this.enemies.decrease(enemyIndex, -10);
+            }, this);
 
-            // this.enemies.decrease(enemyIndex, enemyHealth);
+            
             // this.heroes.increase(heroIndex, heroAttack);
         }, this); 
+
+        this.heroes = new Heroes(this.game, {});
 
         //========== CTA
 
@@ -124,8 +133,9 @@ class Endcard extends Phaser.State {
 
         this.ctaText = new CustomText(this.game, PiecSettings.ctaButtonText);
 
+
         this.game.add.existing(this.cta);
-        Tweener.fadeIn(this.ctaText, 0, 300, Phaser.Easing.Linear.None, true);
+        // Tweener.fadeIn(this.ctaText, 0, 300, Phaser.Easing.Linear.None, true);
 
         this.cta.show();
 

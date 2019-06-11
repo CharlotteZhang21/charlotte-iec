@@ -6,16 +6,12 @@ import CustomText from '../prefabs/custom-text';
 import * as Tweener from '../utils/tweener';
 import * as ParticlesUtil from '../utils/particles-util';
 
-class Enemy extends Phaser.Group {
+class Heroes extends Phaser.Group {
     constructor(game, args) {
         super(game);
-        this.enemies = [];
-
-        this.args = args;
-
-        
-        this.createEnemy(this.args.enemyAmount);
-        
+        this.heroes = [];
+        this.createHero(3);
+        // this.enemyBar = new LifeBar(this.game);
         
         this.dead = false;
     }
@@ -25,28 +21,27 @@ class Enemy extends Phaser.Group {
         this.enemyBar.setCta(cta);
     }
 
-    createEnemy(amount) {
+    createHero(amount) {
         for (var i = 1; i <= amount; i++) {
-            var enemy = new Phaser.Sprite(this.game, 0, 0, 'enemy');
-            ContainerUtil.fitInContainer(enemy, 'enemy-' + i, 0.5, 1);
-            this.add(enemy);
-            this.enemies.push(enemy);
-            enemy.health = PiecSettings.lifeCounters.enemy.initialValue;
-            // PiecSettings.lifeCounters.enemy.maxValue = enemy.health;
-            enemy.lifeBar = new Counter(this.game, PiecSettings.lifeCounters.enemy);
+            var hero = new Phaser.Sprite(this.game, 0, 0, 'hero-' + i);
+            ContainerUtil.fitInContainer(hero, 'hero-' + i, 0.5, 1);
+            this.add(hero);
+            this.heroes.push(hero);
+
+            hero.lifeBar = new Counter(this.game, PiecSettings.lifeCounters.hero);
             // this.add(enemy.lifeBar);
-            this.fitEnemyBarInContainer(enemy);
-            Tweener.characterBreath(enemy, 0, i * 1000 + 500 * Math.random(), Phaser.Easing.Linear.None);
+            this.fitHeroBarInContainer(hero);
+            // Tweener.characterBreath(hero, 0, 1000, Phaser.Easing.Linear.None);
                    
         }    
     }
 
     
-    fitEnemyBarInContainer(enemy) {
-        enemy.lifeBar.scale.x = enemy.width * 0.3 / (enemy.lifeBar.width / enemy.lifeBar.scale.x);
-        enemy.lifeBar.scale.y = enemy.lifeBar.scale.x;
-        enemy.lifeBar.x = enemy.x;
-        enemy.lifeBar.y = enemy.y;
+    fitHeroBarInContainer(hero) {
+        hero.lifeBar.scale.x = hero.width * 0.3 / (hero.lifeBar.width / hero.lifeBar.scale.x);
+        hero.lifeBar.scale.y = hero.lifeBar.scale.x;
+        hero.lifeBar.x = hero.x;
+        hero.lifeBar.y = hero.y;
         // this.enemyBar.y = this.aimCircle.y + this.aimCircle.height * .95;
     }
 
@@ -63,26 +58,6 @@ class Enemy extends Phaser.Group {
     getEnemy(index) {
         return this.enemies[index];
     }
-
-    decrease(enemyIndex, enemyHealth, combo = 1) {
-        // this.attacked()
-        console.log(enemyIndex, enemyHealth);
-        var enemy = this.getEnemy(enemyIndex);
-
-        var value = enemy.health + enemyHealth * combo;
-        
-        enemy.lifeBar.changeCounterTo(value, 500)
-
-        this.hurt(enemy);
-    }
-
-    hurt(enemy) {
-        var initialY = enemy.y;
-        this.game.add.tween(enemy).to({
-            y: [initialY * 1.05, initialY]
-        }, 300, Phaser.Easing.Quadratic.InOut, true, 0);
-    }
-
 
     attacked() {
         if (!this.dead && this.enemyBar.amount - 7 <= 0) {
@@ -117,4 +92,4 @@ class Enemy extends Phaser.Group {
     }
 }
 
-export default Enemy;
+export default Heroes;
