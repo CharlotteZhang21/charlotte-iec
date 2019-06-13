@@ -2,6 +2,31 @@ import * as ContainerUtil from '../utils/container-util';
 import * as Tweener from '../utils/tweener';
 import * as Util from '../utils/util';
 
+/* example
+{text: 'Play Now!',
+    autolocalise: true,
+    container: 'cta-text',
+    style: {
+        fontWeight: "bold",
+        fontFamily: PiecSettings.fontFamily,
+        color: ['#ffe200'], // if there is no gradient, leave only one color in the array
+        stroke: '#531508', // if there is no stroke, can delete it
+        strokeThickness: 6,
+        shadow: {
+            x: 2,
+            y: 6,
+            color: 'rgb(0,0,0)',
+            blur: 0
+        }, //phaser shadow
+    },
+    anchor: {
+        x: 0.5,
+        y: 0.5
+    }
+}
+
+*/
+
 class CustomText extends Phaser.Text {
     constructor(game, args) {
 

@@ -42,7 +42,7 @@ class Endcard extends Phaser.State {
 
         this.game.global.windowWidth = document.body.clientWidth;
         this.game.global.windowHeight = document.body.clientHeight;
-        
+
         this.game.stage.disableVisibilityChange = true;
 
         this.game.global.deviceLanguage = Util.getDeviceLang();
@@ -91,34 +91,16 @@ class Endcard extends Phaser.State {
         this.enemies = new Enemy(this.game, {
             enemyAmount: 3
         });
-        
+
 
         this.board = new Board(this.game, { "container": 'board-container', "board": chosenBoard, "hand": handPositions, "chances": chances });
-        
-        this.board.onMatch.add(function(candy, enemyIndex, harm = 0){
-            var army = new Phaser.Sprite(this.game, 0, 0, candy.id + '_army');
-            army.anchor.set(0.5);
-            this.game.add.existing(army);
 
-            army.scale.x = candy.width * 0.7 / (army.width / army.scale.x);
-            army.scale.y = army.scale.x;
-            army.x = candy.worldPosition.x;
-            army.y = candy.worldPosition.y;
-
-            var enemy = this.enemies.getEnemy(enemyIndex);
-
-            this.game.add.tween(army).to({
-                y: enemy.y - enemy.height / 2, // change to enemy's position Y
-                alpha: [1, 1, 0]
-            }, 500, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function(){
-                this.enemies.decrease(enemyIndex, -10);
-            }, this);
-
-            
-            // this.heroes.increase(heroIndex, heroAttack);
-        }, this); 
 
         this.heroes = new Heroes(this.game, {});
+
+        this.comboText = new CustomText(this.game, PiecSettings.comboText);
+        this.comboText.value = 0;
+        this.comboText.hide();
 
         //========== CTA
 
@@ -151,17 +133,17 @@ class Endcard extends Phaser.State {
                 y: 0.5
             }
         });
-        
-        
+
+
         this.hand.hide();
 
-        Tweener.fadeIn(this.hand, 800, 300, Phaser.Easing.Linear.None, true).onComplete.add(function(e){
-            Tweener.tap(this.hand, 10, 0, 800, Phaser.Easing.Quadratic.InOut).onComplete.add(function(){
+        Tweener.fadeIn(this.hand, 800, 300, Phaser.Easing.Linear.None, true).onComplete.add(function(e) {
+            Tweener.tap(this.hand, 10, 0, 800, Phaser.Easing.Quadratic.InOut).onComplete.add(function() {
                 Tweener.fadeOut(this.hand, 1000, 300, Phaser.Easing.Linear.None, true);
             }, this);
         }, this);
 
-        
+
         // this.tutorialText = new CustomText(this.game, PiecSettings.tutorialText);
         // Tweener.scaleIn(this.tutorialText, 800, 300, Phaser.Easing.Quadratic.InOut).onComplete.add(function(e){
         //     Tweener.scaleOut(this.tutorialText, 1000, 300, Phaser.Easing.Quadratic.InOut);
@@ -170,7 +152,7 @@ class Endcard extends Phaser.State {
 
         //logo example
 
-        
+
         // this.logo = new CustomSprite(this.game, {
         //     src: 'logo',
         //     container: 'logo',
@@ -183,28 +165,150 @@ class Endcard extends Phaser.State {
         // this.logo.show();
 
 
-        this.game.onComplete.add(function(){
+        this.game.onComplete.add(function() {
             this.onComplete();
         }, this);
 
-
+        this.handleSignals();
     }
 
-    
-    onComplete() {
+    handleSignals() {
         
+        //==== candy match
+        this.board.onMatch.add(function(candy, enemyIndex, harm = 0, attackCombo) {
+            var army = new Phaser.Sprite(this.game, 0, 0, candy.id + '_army');
+            army.anchor.set(0.5);
+            this.game.add.existing(army);
+
+            army.scale.x = candy.width * 0.7 / (army.width / army.scale.x);
+            army.scale.y = army.scale.x;
+            army.x = candy.worldPosition.x;
+            army.y = candy.worldPosition.y;
+
+            var enemy = this.enemies.getEnemy(enemyIndex);
+
+
+            if (attackCombo > 1) {
+
+                    
+                    // comboText.scale.x = enemy.width * 0.35 / (comboText.width / comboText.scale.x);
+                    // comboText.scale.y = comboText.scale.x;
+
+                // }
+
+                // this.comboText.alpha = 1;
+                this.comboText.text = 'combo x' + attackCombo;
+                var originalScale = this.comboText.scale.x;
+
+                this.game.add.tween(this.comboText.scale).to({
+                    x: [originalScale * 1.5, originalScale],
+                    y: [originalScale * 1.5, originalScale]
+                }, 600, Phaser.Easing.Quadratic.InOut, true, 100);
+
+                this.game.add.tween(this.comboText).to({
+                    alpha: [1, 1, 0],
+                    y: enemy.y - enemy.height / 2
+                }, 1200, Phaser.Easing.Quadratic.InOut, true, 0);
+            }
+
+
+            this.game.add.tween(army).to({
+                y: enemy.y - enemy.height / 2, // change to enemy's position Y
+                alpha: [1, 1, 0]
+            }, 500, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function(e) {
+
+                this.enemies.changeHealth(enemyIndex, harm, attackCombo); // -10: should be harm;
+
+                if (this.heroes.getHero(candy.id) != null) {
+                    for (var i = 0; i < 3; i++) {
+                        var particle = new CustomSprite(this.game, {
+                            src: 'energy-ball',
+                            container: "energy-ball",
+                            anchor: {
+                                x: 0.5,
+                                y: 0.5
+                            }
+                        })
+
+                        Tweener.fadeIn(particle, 0, 100, Phaser.Easing.Quadratic.InOut);
+
+                        particle.x = enemy.x;
+                        particle.y = e.y;
+
+                        particle.blendMode = PIXI.blendModes.SCREEN;
+                        particle.tint = PiecSettings.blockColors[candy.id];
+
+                        Tweener.moveTo(particle, this.heroes.getHero(candy.id).x, this.heroes.getHero(candy.id).y, i * 100, 800, Phaser.Easing.Quadratic.InOut);
+                        Tweener.scaleOut(particle, i * 100, 800);
+
+
+                    }
+                    this.game.time.events.add(800, function() {
+                        this.heroes.changeEnergy(candy.id, 30);
+                    }, this);
+
+                }
+
+
+            }, this);
+
+
+
+        }, this);
+        //==== end of candy match]
+
+        //==== enemy attack
+
+        this.enemies.onAttack.add(function(enemy, attack) {
+            // enemy attack random hero
+            var originalY = enemy.y;
+            this.game.add.tween(enemy).to({
+                y: [originalY * 1.05, originalY]
+            }, 800, Phaser.Easing.Quadratic.None, true, 0);
+
+            this.heroes.changeHealth(PiecSettings.heroAttributes[Math.floor(Math.random() * 3)].id, -10, 1);
+
+
+        }, this);
+
+        //==== end of enemy attack
+
+        //==== hero attack
+        this.heroes.onAttack.add(function(hero, attack) {
+            // enemy attack random hero
+            var originalY = hero.y;
+            this.game.add.tween(hero).to({
+                y: originalY * 0.95
+            }, 300, Phaser.Easing.Quadratic.None, true, 0).onComplete.add(function() {
+                this.game.add.tween(hero).to({
+                    y: originalY
+                }, 300, Phaser.Easing.Quadratic.None, true, 0)
+            }, this);
+
+            //have to classify them into a alived enemy list
+
+            this.enemies.changeHealth(Math.floor(Math.random() * 3), -attack, 1);
+
+
+        }, this);
+        //==== end of hero attack
+    }
+
+
+    onComplete() {
+
         ///===== COMPLETE ANIMATIONS =====///
 
         ///===== END OF ANIMATIONS =====///
 
 
-        
-        
-        this.game.time.events.add(3000, function(){
+
+
+        this.game.time.events.add(3000, function() {
             console.log('onComplete');
-            parent.postMessage('complete','*');
+            parent.postMessage('complete', '*');
         })
-        
+
     }
 
     resize() {

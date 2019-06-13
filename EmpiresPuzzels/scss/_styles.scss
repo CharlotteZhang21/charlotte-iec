@@ -74,6 +74,14 @@ a {
     right: 0;
 }
 
+#combo-box {
+    width: 40%;
+    height: 10%;
+    top: 20%;
+    left: 0;
+    right: 0;
+}
+
 #enemy {
     &-life-counter {
         width: 30%;
@@ -81,7 +89,7 @@ a {
         bottom: 0;
     }
 
-    &-1 {
+    &-0 {
         width: 70%;
         height: 10%;
         left: 50%;
@@ -91,7 +99,7 @@ a {
 
     }
 
-    &-2 {
+    &-1 {
         width: 60%;
         height: 10%;
         right: -40%;
@@ -99,7 +107,7 @@ a {
         transform: translate(-50%);
     }
 
-    &-3 {
+    &-2 {
         width: 60%;
         height: 10%;
         left: 20%;
@@ -109,23 +117,28 @@ a {
 
 }
 
+#energy-ball {
+    width: 10%;
+    height: 10%;
+}
+
 #hero {
     width: 70%;
     left: 1%;
     // right: 0;
     height: 10%;
-    bottom: 2%;
-    &-1 {
+    bottom: 6%;
+    &-0 {
         width: 32%;
         height: 100%;
         left: 0;
     }
-    &-2 {
+    &-1 {
         width: 32%;
         height: 100%;
         left: 35%;
     }
-    &-3 {
+    &-2 {
         width: 32%;
         height: 100%;
         left: 70%;

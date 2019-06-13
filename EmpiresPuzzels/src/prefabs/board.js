@@ -21,7 +21,7 @@ class Board extends Phaser.Group {
         this.removeMap = [];
         this.initBackground(args.board);
         this.initCandies(args.board);
-        // this.initSounds();
+
 
         this.game.input.onDown.add(this.candySelect, this);
         this.game.input.onUp.add(this.candyDeselect, this);
@@ -39,6 +39,10 @@ class Board extends Phaser.Group {
 
         if (PiecSettings.showPrompt !== undefined && PiecSettings.showPrompt)
             this.createPrompt();
+
+
+        // ====== custom for Empires and puzzles
+        this.attackCombo = 0;
     }
 
     createPrompt() {
@@ -316,7 +320,8 @@ class Board extends Phaser.Group {
                         this.handleMatches();
                     }, this);
                 } else {
-
+                    //reset attackCombo
+                    this.attackCombo = 0;
 
                     this.canPick = true;
                     this.animateMessage();
@@ -572,7 +577,7 @@ class Board extends Phaser.Group {
         // var x = e.clientX * window.devicePixelRatio;
         // var y = e.clientY * window.devicePixelRatio;
         // this.animateParticlesOnTouch(x, y);
-        if(this.pickedCandy != null && this.pickedCandy == this.selectedCandy)
+        if (this.pickedCandy != null && this.pickedCandy == this.selectedCandy)
             this.handleOneTapCandies(true, this.pickedCandy);
         this.game.input.deleteMoveCallback(this.candyMove, this);
     }
@@ -738,41 +743,51 @@ class Board extends Phaser.Group {
         //customized for E&P 
 
         if (candy != null) {
-            
+
             if (candy.type == '_match4') {
-                
-                if(destroyItself)
+
+                if (destroyItself)
                     this.removeMap[candy.row][candy.col] = 1;
 
+                
                 //get nearby candies
                 var topCandy = this.candyAt(candy.col, candy.row - 1);
                 if (topCandy != -1) {
                     this.removeMap[topCandy.row][topCandy.col] = 1;
+                    // this.destroyCandy(topCandy, this.removeMap[topCandy.row][topCandy.col]);
+                    // destroy++;
                 }
-                
+
 
                 var leftCandy = this.candyAt(candy.col - 1, candy.row);
                 if (leftCandy != -1) {
                     this.removeMap[leftCandy.row][leftCandy.col] = 1;
+                    // this.destroyCandy(leftCandy, this.removeMap[leftCandy.row][leftCandy.col]);
+                    // destroy++;
                 }
-                
+
 
                 var rightCandy = this.candyAt(candy.col + 1, candy.row);
                 if (rightCandy != -1) {
                     this.removeMap[rightCandy.row][rightCandy.col] = 1;
+                    // this.destroyCandy(rightCandy, this.removeMap[rightCandy.row][rightCandy.col]);
+                    // destroy++;
                 }
-                
+
 
 
                 var bottomCandy = this.candyAt(candy.col, candy.row + 1);
                 if (bottomCandy != -1) {
                     this.removeMap[bottomCandy.row][bottomCandy.col] = 1;
+                    // this.destroyCandy(bottomCandy, this.removeMap[bottomCandy.row][bottomCandy.col]);
+                    // destroy++;
                 }
-                
+
 
                 this.destroyCandies();
 
-            } if (candy.type == '_match5') {
+            }
+            if (candy.type == '_match5') {
 
                 //because the colorbombCombo is design for matching colorbomb with another candy rather than checking the colorbomb's colour,
                 //we need to have a replacement to allow the function to check the candy.id and destroy all of them
@@ -1551,7 +1566,6 @@ class Board extends Phaser.Group {
 
         var destroyed = 0;
 
-        console.log(this.removeMap);
         for (var i = 0; i < this.args.board.length; i++) {
             for (var j = 0; j < this.args.board[0].length; j++) {
                 if (this.removeMap[i][j] >= 1 && this.removeMap[i][j] < 2) {
@@ -1602,7 +1616,7 @@ class Board extends Phaser.Group {
 
                     } else {
                         destroyTween = this.destroyCandy(candy, this.removeMap[i][j]);
-                    } 
+                    }
 
                     if (destroyTween == null) {
                         if (candy != -1)
@@ -1612,10 +1626,27 @@ class Board extends Phaser.Group {
                         destroyTween.onComplete.add(function(candyObj) {
                             candyObj.destroy();
                             destroyed--;
+                            
                             if (destroyed == 0 && !this.pause) {
+                                this.attackCombo++;
+                                console.log("attackCombo", this.attackCombo);
                                 this.makeCandiesFall();
                                 this.respawnCandies();
                             }
+
+                            var enemyNum = 0;
+                            
+                            if (candyObj.col < this.args.board[0].length / 3)
+                                enemyNum = 2;
+                            else if (candyObj.col < this.args.board[0].length / 3 * 2 ) {
+                                enemyNum = 0;
+                            } else {
+                                enemyNum = 1;
+                            }
+                            
+                            //triggered in endcard
+                            this.onMatch.dispatch(candyObj, enemyNum, -10, this.attackCombo);
+
                         }, this);
                         this.candies[j + "," + i] = null;
                     }
@@ -1935,17 +1966,6 @@ class Board extends Phaser.Group {
         this.game.add.tween(candy.scale).to({
             x: [-initialScale, initialScale]
         }, delay, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function() {
-
-            var enemyNum = 0;
-            if (candy.col < this.args.board.length / 3)
-                enemyNum = 2;
-            else if (candy.col < this.args.board.length / 3 * 2) {
-                enemyNum = 0;
-            } else {
-                enemyNum = 1;
-            }
-
-            this.onMatch.dispatch(candy, enemyNum);
 
             this.destroyCandyAnimation(candy, 0);
 

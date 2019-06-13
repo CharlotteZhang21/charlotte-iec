@@ -174,46 +174,57 @@ a {
   left: 0;
   right: 0; }
 
+#combo-box {
+  width: 40%;
+  height: 10%;
+  top: 20%;
+  left: 0;
+  right: 0; }
+
 #enemy-life-counter {
   width: 30%;
   height: 10%;
   bottom: 0; }
 
-#enemy-1 {
+#enemy-0 {
   width: 70%;
   height: 10%;
   left: 50%;
   top: 30%;
   transform: translate(-50%); }
 
-#enemy-2 {
+#enemy-1 {
   width: 60%;
   height: 10%;
   right: -40%;
   top: 30%;
   transform: translate(-50%); }
 
-#enemy-3 {
+#enemy-2 {
   width: 60%;
   height: 10%;
   left: 20%;
   top: 30%;
   transform: translate(-50%); }
 
+#energy-ball {
+  width: 10%;
+  height: 10%; }
+
 #hero {
   width: 70%;
   left: 1%;
   height: 10%;
-  bottom: 2%; }
-  #hero-1 {
+  bottom: 6%; }
+  #hero-0 {
     width: 32%;
     height: 100%;
     left: 0; }
-  #hero-2 {
+  #hero-1 {
     width: 32%;
     height: 100%;
     left: 35%; }
-  #hero-3 {
+  #hero-2 {
     width: 32%;
     height: 100%;
     left: 70%; }
