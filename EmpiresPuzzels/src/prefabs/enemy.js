@@ -141,13 +141,14 @@ class Enemy extends Phaser.Group {
 
         var initialY = enemy.y;
 
-        // this.enemyHurtTween = this.game.add.tween(enemy).to({
-        //     y: [initialY * 1.05, initialY],
-        //     alpha: [0.5, 1]
-        // }, 500, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function() {
+        this.enemyHurtTween = this.game.add.tween(enemy).to({
+            y: [initialY * 1.05, initialY],
+            // alpha: [0.5, 1]
+        }, 500, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function() {
             enemy.underAttack = false;
-            this.onAttack.dispatch(this);
-        // }, this);
+            // this.onAttack.dispatch(this);
+            this.onAttack.dispatch(this.getRandomAlive());
+        }, this);
 
     }
 

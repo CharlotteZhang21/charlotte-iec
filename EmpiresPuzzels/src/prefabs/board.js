@@ -1982,8 +1982,11 @@ class Board extends Phaser.Group {
     animateRay(candy, rayTo) {
 
         if (rayTo !== undefined) {
-            var ray = new Phaser.Sprite(this.game, 0, 0, "colorbomb_ray");
+            var ray = new Phaser.Sprite(this.game, 0, 0, "lighting");
             this.add(ray);
+
+            ray.blendMode = PIXI.blendModes.SCREEN;
+            ray.tint = PiecSettings.blockColors[candy.id];
             ray.anchor.x = .5;
             ray.anchor.y = 1;
 
@@ -2005,8 +2008,9 @@ class Board extends Phaser.Group {
                 ray.alpha = 1;
             }, this);
 
-            console.log(ray.scale);
+            
             this.game.add.tween(ray.scale).to({
+                x: [1, -1, 1],
                 y: finalLength / ray.height,
             }, 150, Phaser.Easing.Quadratic.InOut, true, randomDelay);
 

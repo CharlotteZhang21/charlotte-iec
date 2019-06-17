@@ -36,17 +36,24 @@ class Heroes extends Phaser.Group {
     createHero(amount) {
         for (var i = 0; i < amount; i++) {
 
-            
+            var hero = new Phaser.Group(this.game);
 
-            var hero = new Phaser.Sprite(this.game, 0, 0, this.args[i].src);
+            var heroPortrait = new Phaser.Sprite(this.game, 0, 0, this.args[i].src);
 
-            ContainerUtil.fitInContainer(hero, this.args[i].container, 0.5, 0.5);
+            hero.portrait = heroPortrait;
+
+            ContainerUtil.fitInContainer(heroPortrait, this.args[i].container, 0.5, 0.5);
 
             this.add(hero);
 
+            hero.add(heroPortrait);
+
             this.heroes.push(hero);
 
+            //==== attributes ====//
             hero.name = i;
+
+            hero.canAttack = false;
 
             hero.colorType = this.args[i].colorType;
 
@@ -54,15 +61,21 @@ class Heroes extends Phaser.Group {
 
             hero.weapon = this.args[i].weapon;
 
+            //==== attributes ====//
+
+            //==== health and enegy ====//
+
             hero.healthBar = new Counter(this.game, PiecSettings.lifeCounters['hero-health']);
-            this.add(hero.healthBar);
+            
+            hero.add(hero.healthBar);
 
             hero.health = PiecSettings.lifeCounters['hero-health'].initialValue;
 
             //======== energy bar =================
+            
             hero.energyBar = new Counter(this.game, PiecSettings.lifeCounters['hero-energy']);
 
-            this.add(hero.energyBar);
+            hero.add(hero.energyBar);
 
             hero.energy = PiecSettings.lifeCounters['hero-energy'].initialValue;
 
@@ -70,21 +83,36 @@ class Heroes extends Phaser.Group {
 
             var healthBarYPos = -hero.energyBar.height / 2;
 
-            this.fitHeroBarInContainer(hero, hero.healthBar, healthBarYPos);
+            this.fitHeroBarInContainer(heroPortrait, hero.healthBar, healthBarYPos);
 
-            this.fitHeroBarInContainer(hero, hero.energyBar, 0);
+            this.fitHeroBarInContainer(heroPortrait, hero.energyBar, 0);
 
-            hero.inputEnabled = true;
-            hero.input.useHandCursor = true;
+            //==== health and enegy ====//
 
-            hero.events.onInputDown.add(function(e) {
+            //==== click events ====//
+            hero.inputEnableChildren = true;
 
-                this.attack(e);
+            hero.portrait.inputEnabled = true;
+            hero.portrait.input.useHandCursor = true;
+
+            hero.portrait.events.onInputDown.add(function(e) {
+
+                this.attack(e.parent);
 
             }, this);
+
+            //==== click events ====//
         }
 
 
+    }
+
+    getPos(colorType){
+        var hero = this.getHero(colorType);
+        return{
+            x: hero.portrait.x, 
+            y: hero.portrait.y,
+        }
     }
 
 
@@ -101,10 +129,10 @@ class Heroes extends Phaser.Group {
     }
 
     fitHeroBarInContainer(hero, bar, yPos) {
-        bar.scale.x = hero.width * 0.8 / (bar.width / bar.scale.x);
+        bar.scale.x = hero.width * 0.9 / (bar.width / bar.scale.x);
         bar.scale.y = bar.scale.x;
         bar.x = hero.x;
-        bar.y = hero.y + yPos + hero.height * hero.anchor.y * 0.87;
+        bar.y += yPos + hero.height * 0.3;
 
     }
 
@@ -124,13 +152,19 @@ class Heroes extends Phaser.Group {
 
                 if (hero.canAttackIndicator == null) {
 
-                    hero.canAttackIndicator = CustomPngSequencesRenderer.playPngSequence(this.game, 'can_attack_ani', this);
+                    hero.canAttackIndicator = CustomPngSequencesRenderer.playPngSequence(this.game, 'can_attack_ani', this, hero);
 
                     ContainerUtil.fitInContainer(hero.canAttackIndicator, 'hero-' + hero.name, 0.5, 0.5);
 
-                    hero.canAttackIndicator.y = hero.y - hero.height * 0.07;
+                    hero.canAttackIndicator.y -= hero.height * 0.07;
+
+                    
+
+                    hero.bringToTop(hero.energyBar);
 
                     hero.canAttack = true;
+
+
 
                 }
 

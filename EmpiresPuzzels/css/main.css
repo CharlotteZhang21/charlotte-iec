@@ -207,6 +207,13 @@ a {
   top: 30%;
   transform: translate(-50%); }
 
+#enemy-attacking-effect {
+  width: 40%;
+  height: 40%;
+  left: 0;
+  right: 0;
+  top: 20%; }
+
 #energy-ball {
   width: 10%;
   height: 10%; }

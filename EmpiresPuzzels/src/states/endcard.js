@@ -217,6 +217,7 @@ class Endcard extends Phaser.State {
                 this.enemies.changeHealth(enemyIndex, harm, attackCombo); // -10: should be harm;
 
                 if (this.heroes.getHero(candy.id) != null) {
+
                     for (var i = 0; i < 3; i++) {
                         var particle = new CustomSprite(this.game, {
                             src: 'energy-ball',
@@ -235,7 +236,7 @@ class Endcard extends Phaser.State {
                         particle.blendMode = PIXI.blendModes.SCREEN;
                         particle.tint = PiecSettings.blockColors[candy.id];
 
-                        Tweener.moveTo(particle, this.heroes.getHero(candy.id).x, this.heroes.getHero(candy.id).y, i * 100, 800, Phaser.Easing.Quadratic.InOut);
+                        Tweener.moveTo(particle, this.heroes.getPos(candy.id).x, this.heroes.getPos(candy.id).y, i * 100, 800, Phaser.Easing.Quadratic.InOut);
                         Tweener.scaleOut(particle, i * 100, 800);
 
 
@@ -259,12 +260,55 @@ class Endcard extends Phaser.State {
         this.enemies.onAttack.add(function(enemy, attack) {
             // enemy attack random hero
             var originalY = enemy.y;
+            var originalScale = enemy.scale.x;
             this.game.add.tween(enemy).to({
                 y: [originalY * 1.05, originalY]
             }, 800, Phaser.Easing.Quadratic.None, true, 0);
 
 
-            this.heroes.changeHealth(PiecSettings.heroAttributes[Math.floor(Math.random() * 3)].colorType, -10, 1);
+            this.game.add.tween(enemy.scale).to({
+                x: [originalScale * 1.05, originalScale],
+                y: [originalScale * 1.05, originalScale],
+            }, 500, Phaser.Easing.Quadratic.InOut, true, 0);
+
+            var attackingEffect = new CustomSprite(this.game, {
+                src: 'die-effect', //'tiger-hurt',
+                container: 'enemy-attacking-effect',
+                anchor: {
+                    x: 0.5,
+                    y: 0
+                }
+            })
+
+            attackingEffect.blendMode = PIXI.blendModes.SCREEN;
+            // attackingEffect.tint = 0X550b7a;
+
+            var randomHeroColorType = PiecSettings.heroAttributes[Math.floor(Math.random() * 3)].colorType;
+
+            Tweener.fadeIn(attackingEffect, 0, 100);
+
+            var attackingEffectOriginalScale = attackingEffect.scale.x;
+            attackingEffect.scale.y = 0.01;
+
+            this.game.add.tween(attackingEffect.scale).to({
+                x: [attackingEffectOriginalScale * 1.05],
+                y: [attackingEffectOriginalScale * 1.05],
+            }, 100, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function() {
+
+                Tweener.moveTo(attackingEffect, this.heroes.getPos(randomHeroColorType).x, this.heroes.getPos(randomHeroColorType).y, 0, 100, Phaser.Easing.Sinusoidal.InOut).onComplete.add(function() {
+                    // this.hero
+                    this.heroes.changeHealth(randomHeroColorType, -10, 1);
+
+                }, this);
+                
+                Tweener.fadeOut(attackingEffect, 0, 100, Phaser.Easing.Linear.None).onComplete.add(function(e) {
+                    e.destroy();
+                }, this);
+            }, this);
+
+
+
+
 
 
         }, this);
@@ -298,7 +342,7 @@ class Endcard extends Phaser.State {
                 weaponEffect.tint = PiecSettings.blockColors[hero.colorType];
 
 
-                
+
 
                 this.enemies.changeHealth(targetEnemy.name, -attack, 1);
 
@@ -308,7 +352,7 @@ class Endcard extends Phaser.State {
                     x: targetEnemy.x,
                     y: targetEnemy.y
 
-                }, 300, Phaser.Easing.Quadratic.InOut, true, i*100).onComplete.add(function(e) {
+                }, 300, Phaser.Easing.Quadratic.InOut, true, i * 100).onComplete.add(function(e) {
                     Tweener.fadeOut(e, 0, 500);
                 }, this);
             }
