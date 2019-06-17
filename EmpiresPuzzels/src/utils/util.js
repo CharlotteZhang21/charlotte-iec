@@ -36,8 +36,14 @@ export function getOrientation() {
 
 // boolean screen orientation
 export function clone(obj) {
-
-    return JSON.parse(JSON.stringify(obj));
+    var newObj = new Phaser.Sprite(obj.game, 0, 0, obj.key);
+    newObj.x = obj.x;
+    newObj.y = obj.y;
+    newObj.scale.x = obj.width / (newObj.width / newObj.scale.x);
+    newObj.scale.y = newObj.scale.x;
+    newObj.anchor.x = obj.anchor.x;
+    newObj.anchor.y = obj.anchor.y;
+    return newObj;
 }
 
 export function remove(array, item) {

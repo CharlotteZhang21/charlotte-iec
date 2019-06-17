@@ -88,15 +88,12 @@ class Endcard extends Phaser.State {
             }, this);
         }, this);
 
-        this.enemies = new Enemy(this.game, {
-            enemyAmount: 3
-        });
-
+        this.enemies = new Enemy(this.game, PiecSettings.enemies);
 
         this.board = new Board(this.game, { "container": 'board-container', "board": chosenBoard, "hand": handPositions, "chances": chances });
 
 
-        this.heroes = new Heroes(this.game, {});
+        this.heroes = new Heroes(this.game, PiecSettings.heroAttributes);
 
         this.comboText = new CustomText(this.game, PiecSettings.comboText);
         this.comboText.value = 0;
@@ -173,7 +170,7 @@ class Endcard extends Phaser.State {
     }
 
     handleSignals() {
-        
+
         //==== candy match
         this.board.onMatch.add(function(candy, enemyIndex, harm = 0, attackCombo) {
             var army = new Phaser.Sprite(this.game, 0, 0, candy.id + '_army');
@@ -190,9 +187,9 @@ class Endcard extends Phaser.State {
 
             if (attackCombo > 1) {
 
-                    
-                    // comboText.scale.x = enemy.width * 0.35 / (comboText.width / comboText.scale.x);
-                    // comboText.scale.y = comboText.scale.x;
+
+                // comboText.scale.x = enemy.width * 0.35 / (comboText.width / comboText.scale.x);
+                // comboText.scale.y = comboText.scale.x;
 
                 // }
 
@@ -266,7 +263,8 @@ class Endcard extends Phaser.State {
                 y: [originalY * 1.05, originalY]
             }, 800, Phaser.Easing.Quadratic.None, true, 0);
 
-            this.heroes.changeHealth(PiecSettings.heroAttributes[Math.floor(Math.random() * 3)].id, -10, 1);
+
+            this.heroes.changeHealth(PiecSettings.heroAttributes[Math.floor(Math.random() * 3)].colorType, -10, 1);
 
 
         }, this);
@@ -275,19 +273,47 @@ class Endcard extends Phaser.State {
 
         //==== hero attack
         this.heroes.onAttack.add(function(hero, attack) {
-            // enemy attack random hero
-            var originalY = hero.y;
-            this.game.add.tween(hero).to({
-                y: originalY * 0.95
-            }, 300, Phaser.Easing.Quadratic.None, true, 0).onComplete.add(function() {
-                this.game.add.tween(hero).to({
-                    y: originalY
-                }, 300, Phaser.Easing.Quadratic.None, true, 0)
-            }, this);
-
+            // hero attack random enemy
             //have to classify them into a alived enemy list
+            var targetEnemy = this.enemies.getRandomAlive();
 
-            this.enemies.changeHealth(Math.floor(Math.random() * 3), -attack, 1);
+            for (var i = 0; i < 3; i++) {
+
+                var weaponEffect = new CustomSprite(this.game, {
+                    src: hero.weapon,
+                    container: 'hero-' + hero.name,
+                    anchor: {
+                        x: 0.5,
+                        y: 0.5
+                    }
+                })
+
+                Tweener.fadeIn(weaponEffect, i * 100, 200);
+
+                weaponEffect.scale.x = hero.width * 0.2 / (weaponEffect.width / weaponEffect.scale.x);
+                weaponEffect.x = hero.x;
+                weaponEffect.y = hero.y;
+
+                weaponEffect.blendMode = PIXI.blendModes.SCREEN;
+                weaponEffect.tint = PiecSettings.blockColors[hero.colorType];
+
+
+                
+
+                this.enemies.changeHealth(targetEnemy.name, -attack, 1);
+
+                weaponEffect.angle = 20 * (hero.name - targetEnemy.name);
+
+                this.game.add.tween(weaponEffect).to({
+                    x: targetEnemy.x,
+                    y: targetEnemy.y
+
+                }, 300, Phaser.Easing.Quadratic.InOut, true, i*100).onComplete.add(function(e) {
+                    Tweener.fadeOut(e, 0, 500);
+                }, this);
+            }
+
+
 
 
         }, this);

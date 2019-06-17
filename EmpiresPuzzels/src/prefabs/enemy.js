@@ -15,9 +15,9 @@ class Enemy extends Phaser.Group {
         this.args = args;
 
 
-        this.createEnemy(this.args.enemyAmount);
+        this.createEnemy(this.args.length);
 
-        this.dead = false;
+        this.alivedEnemy = this.args.length;
 
         this.initSignals();
     }
@@ -34,9 +34,9 @@ class Enemy extends Phaser.Group {
     createEnemy(amount) {
         for (var i = 0; i < amount; i++) {
 
-            var enemy = new Phaser.Sprite(this.game, 0, 0, 'enemy');
+            var enemy = new Phaser.Sprite(this.game, 0, 0, this.args[i].src);
 
-            ContainerUtil.fitInContainer(enemy, 'enemy-' + i, 0.5, 1);
+            ContainerUtil.fitInContainer(enemy, this.args[i].container, 0.5, 1);
 
             this.add(enemy);
 
@@ -66,18 +66,24 @@ class Enemy extends Phaser.Group {
         // this.enemyBar.y = this.aimCircle.y + this.aimCircle.height * .95;
     }
 
-    getEnemyYPosition() {
-        return this.enemyIdle.y;
-    }
-    getEnemyYCenterPosition() {
-        return this.enemyIdle.y + this.enemyIdle.height / 2;
-    }
-    getEnemyXCenterPosition() {
-        return this.enemyIdle.x + this.enemyIdle.width / 2;
-    }
 
     getEnemy(index) {
         return this.enemies[index];
+    }
+
+    getRandomAlive(){
+
+
+        var enemy = this.getEnemy(Math.floor(Math.random() * this.args.length));
+
+        if(enemy ==null || enemy.dead){
+            
+            return this.getRandomAlive();
+
+        }else{
+        
+            return enemy;
+        }
     }
 
     changeHealth(enemyIndex, enemyHealth, combo = 1) {
@@ -129,31 +135,39 @@ class Enemy extends Phaser.Group {
     }
 
     hurt(enemy) {
-        if(enemy.dead){
+        if (enemy.dead) {
             return;
         }
 
-        console.log('here');
-
         var initialY = enemy.y;
 
-        this.game.add.tween(enemy).to({
-            y: [initialY * 1.05, initialY],
-            alpha: [0.5, 1]
-        }, 500, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function() {
+        // this.enemyHurtTween = this.game.add.tween(enemy).to({
+        //     y: [initialY * 1.05, initialY],
+        //     alpha: [0.5, 1]
+        // }, 500, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function() {
             enemy.underAttack = false;
             this.onAttack.dispatch(this);
-        }, this);
+        // }, this);
 
     }
 
     die(enemy) {
-        Tweener.fadeOut(enemy.lifeBar, 0, 100, Phaser.Easing.Linear.None);
-        this.game.add.tween(enemy).to({
-            alpha: [ 0],
-        }, 100, Phaser.Easing.Linear.None, true, 0).onComplete.add(function() {
+        console.log(enemy.name, enemy.dead);
+        console.log(this.enemies);
+        if (!enemy.dead) {
+            enemy.dead = true;
+            this.alivedEnemy--;
+            Tweener.fadeOut(enemy.lifeBar, 0, 100, Phaser.Easing.Linear.None);
+            if(this.alivedEnemy <= 0){
+                this.game.onComplete.dispatch();
+            }
+            this.game.tweens.remove(this.enemyHurtTween);
+            console.log('here');
+            this.game.add.tween(enemy).to({
+                alpha: [0, 1, 0],
+            }, 100, Phaser.Easing.Linear.None, true, 0).onComplete.add(function() {
 
-            if (!enemy.dead) {
+
                 var effect = new CustomSprite(this.game, {
                     src: 'die-effect',
                     container: 'enemy-' + enemy.name,
@@ -165,52 +179,22 @@ class Enemy extends Phaser.Group {
                 });
 
                 Tweener.fadeIn(effect, 0, 200, Phaser.Easing.Linear.None);
-                
+
                 effect.blendMode = PIXI.blendModes.SCREEN;
                 // effect.tint = 0x430c64;
 
                 Tweener.scaleOut(effect, 0, 500, Phaser.Easing.Quadratic.InOut);
 
-                enemy.dead = true;
-                
-            }
 
-
-        }, this);
-    }
-
-
-    attacked() {
-        if (!this.dead && this.enemyBar.amount - 7 <= 0) {
-            var positionTween = this.game.add.tween(this).to({ y: -50 }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            positionTween.onComplete.add(function() {
-                this.game.add.tween(this).to({ y: 0 }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
             }, this);
+        }else {
 
-            var redAlphaTween = this.game.add.tween(this.redEnemy).to({ alpha: 1 }, 500, Phaser.Easing.Quadratic.InOut, true, 0);
-            redAlphaTween.onComplete.add(function() {
-                // this.game.add.tween(this.redEnemy).to({alpha: 0}, 500, Phaser.Easing.Quadratic.InOut, true, 0);
-                this.game.add.tween(this).to({ alpha: 0 }, 1000, Phaser.Easing.Quadratic.InOut, true, 0);
-                this.game.add.tween(this.enemyBar).to({ alpha: 0 }, 1000, Phaser.Easing.Quadratic.InOut, true, 0);
-            }, this);
-        } else if (!this.dead) {
-            var positionTween = this.game.add.tween(this).to({ y: -50 }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            positionTween.onComplete.add(function() {
-                this.game.add.tween(this).to({ y: 0 }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            }, this);
-
-            var whiteAlphaTween = this.game.add.tween(this.whiteEnemy).to({ alpha: 1 }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            whiteAlphaTween.onComplete.add(function() {
-                this.game.add.tween(this.whiteEnemy).to({ alpha: 0 }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            }, this);
-
-            var circleTween = this.game.add.tween(this.aimCircle).to({ y: this.aimCircleInitialY + 80 }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            circleTween.onComplete.add(function() {
-                var circleTween = this.game.add.tween(this.aimCircle).to({ y: this.aimCircleInitialY }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            }, this);
         }
-        this.enemyBar.decreaseLifeBar(7);
+
     }
+
+
+    
 }
 
 export default Enemy;

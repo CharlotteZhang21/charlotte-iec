@@ -47,7 +47,7 @@ class Counter extends Phaser.Group {
         }
 
 
-        this.game.add.existing(this);
+        // this.game.add.existing(this);
 
         // this.x += this.width / 2;
         this.x += this.counterBackground.width / 2;

@@ -783,19 +783,19 @@ class Board extends Phaser.Group {
                     // destroy++;
                 }
 
-
-                this.destroyCandies();
-
             }
             if (candy.type == '_match5') {
 
                 //because the colorbombCombo is design for matching colorbomb with another candy rather than checking the colorbomb's colour,
                 //we need to have a replacement to allow the function to check the candy.id and destroy all of them
-
-                var targetCandyColourReplacement = candy;
+                console.log('match5');
+                // var targetCandyColourReplacement = candy;
+                var targetCandyColourReplacement = Util.clone(candy);
+                targetCandyColourReplacement.id = candy.id;
                 targetCandyColourReplacement.type = 'replacement';
                 this.applyColorBombCombo(candy, targetCandyColourReplacement);
             }
+            this.destroyCandies();
         }
 
         //end customize
@@ -1132,6 +1132,8 @@ class Board extends Phaser.Group {
     }
 
     applyColorBombCombo(colorbombCandy, originalCandy = null) {
+
+        
         if (originalCandy == null) {
             originalCandy = this.getRandomCandy();
             if (originalCandy == -1)
@@ -1144,7 +1146,7 @@ class Board extends Phaser.Group {
                 for (var j = 0; j < this.args.board[0].length; j++) {
                     var candy = this.candyAt(j, i);
                     if (candy != -1 && candy.id == originalCandy.id) {
-
+                        
                         this.removeMap[i][j] = 1.1;
                         candy.rayTo = [];
                         candy.rayTo.x = colorbombCandy.x;
@@ -1169,6 +1171,7 @@ class Board extends Phaser.Group {
                             this.removeMap[i][j] = 6.1;
                     }
                 }
+                
             }
         } else {
             for (var i = 0; i < this.args.board.length; i++) {
@@ -1324,7 +1327,6 @@ class Board extends Phaser.Group {
                                 this.removeMap[i][startStreak + k] = 1;
                         }
 
-                        console.log(this.removeMap);
                     }
 
                     startStreak = j;
@@ -1636,9 +1638,9 @@ class Board extends Phaser.Group {
 
                             var enemyNum = 0;
                             
-                            if (candyObj.col < this.args.board[0].length / 3)
+                            if (candyObj.col < (this.args.board[0].length / 3 + 1))
                                 enemyNum = 2;
-                            else if (candyObj.col < this.args.board[0].length / 3 * 2 ) {
+                            else if (candyObj.col < (this.args.board[0].length / 3 * 2 + 1)) {
                                 enemyNum = 0;
                             } else {
                                 enemyNum = 1;
@@ -1667,7 +1669,7 @@ class Board extends Phaser.Group {
                     // this.changeCandyTo(this.candyAt(j, i), "_ver", this.removeMap[i][j]);
                 } else if (this.removeMap[i][j] >= 4 && this.removeMap[i][j] < 5) {
                     //== customized for empires&puzzles
-                    this.changeCandyTo(this.candyAt(j, i), "_match4", this.removeMap[i][j]);
+                    this.changeCandyTo(this.candyAt(j, i), "_match5", this.removeMap[i][j]);
 
                     //== original code
                     // this.changeCandyTo(this.candyAt(j, i), "_wrap", this.removeMap[i][j]);
@@ -1934,19 +1936,20 @@ class Board extends Phaser.Group {
         }
 
         var delay = 100;
-        // if (delayedAnim == 1.5) { //WRAPPED combo
-        //     delay = 300;
-        // } else if (delayedAnim == 1.6) { //Destroyed by FISH
-        //     delay = 1050;
-        // } else if (delayedAnim == 1.1) { //Destroyed by COLORBOMB
-        //     delay = 600 + Math.random() * 200 + 100;
-        //     this.animateRay(candy, candy.rayTo);
-        //     this.animateRay(candy, candy.rayTo2);
-        // } else if (delayedAnim == 1.3) {
-        //     delay = 1200;
-        // } else if (delayedAnim == 1.4) {
-        //     delay = 600;
-        // }
+        if (delayedAnim == 1.5) { //WRAPPED combo
+            delay = 300;
+        } else if (delayedAnim == 1.6) { //Destroyed by FISH
+            delay = 1050;
+        } else if (delayedAnim == 1.1) { //Destroyed by COLORBOMB
+            delay = 600 + Math.random() * 200 + 100;
+
+            this.animateRay(candy, candy.rayTo);
+            this.animateRay(candy, candy.rayTo2);
+        } else if (delayedAnim == 1.3) {
+            delay = 1200;
+        } else if (delayedAnim == 1.4) {
+            delay = 600;
+        }
 
         // this.destroyCandyAnimation(candy, delay);
 
@@ -1996,10 +1999,13 @@ class Board extends Phaser.Group {
 
             ray.alpha = 0;
 
+
+
             this.game.time.events.add(randomDelay, function() {
                 ray.alpha = 1;
             }, this);
 
+            console.log(ray.scale);
             this.game.add.tween(ray.scale).to({
                 y: finalLength / ray.height,
             }, 150, Phaser.Easing.Quadratic.InOut, true, randomDelay);

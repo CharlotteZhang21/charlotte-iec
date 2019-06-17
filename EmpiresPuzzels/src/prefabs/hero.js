@@ -10,11 +10,15 @@ import * as ParticlesUtil from '../utils/particles-util';
 class Heroes extends Phaser.Group {
     constructor(game, args) {
         super(game);
+
+        this.args = args;
+
         this.heroes = [];
-        this.createHero(3);
+
+        this.createHero(this.args.length);
         // this.enemyBar = new LifeBar(this.game);
 
-        this.dead = false;
+        // this.dead = false;
 
         this.initSignals();
     }
@@ -32,9 +36,11 @@ class Heroes extends Phaser.Group {
     createHero(amount) {
         for (var i = 0; i < amount; i++) {
 
-            var hero = new Phaser.Sprite(this.game, 0, 0, 'hero-' + i);
+            
 
-            ContainerUtil.fitInContainer(hero, 'hero-' + i, 0.5, 0.5);
+            var hero = new Phaser.Sprite(this.game, 0, 0, this.args[i].src);
+
+            ContainerUtil.fitInContainer(hero, this.args[i].container, 0.5, 0.5);
 
             this.add(hero);
 
@@ -42,14 +48,21 @@ class Heroes extends Phaser.Group {
 
             hero.name = i;
 
-            hero.colorType = PiecSettings.heroAttributes[i].id;
+            hero.colorType = this.args[i].colorType;
+
+            hero.attacking = false;
+
+            hero.weapon = this.args[i].weapon;
 
             hero.healthBar = new Counter(this.game, PiecSettings.lifeCounters['hero-health']);
+            this.add(hero.healthBar);
 
             hero.health = PiecSettings.lifeCounters['hero-health'].initialValue;
 
             //======== energy bar =================
             hero.energyBar = new Counter(this.game, PiecSettings.lifeCounters['hero-energy']);
+
+            this.add(hero.energyBar);
 
             hero.energy = PiecSettings.lifeCounters['hero-energy'].initialValue;
 
@@ -151,28 +164,6 @@ class Heroes extends Phaser.Group {
             hero.underAttack = true;
             PiecSettings.hurtText.text = 300 + Math.floor(200 * Math.random());
 
-            // var healthText = new CustomText(this.game, PiecSettings.hurtText);
-
-            // healthText.y = enemy.y;
-            // healthText.x = enemy.x;
-            // healthText.scale.x = enemy.width * 0.35 / (healthText.width / healthText.scale.x);
-            // healthText.scale.y = healthText.scale.x;
-
-            // var originalScale = healthText.scale.x;
-
-            // this.game.add.tween(healthText.scale).to({
-            //     x: [originalScale * 1.5, originalScale],
-            //     y: [originalScale * 1.5, originalScale]
-            // }, 600, Phaser.Easing.Quadratic.InOut, true, 100);
-
-            // this.game.add.tween(healthText).to({
-            //     alpha: [1, 1, 0],
-            //     y: enemy.y - enemy.height / 2
-            // }, 1200, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function(e) {
-            //     e.destroy();
-            // }, this);
-
-            // this.hurt(enemy);
             var hurt = new CustomSprite(this.game, {
                 src: 'tiger-hurt',
                 container: 'hero-' + hero.name,
@@ -209,6 +200,7 @@ class Heroes extends Phaser.Group {
 
         switch (hero.colorType) {
             case 4:
+                hero.attacking = true;
                 //heal
                 for (var i = 0; i < this.heroes.length; i++) {
                     this.heroes[i].health = PiecSettings.lifeCounters['hero-health'].maxValue;
@@ -236,10 +228,6 @@ class Heroes extends Phaser.Group {
                     }, this);
                 }
 
-
-
-
-
                 break;
 
             case 2:
@@ -257,41 +245,20 @@ class Heroes extends Phaser.Group {
         hero.canAttackIndicator.destroy();
         hero.canAttackIndicator = null;
 
+        var originalY = hero.y;
+        this.game.add.tween(hero).to({
+            y: originalY * 0.95
+        }, 300, Phaser.Easing.Quadratic.None, true, 0).onComplete.add(function() {
+            this.game.add.tween(hero).to({
+                y: originalY
+            }, 300, Phaser.Easing.Quadratic.None, true, 0)
+        }, this);
+
         hero.energy = PiecSettings.lifeCounters['hero-energy'].minValue;
         hero.energyBar.changeCounterTo(hero.energy, 100);
     }
 
-    attacked() {
-        if (!this.dead && this.enemyBar.amount - 7 <= 0) {
-            var positionTween = this.game.add.tween(this).to({ y: -50 }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            positionTween.onComplete.add(function() {
-                this.game.add.tween(this).to({ y: 0 }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            }, this);
-
-            var redAlphaTween = this.game.add.tween(this.redEnemy).to({ alpha: 1 }, 500, Phaser.Easing.Quadratic.InOut, true, 0);
-            redAlphaTween.onComplete.add(function() {
-                // this.game.add.tween(this.redEnemy).to({alpha: 0}, 500, Phaser.Easing.Quadratic.InOut, true, 0);
-                this.game.add.tween(this).to({ alpha: 0 }, 1000, Phaser.Easing.Quadratic.InOut, true, 0);
-                this.game.add.tween(this.enemyBar).to({ alpha: 0 }, 1000, Phaser.Easing.Quadratic.InOut, true, 0);
-            }, this);
-        } else if (!this.dead) {
-            var positionTween = this.game.add.tween(this).to({ y: -50 }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            positionTween.onComplete.add(function() {
-                this.game.add.tween(this).to({ y: 0 }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            }, this);
-
-            var whiteAlphaTween = this.game.add.tween(this.whiteEnemy).to({ alpha: 1 }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            whiteAlphaTween.onComplete.add(function() {
-                this.game.add.tween(this.whiteEnemy).to({ alpha: 0 }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            }, this);
-
-            var circleTween = this.game.add.tween(this.aimCircle).to({ y: this.aimCircleInitialY + 80 }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            circleTween.onComplete.add(function() {
-                var circleTween = this.game.add.tween(this.aimCircle).to({ y: this.aimCircleInitialY }, 150, Phaser.Easing.Quadratic.InOut, true, 0);
-            }, this);
-        }
-        this.enemyBar.decreaseLifeBar(7);
-    }
+    
 }
 
 export default Heroes;
