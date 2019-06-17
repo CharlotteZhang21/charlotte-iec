@@ -44,6 +44,8 @@ class Heroes extends Phaser.Group {
 
             ContainerUtil.fitInContainer(heroPortrait, this.args[i].container, 0.5, 0.5);
 
+            hero.container = this.args[i].container;
+
             this.add(hero);
 
             hero.add(heroPortrait);

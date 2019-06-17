@@ -752,7 +752,7 @@ class Board extends Phaser.Group {
                 
                 //get nearby candies
                 var topCandy = this.candyAt(candy.col, candy.row - 1);
-                if (topCandy != -1) {
+                if (topCandy != -1 && topCandy.type != '_match4') {
                     this.removeMap[topCandy.row][topCandy.col] = 1;
                     // this.destroyCandy(topCandy, this.removeMap[topCandy.row][topCandy.col]);
                     // destroy++;
@@ -760,7 +760,7 @@ class Board extends Phaser.Group {
 
 
                 var leftCandy = this.candyAt(candy.col - 1, candy.row);
-                if (leftCandy != -1) {
+                if (leftCandy != -1 && leftCandy.type != '_match4') {
                     this.removeMap[leftCandy.row][leftCandy.col] = 1;
                     // this.destroyCandy(leftCandy, this.removeMap[leftCandy.row][leftCandy.col]);
                     // destroy++;
@@ -768,7 +768,7 @@ class Board extends Phaser.Group {
 
 
                 var rightCandy = this.candyAt(candy.col + 1, candy.row);
-                if (rightCandy != -1) {
+                if (rightCandy != -1 && rightCandy.type != '_match4') {
                     this.removeMap[rightCandy.row][rightCandy.col] = 1;
                     // this.destroyCandy(rightCandy, this.removeMap[rightCandy.row][rightCandy.col]);
                     // destroy++;
@@ -777,7 +777,7 @@ class Board extends Phaser.Group {
 
 
                 var bottomCandy = this.candyAt(candy.col, candy.row + 1);
-                if (bottomCandy != -1) {
+                if (bottomCandy != -1 && bottomCandy.type != '_match4') {
                     this.removeMap[bottomCandy.row][bottomCandy.col] = 1;
                     // this.destroyCandy(bottomCandy, this.removeMap[bottomCandy.row][bottomCandy.col]);
                     // destroy++;

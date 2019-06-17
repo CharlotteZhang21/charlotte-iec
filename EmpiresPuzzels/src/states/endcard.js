@@ -300,7 +300,7 @@ class Endcard extends Phaser.State {
                     this.heroes.changeHealth(randomHeroColorType, -10, 1);
 
                 }, this);
-                
+
                 Tweener.fadeOut(attackingEffect, 0, 100, Phaser.Easing.Linear.None).onComplete.add(function(e) {
                     e.destroy();
                 }, this);
@@ -334,9 +334,11 @@ class Endcard extends Phaser.State {
 
                 Tweener.fadeIn(weaponEffect, i * 100, 200);
 
-                weaponEffect.scale.x = hero.width * 0.2 / (weaponEffect.width / weaponEffect.scale.x);
-                weaponEffect.x = hero.x;
-                weaponEffect.y = hero.y;
+                weaponEffect.scale.x = hero.width * 0.5 / (weaponEffect.width / weaponEffect.scale.x);
+                weaponEffect.scale.y = weaponEffect.scale.x;
+
+                weaponEffect.x = this.heroes.getPos(hero.colorType).x;
+                weaponEffect.y = this.heroes.getPos(hero.colorType).y;
 
                 weaponEffect.blendMode = PIXI.blendModes.SCREEN;
                 weaponEffect.tint = PiecSettings.blockColors[hero.colorType];
@@ -346,12 +348,29 @@ class Endcard extends Phaser.State {
 
                 this.enemies.changeHealth(targetEnemy.name, -attack, 1);
 
-                weaponEffect.angle = 20 * (hero.name - targetEnemy.name);
+                // weaponEffect.angle = 30 * (hero.name + 1 - targetEnemy.name);
+                var point1 = {
+                    x: ContainerUtil.getXCenterWithinContainer(hero.container),
+                    y: ContainerUtil.getYCenterWithinContainer(hero.container),
+                };
+                var point2 = {
+                    x: targetEnemy.x,
+                    y: targetEnemy.y
+                }
 
+                console.log(point1)
+                console.log(point2)
+                // angle in degrees
+                var angleDeg = 90 + (Math.atan2(point2.y - point1.y, point2.x - point1.x) * 180 / Math.PI);
+                console.log(angleDeg);
+                // var direction = ContainerUtil
+                weaponEffect.angle = angleDeg;
+                // weaponEffect.angle = new Phaser.Point(point1)
+                //                         .angle(targetEnemy) / Math.PI * -90;
+                console.log(weaponEffect.angle)
                 this.game.add.tween(weaponEffect).to({
                     x: targetEnemy.x,
                     y: targetEnemy.y
-
                 }, 300, Phaser.Easing.Quadratic.InOut, true, i * 100).onComplete.add(function(e) {
                     Tweener.fadeOut(e, 0, 500);
                 }, this);

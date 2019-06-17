@@ -6,20 +6,20 @@ const kebabCase = require('kebab-case');
 const pjson = require('../package.json');
 
 var iecSettings = JSON.parse(fs.readFileSync('./iec-settings.json', 'utf8'));
-// var localisation = JSON.parse(fs.readFileSync('./localisation.json', 'utf8'));
+var localisation = JSON.parse(fs.readFileSync('./localisation.json', 'utf8'));
 
 
 var path = 'dist';
 
 var label, fileString;
 
-// var logThis = convertToArray(iecSettings);
+var logThis = convertToArray(iecSettings);
 
 // console.log(logThis);
 
-// var settingCombinations = getCombinations(logThis, logThis.length);
+var settingCombinations = getCombinations(logThis, logThis.length);
 
-// var labels = getLabels(iecSettings);
+var labels = getLabels(iecSettings);
 
 var name, value, token, replaceText, replaceValue;
 
@@ -31,13 +31,12 @@ exec('rm -r ' + path, function(err, stdout, stderr) {
 
     exec('mkdir dist', function(err, stdout, stderr) {
 
-        // for (var key in localisation) {
-        //     if (localisation.hasOwnProperty(key)) {
+        for (var key in localisation) {
+            if (localisation.hasOwnProperty(key)) {
 
 
                 settingCombinations.forEach(function(specificCombination) {
-                    // label = pjson.name + '-' + key + '-';
-                    label = pjson.name;
+                    label = pjson.name + '-' + key + '-';
 
                     index = 0;
 
@@ -45,9 +44,9 @@ exec('rm -r ' + path, function(err, stdout, stderr) {
 
                     specificCombination.forEach(function(option) {
 
-                        // fileString += "PiecSettings." + labels[index] + " = ";
+                        fileString += "PiecSettings." + labels[index] + " = ";
 
-                        // console.log("LABELS ------ " + labels[index]);
+                        console.log("LABELS ------ " + labels[index]);
 
                         if (Number.isInteger(option)) {
                             fileString += option + ";\n";
@@ -55,7 +54,7 @@ exec('rm -r ' + path, function(err, stdout, stderr) {
                             fileString += "'" + option + "';\n";
                         }
 
-                        // label += kebabCase(labels[index]) + "-" + option + "-";
+                        label += kebabCase(labels[index]) + "-" + option + "-";
 
                         index++;
                     }, this);
@@ -72,29 +71,29 @@ exec('rm -r ' + path, function(err, stdout, stderr) {
                     replaceText = [];
                     replaceValue = [];
 
-                    // localisation[key].forEach(function(item, i) {
+                    localisation[key].forEach(function(item, i) {
 
-                    //     name = Object.keys(item)[0];
-                    //     token = "\{\{" + Object.keys(item)[0] + "\}\}";
-                    //     value = item[name];
-                    //     replaceText.push(new RegExp(token, "g"));
-                    //     replaceValue.push(value);
+                        name = Object.keys(item)[0];
+                        token = "\{\{" + Object.keys(item)[0] + "\}\}";
+                        value = item[name];
+                        replaceText.push(new RegExp(token, "g"));
+                        replaceValue.push(value);
 
-                    // }, this);
+                    }, this);
 
                     console.log('dist/' + label + '/*.html');
-                    // console.log(replaceText);
-                    // console.log(replaceValue);
+                    console.log(replaceText);
+                    console.log(replaceValue);
 
-                    // replace.sync({
-                    //     files: 'dist/' + label + '/*.html',
-                    //     replace: replaceText,
-                    //     with: replaceValue
-                    // });
+                    replace.sync({
+                        files: 'dist/' + label + '/*.html',
+                        replace: replaceText,
+                        with: replaceValue
+                    });
 
                 }, this);
-        //     }
-        // }
+            }
+        }
     });
 });
 

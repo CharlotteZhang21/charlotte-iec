@@ -44,6 +44,8 @@ class Enemy extends Phaser.Group {
 
             enemy.name = i;
 
+            enemy.container = this.args[i].container;
+
             enemy.dead = false;
 
             enemy.health = PiecSettings.lifeCounters.enemy.initialValue;
