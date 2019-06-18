@@ -230,6 +230,8 @@ class Board extends Phaser.Group {
         //==== end empires and puzzles
 
         this.onRespawnFinished = new Phaser.Signal();
+
+
     }
 
     randomHelper() {
@@ -279,6 +281,8 @@ class Board extends Phaser.Group {
 
 
     initCandies(board) {
+        this.canPick = false;
+        this.generated = 0;
         for (var i = 0; i < board.length; i++) {
             for (var j = 0; j < board[0].length; j++) {
 
@@ -293,10 +297,6 @@ class Board extends Phaser.Group {
                     }
                 } else {
 
-                    //customised random generate paws
-                    // var special = Math.random() > 0.95 ? "_paw" : '';
-                    // console.log(board[0].length)
-
                     var special = '';
 
                     if (PiecSettings.foxPathPortrait || PiecSettings.foxPathLandscape) {
@@ -304,8 +304,10 @@ class Board extends Phaser.Group {
                             special = '_paw';
 
                     }
+                    this.generated++;
 
-                    this.createCandy(board[i][j], j, i, special);
+                    this.createCandy(board[i][j], j, i, special, true);
+
                 }
             }
         }
@@ -345,7 +347,7 @@ class Board extends Phaser.Group {
             this.bringToTop(this.getCandyOnFoxPath(this.foxCurrentAt));
     }
 
-    createCandy(id, col, row, special = "") {
+    createCandy(id, col, row, special = "", tween = false) {
         var type = special;
 
         if (id == 0) {
@@ -436,6 +438,26 @@ class Board extends Phaser.Group {
 
         if (id == "colorbomb") {
             this.idleColorbomb(candy);
+        }
+
+
+
+        //tween in
+        if(tween){
+
+            var appearDelay = 300 + 100 * Math.floor(Math.abs((this.args.board[0].length - 1) / 2 - candy.col));
+            var candyFinalY = candy.y;
+
+            candy.y += candy.height * this.args.board.length;
+
+            this.game.add.tween(candy).to({
+                y: [candyFinalY, candyFinalY - candy.height * 0.1, candyFinalY]
+            }, 300, Phaser.Easing.Quadratic.In, true, appearDelay).onComplete.add(function(){
+                this.generated--;
+                if(this.generated <= 0){
+                    this.canPick = true;
+                }
+            }, this);
         }
 
         return candy;
@@ -740,11 +762,14 @@ class Board extends Phaser.Group {
             }
         }
 
+        var destroy = 0;
         //customized for E&P 
 
         if (candy != null) {
 
             if (candy.type == '_match4') {
+
+
 
                 if (destroyItself)
                     this.removeMap[candy.row][candy.col] = 1;
@@ -755,7 +780,7 @@ class Board extends Phaser.Group {
                 if (topCandy != -1 && topCandy.type != '_match4') {
                     this.removeMap[topCandy.row][topCandy.col] = 1;
                     // this.destroyCandy(topCandy, this.removeMap[topCandy.row][topCandy.col]);
-                    // destroy++;
+                    destroy++;
                 }
 
 
@@ -763,7 +788,7 @@ class Board extends Phaser.Group {
                 if (leftCandy != -1 && leftCandy.type != '_match4') {
                     this.removeMap[leftCandy.row][leftCandy.col] = 1;
                     // this.destroyCandy(leftCandy, this.removeMap[leftCandy.row][leftCandy.col]);
-                    // destroy++;
+                    destroy++;
                 }
 
 
@@ -771,7 +796,7 @@ class Board extends Phaser.Group {
                 if (rightCandy != -1 && rightCandy.type != '_match4') {
                     this.removeMap[rightCandy.row][rightCandy.col] = 1;
                     // this.destroyCandy(rightCandy, this.removeMap[rightCandy.row][rightCandy.col]);
-                    // destroy++;
+                    destroy++;
                 }
 
 
@@ -780,7 +805,7 @@ class Board extends Phaser.Group {
                 if (bottomCandy != -1 && bottomCandy.type != '_match4') {
                     this.removeMap[bottomCandy.row][bottomCandy.col] = 1;
                     // this.destroyCandy(bottomCandy, this.removeMap[bottomCandy.row][bottomCandy.col]);
-                    // destroy++;
+                    destroy++;
                 }
 
             }
@@ -799,6 +824,7 @@ class Board extends Phaser.Group {
         }
 
         //end customize
+        return destroy;
 
     }
 
@@ -1584,6 +1610,7 @@ class Board extends Phaser.Group {
 
                     var destroyTween;
 
+                    //=========== handle different candy types
 
                     //Normal candy
                     if (candy.type == "") {
@@ -1599,12 +1626,10 @@ class Board extends Phaser.Group {
                     } else if (candy.type == "colorbomb") {
                         destroyTween = this.animateColorBomb(candy, this.removeMap[i][j]);
                     } else if (candy.type == "_match4") {
-                        this.handleOneTapCandies(false, candy);
+                        destroyed += this.handleOneTapCandies(false, candy);
                         destroyTween = this.destroyCandy(candy, this.removeMap[i][j]);
                         this.candies[j + ',' + i] = null;
                     } else if (candy.type == '_paw') {
-
-
 
                         if (this.getCandyOnFoxPath(this.foxCurrentAt) != null) {
 
@@ -1619,6 +1644,8 @@ class Board extends Phaser.Group {
                     } else {
                         destroyTween = this.destroyCandy(candy, this.removeMap[i][j]);
                     }
+
+                    //======== end of handle different candy types
 
                     if (destroyTween == null) {
                         if (candy != -1)
@@ -1638,16 +1665,19 @@ class Board extends Phaser.Group {
 
                             var enemyNum = 0;
                             
-                            if (candyObj.col < (this.args.board[0].length / 3 + 1))
+                            if (candyObj.col < (this.args.board[0].length / 3)){
                                 enemyNum = 2;
-                            else if (candyObj.col < (this.args.board[0].length / 3 * 2 + 1)) {
+
+                            }
+                            else if (candyObj.col < (this.args.board[0].length / 3 * 2)) {
                                 enemyNum = 0;
                             } else {
                                 enemyNum = 1;
                             }
+                            console.log('enemyNum', enemyNum);
                             
                             //triggered in endcard
-                            this.onMatch.dispatch(candyObj, enemyNum, -10, this.attackCombo);
+                            this.onMatch.dispatch(candyObj, enemyNum, -PiecSettings.danmageAttributes[candyObj.id], this.attackCombo);
 
                         }, this);
                         this.candies[j + "," + i] = null;

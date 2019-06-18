@@ -273,6 +273,60 @@ export function particleExplosion(game, particlesSrc, particleContainer, parentC
     return particles;
 }
 
+//customised for E&P
+
+export function particleExplosionEmpiresPuzzle(game, color, particlesSrc, particleContainer, parentContainer, x, y, amount, angleRange = 360) {
+    var particles = [];
+
+    var radius = ContainerUtil.getContainerWidth(parentContainer) / 2;
+
+    var angle = 0;
+    var step = (2 * Math.PI ) / amount;
+
+    for (var i = 0; i < amount; i++) {
+
+        var particle = getRandomParticleFromArray(game, particlesSrc);
+
+        particle.blendMode = PIXI.blendModes.SCREEN;
+
+        particle.tint = color;
+        
+        ContainerUtil.fitInContainer(particle, particleContainer, 0.5, 0.5);
+        
+        
+        particle.angle =  90 + 360 / amount * i;
+ 
+        particles.push(particle);
+        
+        game.add.existing(particle);
+        
+        particle.x = x;
+        particle.y = y;
+
+        var particleScale = particle.scale.x;
+
+        var targetX = particle.x + radius * Math.cos(angle),
+            targetY = particle.y + radius * Math.sin(angle);
+
+        angle += step;
+
+        game.add.tween(particle).to({
+            x: targetX,
+            y: targetY,
+        }, 400, Phaser.Easing.Quadratic.Out, true, 0);
+
+        particle.scale.x = particleScale * 0.1;
+
+        game.add.tween(particle.scale).to({
+            x: [particleScale, 0],
+            y: [particleScale, 0],
+        }, 400, Phaser.Easing.Quadratic.Out, true, 0);
+
+        
+    }
+    return particles;
+}
+
 function particleSpawnSingle(game, particlesSrc, particleContainer, x, y, angleRange = 360) {
     var particle = getRandomParticleFromArray(game, particlesSrc);
 

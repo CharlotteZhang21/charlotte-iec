@@ -70,20 +70,24 @@ class Enemy extends Phaser.Group {
 
 
     getEnemy(index) {
+        
         return this.enemies[index];
+
     }
 
-    getRandomAlive(){
+    getRandomAlive() {
 
+        if(this.alivedEnemy <= 0)
+            return;
 
         var enemy = this.getEnemy(Math.floor(Math.random() * this.args.length));
 
-        if(enemy ==null || enemy.dead){
-            
+        if (enemy == null || enemy.dead) {
+
             return this.getRandomAlive();
 
-        }else{
-        
+        } else {
+
             return enemy;
         }
     }
@@ -141,6 +145,7 @@ class Enemy extends Phaser.Group {
             return;
         }
 
+        console.log(enemy.name);
         var initialY = enemy.y;
 
         this.enemyHurtTween = this.game.add.tween(enemy).to({
@@ -155,15 +160,14 @@ class Enemy extends Phaser.Group {
     }
 
     die(enemy) {
-        console.log(enemy.name, enemy.dead);
-        console.log(this.enemies);
+
+        console.log('dead', enemy.name, enemy.dead);
+
         if (!enemy.dead) {
             enemy.dead = true;
             this.alivedEnemy--;
             Tweener.fadeOut(enemy.lifeBar, 0, 100, Phaser.Easing.Linear.None);
-            if(this.alivedEnemy <= 0){
-                this.game.onComplete.dispatch();
-            }
+
             this.game.tweens.remove(this.enemyHurtTween);
             console.log('here');
             this.game.add.tween(enemy).to({
@@ -190,14 +194,22 @@ class Enemy extends Phaser.Group {
 
 
             }, this);
-        }else {
+        } else {
+            console.log(this.alivedEnemy);
+            if (this.alivedEnemy <= 0) {
+                this.game.onComplete.dispatch();
+            }
+        }
 
+        if (this.alivedEnemy <= 0) {
+            console.log('here');
+            this.game.onComplete.dispatch();
         }
 
     }
 
 
-    
+
 }
 
 export default Enemy;

@@ -194,7 +194,7 @@ class Endcard extends Phaser.State {
                 // }
 
                 // this.comboText.alpha = 1;
-                this.comboText.text = 'combo x' + attackCombo;
+                this.comboText.text = 'combo x' + attackCombo / 2;
                 var originalScale = this.comboText.scale.x;
 
                 this.game.add.tween(this.comboText.scale).to({
@@ -226,7 +226,7 @@ class Endcard extends Phaser.State {
                                 x: 0.5,
                                 y: 0.5
                             }
-                        })
+                        });
 
                         Tweener.fadeIn(particle, 0, 100, Phaser.Easing.Quadratic.InOut);
 
@@ -358,16 +358,11 @@ class Endcard extends Phaser.State {
                     y: targetEnemy.y
                 }
 
-                console.log(point1)
-                console.log(point2)
                 // angle in degrees
                 var angleDeg = 90 + (Math.atan2(point2.y - point1.y, point2.x - point1.x) * 180 / Math.PI);
-                console.log(angleDeg);
-                // var direction = ContainerUtil
+
+
                 weaponEffect.angle = angleDeg;
-                // weaponEffect.angle = new Phaser.Point(point1)
-                //                         .angle(targetEnemy) / Math.PI * -90;
-                console.log(weaponEffect.angle)
                 this.game.add.tween(weaponEffect).to({
                     x: targetEnemy.x,
                     y: targetEnemy.y
@@ -390,7 +385,7 @@ class Endcard extends Phaser.State {
 
         ///===== END OF ANIMATIONS =====///
 
-
+        this.endcard();
 
 
         this.game.time.events.add(3000, function() {
@@ -399,6 +394,34 @@ class Endcard extends Phaser.State {
         })
 
     }
+
+    endcard() {
+        this.board.pause = true;
+        this.game.time.events.add(500, function() {
+            this.animateChars();
+            this.animateBoard();
+            // this.animateLogo();
+            // this.animateCandies();
+            // this.finalAnimationCta();
+        }, this);
+    }
+    
+    animateChars() {
+        var initialY = this.heroes.y;
+        this.game.add.tween(this.heroes).to({
+            alpha: 0,
+            y: [initialY, initialY + 100],
+        }, 500, Phaser.Easing.Quadratic.InOut, true);
+    }
+
+    animateBoard() {
+        var initialY = this.board.y;
+        this.game.add.tween(this.board).to({
+            alpha: 0,
+            y: [initialY, initialY - 100],
+        }, 500, Phaser.Easing.Quadratic.InOut, true);
+    }
+
 
     resize() {
         // resize code here

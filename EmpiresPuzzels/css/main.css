@@ -214,6 +214,20 @@ a {
   right: 0;
   top: 20%; }
 
+#victory-bg {
+  width: 60%;
+  height: 10%;
+  top: 30%;
+  left: 0;
+  right: 0; }
+
+#victory-text {
+  width: 80%;
+  height: 70%;
+  left: 0;
+  right: 0;
+  top: 0; }
+
 #energy-ball {
   width: 10%;
   height: 10%; }

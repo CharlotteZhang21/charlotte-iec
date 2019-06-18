@@ -68,13 +68,13 @@ class Heroes extends Phaser.Group {
             //==== health and enegy ====//
 
             hero.healthBar = new Counter(this.game, PiecSettings.lifeCounters['hero-health']);
-            
+
             hero.add(hero.healthBar);
 
             hero.health = PiecSettings.lifeCounters['hero-health'].initialValue;
 
             //======== energy bar =================
-            
+
             hero.energyBar = new Counter(this.game, PiecSettings.lifeCounters['hero-energy']);
 
             hero.add(hero.energyBar);
@@ -109,10 +109,10 @@ class Heroes extends Phaser.Group {
 
     }
 
-    getPos(colorType){
+    getPos(colorType) {
         var hero = this.getHero(colorType);
-        return{
-            x: hero.portrait.x, 
+        return {
+            x: hero.portrait.x,
             y: hero.portrait.y,
         }
     }
@@ -160,7 +160,7 @@ class Heroes extends Phaser.Group {
 
                     hero.canAttackIndicator.y -= hero.height * 0.07;
 
-                    
+
 
                     hero.bringToTop(hero.energyBar);
 
@@ -233,58 +233,61 @@ class Heroes extends Phaser.Group {
             return;
         }
 
-
-        switch (hero.colorType) {
-            case 4:
-                hero.attacking = true;
-                //heal
-                for (var i = 0; i < this.heroes.length; i++) {
-                    this.heroes[i].health = PiecSettings.lifeCounters['hero-health'].maxValue;
-                    this.heroes[i].healthBar.changeCounterTo(this.heroes[i].health, 500);
-
-
-                    var healthText = new CustomText(this.game, PiecSettings.healText);
-                    healthText.scale.x = this.heroes[i].width / (healthText.width / healthText.scale.x);
-                    healthText.scale.y = healthText.scale.x;
-                    healthText.y = this.heroes[i].y;
-                    healthText.x = this.heroes[i].x;
-
-                    var originalScale = healthText.scale.x;
-
-                    this.game.add.tween(healthText.scale).to({
-                        x: [originalScale * 1.5, originalScale],
-                        y: [originalScale * 1.5, originalScale]
-                    }, 600, Phaser.Easing.Quadratic.InOut, true, 100);
-
-                    this.game.add.tween(healthText).to({
-                        alpha: [1, 1, 0],
-                        y: this.heroes[i].y - this.heroes[i].height / 2
-                    }, 1200, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function(e) {
-                        e.destroy();
-                    }, this);
-                }
-
-                break;
-
-            case 2:
-
-                this.onAttack.dispatch(hero, 40);
-                break;
-
-            case 3:
-
-                this.onAttack.dispatch(hero, 40);
-                break;
-        }
+        var heroAnimationDelay = 400;
 
         hero.canAttack = false;
         hero.canAttackIndicator.destroy();
         hero.canAttackIndicator = null;
 
         var originalY = hero.y;
+
+        ParticlesUtil.particleExplosionEmpiresPuzzle(this.game, PiecSettings.blockColors[hero.colorType], ['shining.png'], hero.container, hero.container, ContainerUtil.getXCenterWithinContainer(hero.container), ContainerUtil.getYCenterWithinContainer(hero.container), 10, 360);
+
         this.game.add.tween(hero).to({
-            y: originalY * 0.95
-        }, 300, Phaser.Easing.Quadratic.None, true, 0).onComplete.add(function() {
+            y: originalY - hero.portrait.height * 0.1
+        }, 300, Phaser.Easing.Quadratic.None, true, 400).onComplete.add(function() {
+            switch (hero.colorType) {
+                case 4:
+                    hero.attacking = true;
+                    //heal
+                    for (var i = 0; i < this.heroes.length; i++) {
+                        this.heroes[i].health = PiecSettings.lifeCounters['hero-health'].maxValue;
+                        this.heroes[i].healthBar.changeCounterTo(this.heroes[i].health, 500);
+
+
+                        var healthText = new CustomText(this.game, PiecSettings.healText);
+                        healthText.scale.x = this.heroes[i].portrait.width / (healthText.width / healthText.scale.x);
+                        healthText.scale.y = healthText.scale.x;
+                        healthText.y = this.getPos(this.heroes[i].colorType).y;
+                        healthText.x = this.getPos(this.heroes[i].colorType).x;
+
+                        var originalScale = healthText.scale.x;
+
+                        this.game.add.tween(healthText.scale).to({
+                            x: [originalScale * 1.5, originalScale],
+                            y: [originalScale * 1.5, originalScale]
+                        }, 600, Phaser.Easing.Quadratic.InOut, true, 100);
+
+                        this.game.add.tween(healthText).to({
+                            alpha: [1, 1, 0],
+                            y: this.getPos(this.heroes[i].colorType).y - this.heroes[i].portrait.height / 2
+                        }, 1200, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function(e) {
+                            e.destroy();
+                        }, this);
+                    }
+
+                    break;
+
+                case 2:
+
+                    this.onAttack.dispatch(hero, 40);
+                    break;
+
+                case 3:
+
+                    this.onAttack.dispatch(hero, 40);
+                    break;
+            }
             this.game.add.tween(hero).to({
                 y: originalY
             }, 300, Phaser.Easing.Quadratic.None, true, 0)
@@ -294,7 +297,7 @@ class Heroes extends Phaser.Group {
         hero.energyBar.changeCounterTo(hero.energy, 100);
     }
 
-    
+
 }
 
 export default Heroes;
