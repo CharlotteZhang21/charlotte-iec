@@ -79,7 +79,7 @@ class PowerUpGame extends Phaser.Group {
     initSignals() {
         this.onSuccess = new Phaser.Signal();
         this.onFail = new Phaser.Signal();
-
+        this.onTap = new Phaser.Signal();
     }
 
     createCounter() {
@@ -177,15 +177,31 @@ class PowerUpGame extends Phaser.Group {
 
         var audioIndex = 0;
 
+
+        // this.game.input.onDown.add(function(e){
+
+            
+
+        // }, this);
+
         this.button.inputEnabled = true;
         this.button.input.useHandCursor = true;
-        this.button.events.onInputDown.add(function() {
+
+        this.button.events.onInputDown.add(function(point, events) {
+            //used in endcard
+            
             if (this.canInteract) {
                 this.increasePower(this.valueIncrementPerInteraction);
+                
+                // this.onTap.dispatch(e.clientX * window.devicePixelRatio, e.clientY * window.devicePixelRatio);
+                this.onTap.dispatch(this.getGameXInput(), this.getGameYInput());
+
+
+
                 if (this.args.particles !== undefined && this.args.particles.src !== undefined && this.args.particles.htmlTag !== undefined && this.args.particles.src.length > 0) {
 
                     if (this.args.particles.effect !== undefined && !this.poweredUp) {
-                        this.playEffect(this.args.particles.effect);
+                        this.playEffect(this.args.particles.effect, this.particleColour);
                     }
 
                     if (this.args.sounds !== undefined && this.args.sounds.interact !== undefined) {
@@ -207,6 +223,10 @@ class PowerUpGame extends Phaser.Group {
 
     //     this.game.input.addMoveCallback(this.updatePath, this);
     // }
+
+    setParticleColour(color){
+        this.particleColour = color;
+    }
 
     onUp() {
 
@@ -440,7 +460,7 @@ class PowerUpGame extends Phaser.Group {
 
     }
 
-    playEffect(effect) {
+    playEffect(effect, particleColour) {
 
         var inputX = this.getGameXInput();
         var inputY = this.getGameYInput();
@@ -487,7 +507,13 @@ class PowerUpGame extends Phaser.Group {
                     ParticlesUtil.particleRain(this.game, this.args.particles.src, this.args.particles.htmlTag, this.args.particles.htmlTagGoal, inputX, inputY, 15, 0, 10);
                     break;
                 case "glitterBurst":
-                    ParticlesUtil.particleRain(this.game, this.args.particles.src, this.args.particles.htmlTag, this.args.particles.htmlTagGoal, inputX, inputY, 8, 20, 30);
+                    var particlesSrcs = [];
+                    if(particleColour == null ){
+                        particlesSrcs = this.args.particles.src;
+                    }else {
+                        particlesSrcs = [particleColour + '-cube.png'];
+                    }
+                    ParticlesUtil.particleRain(this.game, particlesSrcs, this.args.particles.htmlTag, this.args.particles.htmlTagGoal, inputX, inputY, 8, 20, 30);
                     break;
                 default:
                     ParticlesUtil.particleBurst(this.game, this.args.particles.src, this.args.particles.htmlTag, inputX, inputY, 10);
@@ -693,6 +719,7 @@ class PowerUpGame extends Phaser.Group {
     }
 
     increasePower(amount) {
+        console.log(amount)
         this.currentPower += amount;
         var nextCheckpointAmount = this.getCheckpointAmount(this.currentCheckpoint);
 

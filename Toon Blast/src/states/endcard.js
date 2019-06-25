@@ -113,7 +113,7 @@ class Endcard extends Phaser.State {
                 y: 0.5
             }
         });
-        // this.anvil.show();
+        
 
         this.anvil.scale.x *= 0.95;
         this.anvil.scale.y *= 0.95;
@@ -302,7 +302,12 @@ class Endcard extends Phaser.State {
         this.miniGame.init();
 
 
+        this.miniGame.onTap.add(function(mouseX, mouseY){
+            var blockColour = this.blocks.checkClick(mouseX, mouseY);
 
+            this.miniGame.setParticleColour(blockColour);
+
+        }, this);
         this.miniGame.onSuccess.add(function() {
 
             this.miniGame.disableInteraction();

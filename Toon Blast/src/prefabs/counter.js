@@ -76,6 +76,7 @@ class Counter extends Phaser.Group {
 
         this.barFilling.anchor.set(0, .5);
 
+
         if (this.args.htmlTagFill !== undefined) {
             ContainerUtil.fitInContainer(this.barFilling, this.args.htmlTagFill);
             this.barFilling.x = -this.counterBackground.width / 2;
@@ -89,10 +90,12 @@ class Counter extends Phaser.Group {
             this.barFilling.scale.y = this.counterBackground.height / this.barFilling.height * .75;
         }
 
-        this.fullWidthFilling = this.barFilling.scale.x;
+        // this.fullWidthFilling = this.barFilling.scale.x;
 
-        if (this.maxValue !== undefined)
-            this.barFilling.scale.x = this.currentValue / this.maxValue * this.fullWidthFilling;
+        // if (this.maxValue !== undefined)
+        //     this.barFilling.scale.x = this.currentValue / this.maxValue * this.fullWidthFilling;
+
+
 
         if (this.args.iconSrc !== undefined)
             this.createCounterIcon('outside');
@@ -101,6 +104,40 @@ class Counter extends Phaser.Group {
             this.createTextCounter();
             this.updateTextCounter();
         }
+
+        var mask = new Phaser.Graphics(this.game, 0, 0);
+
+        mask.beginFill(0xffffff);
+
+
+        // mask.drawRoundedRect(this.barFilling.x, this.barFilling.y, this.barFilling.width, this.barFilling.height );
+        mask.drawRect(0, 0, 20, 20);
+
+
+        mask.x = this.barFilling.x;
+        mask.y = this.barFilling.y;
+        mask.width = this.barFilling.width;
+        mask.height = this.barFilling.height;
+        
+
+        this.barFilling.mask = mask;
+
+
+
+
+        this.add(mask);
+
+
+
+        this.fullWidthFilling = this.barFilling.width;
+        this.currentValue = 0.01;
+        
+        if (this.maxValue !== undefined) {
+            // this.barFilling.mask.scale.x = this.currentValue / this.maxValue * this.barFilling.width;
+            this.barFilling.mask.width = this.currentValue / this.maxValue * this.barFilling.width;
+            
+        }
+
 
     }
 
@@ -255,7 +292,7 @@ class Counter extends Phaser.Group {
         //perhaps needs to change .7 to a value that we can tweak
         if (this.args.htmlTagIcon !== undefined) {
             ContainerUtil.fitInContainer(this.counterIcon, this.args.htmlTagIcon, .5, .5);
-            
+
             this.counterIcon.x = ContainerUtil.getContainerX(this.args.htmlTagIcon) - ContainerUtil.getContainerX(this.args.htmlTag) -
                 this.counterBackground.width / 2 + this.counterIcon.width / 2;
             this.counterIcon.y = ContainerUtil.getContainerY(this.args.htmlTagIcon) - ContainerUtil.getContainerY(this.args.htmlTag) -
@@ -272,7 +309,7 @@ class Counter extends Phaser.Group {
             }
             this.counterIcon.scale.y = this.counterIcon.scale.x;
             this.counterIcon.y = this.counterBackground.y + this.counterBackground.height / 2;
-            
+
         }
 
 
@@ -320,6 +357,7 @@ class Counter extends Phaser.Group {
                 }
                 break;
             case 'rectangle_progressbar':
+                console.log(value);
                 this.changeRectBarTo(value, speed * waitBetweenUpdates, waitBetweenUpdates);
                 break;
 
@@ -357,12 +395,20 @@ class Counter extends Phaser.Group {
     setRectBarTo(value) {
         this.currentValue = value;
 
-        if (this.barFilling.tween !== undefined && this.barFilling.tween != null) {
-            this.game.tweens.remove(this.barFilling.tween);
+        // if (this.barFilling.tween !== undefined && this.barFilling.tween != null) {
+        //     this.game.tweens.remove(this.barFilling.tween);
+        // }
+
+        // this.barFilling.tween = this.game.add.tween(this.barFilling.scale).to({ x: this.currentValue / this.maxValue * this.fullWidthFilling },
+        //     200, Phaser.Easing.Linear.None, true, 0);
+
+        if(this.barFilling.mask.tween !== undefined && this.barFilling.mask.tween != null) {
+            this.game.tweens.remove(this.barFilling.mask);
         }
 
-        this.barFilling.tween = this.game.add.tween(this.barFilling.scale).to({ x: this.currentValue / this.maxValue * this.fullWidthFilling },
-            200, Phaser.Easing.Linear.None, true, 0);
+        this.barFilling.mask.tween = this.game.add.tween(this.barFilling.mask).to({
+            width: this.currentValue / this.maxValue * this.fullWidthFilling
+        }, 200, Phaser.Easing.Linear.None, true, 0);
 
         if (this.textField) {
             this.updateTextCounter();
@@ -405,7 +451,7 @@ class Counter extends Phaser.Group {
                     this.currentValue = value;
 
                 this.game.time.events.add(waitBetweenUpdates, function() {
-                    
+
                     if (this.textField) {
                         this.updateTextCounter();
                     }
@@ -421,6 +467,8 @@ class Counter extends Phaser.Group {
 
     changeRectBarTo(value, speed, waitBetweenUpdates) {
 
+        console.log(value)
+
         if (value > this.currentValue) {
 
             if (this.currentValue < value) {
@@ -431,7 +479,9 @@ class Counter extends Phaser.Group {
 
                 this.game.time.events.add(waitBetweenUpdates, function() {
 
-                    this.barFilling.scale.x = this.currentValue / this.maxValue * this.fullWidthFilling;
+                    // this.barFilling.scale.x = this.currentValue / this.maxValue * this.fullWidthFilling;
+                    // this.barFilling.mask.width = this.currentValue / this.maxValue * this.fullWidthFilling;
+                    this.barFilling.mask.width = this.currentValue / this.maxValue * this.barFilling.width;
                     if (this.textField) {
                         this.updateTextCounter();
                     }
@@ -455,7 +505,8 @@ class Counter extends Phaser.Group {
 
                 this.game.time.events.add(waitBetweenUpdates, function() {
 
-                    this.barFilling.scale.x = this.currentValue / this.maxValue * this.fullWidthFilling;
+                    // this.barFilling.scale.x = this.currentValue / this.maxValue * this.fullWidthFilling;
+                    this.barFilling.mask.width = this.currentValue / this.maxValue * this.barFilling.width;
 
                     if (this.currentValue > value) {
                         this.changeRectBarTo(value, 1, waitBetweenUpdates);

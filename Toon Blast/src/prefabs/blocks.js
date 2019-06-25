@@ -29,7 +29,7 @@ class Blocks extends Phaser.Group {
     createRandomBlocks() {
         var block;
 
-        var size = Util.isPortrait()? PiecSettings.blockArraySize.portrait : PiecSettings.blockArraySize.landscape;
+        var size = Util.isPortrait() ? PiecSettings.blockArraySize.portrait : PiecSettings.blockArraySize.landscape;
 
         this.maxCol = size.length;
 
@@ -40,8 +40,10 @@ class Blocks extends Phaser.Group {
         for (var j = 0; j < size.length; j++) {
 
             for (var i = this.maxRow; i > this.maxRow - size[j]; i--) {
+                var blockColour = this.getRandomBlockColor(i, j);
+                block = new Phaser.Sprite(this.game, 0, 0, 'block_' + blockColour);
 
-                block = new Phaser.Sprite(this.game, 0, 0, 'block_' + PiecSettings.blocks[Math.floor(Math.random() * 6)]);
+                block.colour = blockColour;
                 this.add(block);
 
                 ContainerUtil.fitInContainer(block, 'fixed-block-1', 0.5, 1);
@@ -65,7 +67,7 @@ class Blocks extends Phaser.Group {
 
                     leftBlockCoor = j - 1;
                     if (this.blocks[leftBlockCoor + ',' + i] != undefined)
-                        block.x = this.blocks[leftBlockCoor + ',' + i].x + this.blocks[leftBlockCoor + ',' + i].width * (1 + 0.1 * Math.random());
+                        block.x = this.blocks[leftBlockCoor + ',' + i].x + this.blocks[leftBlockCoor + ',' + i].width * (0.9 + 0.1 * Math.random());
                     else {
                         block.x = this.blocks[j + ',' + this.maxRow].x;
                     }
@@ -90,6 +92,59 @@ class Blocks extends Phaser.Group {
 
     }
 
+
+    getRandomBlockColor(i, j) {
+        var colour = PiecSettings.blocks[Math.floor(Math.random() * 6)];
+
+        var bottomBlockNum = j + ',' + (i + 1);
+        var bottomBlock = this.blocks[bottomBlockNum];
+
+
+        var leftBlockNum = j + ',' + (i - 1);
+        var leftBlock = this.blocks[leftBlockNum];
+
+
+        if (bottomBlock != undefined && colour == bottomBlock.colour) {
+
+            return this.getRandomBlockColor(i, j);
+        }
+        if (leftBlock != undefined && colour == leftBlock.colour) {
+            return this.getRandomBlockColor(i, j);
+        }
+
+        return colour;
+
+    }
+
+    checkClick(mouseX, mouseY) {
+
+        for (var key in this.blocks) {
+            var block = this.blocks[key];
+            var blockWidthRange = [block.worldPosition.x - block.width / 2 * this.scale.x, block.worldPosition.x + block.width / 2 * this.scale.x];
+            var blockHeightRange = [block.worldPosition.y - block.height * this.scale.x, block.worldPosition.y];
+
+            if (mouseX >= blockWidthRange[0] && mouseX <= blockWidthRange[1] && mouseY >= blockHeightRange[0] && mouseY <= blockHeightRange[1]) {
+                // block.tint = 0x5555555;
+                // block.tint = 0xfffffff;
+                if(block.tween!= null ){
+                    this.game.tweens.remove(block.tween);
+                    block.angle = 0;
+                }
+                block.tween = this.game.add.tween(block).to({
+                        angle: 15
+                    }, 300,
+                    function(k) {
+                        return Math.sin(Math.PI * 2 * k);
+                    }, true, 0, 1);
+                return block.colour;
+            }
+
+        }
+
+        return null;
+    }
+
+
     animateBlocks() {
         var index = 0;
         var lastTween = null;
@@ -104,13 +159,13 @@ class Blocks extends Phaser.Group {
                 var finalY = block.y;
                 var finalX = block.x;
 
-                if(Util.isPortrait()){
-                    block.y = finalY - this.game.global.windowHeight * window.devicePixelRatio;    
-                }else {
-                    block.y = finalY - this.game.global.windowHeight * window.devicePixelRatio * 1.6;    
+                if (Util.isPortrait()) {
+                    block.y = finalY - this.game.global.windowHeight * window.devicePixelRatio;
+                } else {
+                    block.y = finalY - this.game.global.windowHeight * window.devicePixelRatio * 1.6;
                 }
 
-                
+
                 var originalScale = block.scale.x;
 
                 this.game.add.tween(block.scale).to({
@@ -126,15 +181,15 @@ class Blocks extends Phaser.Group {
 
         }
 
-        lastTween.onComplete.add(function(){
-            
+        lastTween.onComplete.add(function() {
+
             this.onBlocksFinished.dispatch();
         }, this);
 
     }
 
     levelUp(minigame) {
-        
+
     }
 
     explodeAll() {
@@ -184,7 +239,7 @@ class Blocks extends Phaser.Group {
     }
 
     generateSmoke() {
-    
+
         for (var i = 0; i < 50; i++) {
             var smoke = new CustomSprite(this.game, {
                 src: 'smoke',

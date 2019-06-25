@@ -1,0 +1,663 @@
+@import '_media-queries';
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-width: 100% auto;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-color: black;
+    /*background-image: url(../assets/bg.jpg);*/
+}
+
+canvas {
+    display: block;
+    cursor: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+#background {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#logo {
+    top: 10%;
+    width: 40%;
+    height: 10%;
+    left: 0;
+    right: 0;
+
+    @include iphoneLandscape {
+        width: 18%;
+        left: 15%;
+        right: auto;
+        top: 40%;
+    }
+
+
+    @include iPadPortrait {
+        width: 25%;
+        top: 5%;
+    }
+
+
+    @include iPhoneXLandscape {
+        width: 20%;
+        left: 5%;
+    }
+
+
+    @include iPadLandscape {
+        width: 28%;
+        left: 1%;
+    }
+
+}
+
+#hand {
+    width: 30%;
+    height: 10%;
+    left: 0;
+    right: 0;
+    top: 50%;
+
+
+    @include iphoneLandscape {
+        width: 10%;
+    }
+}
+
+
+#cloud-1 {
+    width: 75%;
+    height: 5%;
+    top: 8%;
+    left: 0;
+    right: 0;
+
+    @include iphoneLandscape {
+        width: 30%;
+    }
+    
+    @include iPadPortrait {
+        width: 25%;
+    }
+
+}
+
+#cloud-2 {
+    width: 30%;
+    height: 5%;
+    top: 21%;
+    left: 5%;
+
+    @include iphoneLandscape {
+        width: 14%;
+    }
+
+
+    @include iPadPortrait {
+        width: 20%;
+    }
+}
+
+#cloud-3 {
+    width: 28%;
+    height: 5%;
+    top: 30%;
+    right: 3%;
+
+    @include iphoneLandscape {
+        width: 12%;
+    }
+
+    @include iPadPortrait {
+        width: 17%;
+    }
+}
+
+/*bruno*/
+#character-1 {
+    width: 55%;
+    height: 5%;
+    top: 55%;
+    left: 25%;
+    // right: 0;
+
+    @include iphoneLandscape {
+        width: 23%;
+        left: 40%;
+    }
+
+    @include iPadLandscape {
+        width: 27%;
+    }
+
+    @include iPadPortrait {
+        width: 48%;
+    }
+}
+
+/*wally*/
+#character-2 {
+    width: 50%;
+    height: 5%;
+    top: 57%;
+    left: 18%;
+
+    @include iphoneLandscape {
+        width: 23%;
+        left: 35%;
+    }
+
+
+    @include iPadLandscape {
+        width: 25%;
+    }
+
+
+    @include iPadPortrait {
+        width: 44%;
+    }
+}
+
+/*cooper*/
+#character-3 {
+    width: 45%;
+    height: 5%;
+    top: 64%;
+    left: 0;
+    right: 0;
+
+    @include iphoneLandscape {
+        width: 21%;
+        left: 10%;
+        top: 68%;
+    }
+
+
+    @include iPadLandscape {
+        width: 25%;
+    }
+
+
+    @include iPadPortrait {
+        width: 40%;
+    }
+}
+
+#mark {
+    width: 60%;
+    height: 20%;
+    left: 0;
+    right: 0;
+    top: 20%;
+
+    @include iphoneLandscape {
+        width: 40%;
+    }
+
+}
+
+
+#characters-final {
+    width: 90%;
+    height: 10%;
+    bottom: 39%;
+    left: 12%;
+
+    @include iphoneLandscape {
+        width: 41%;
+        left: 37%;
+        bottom: 50%;
+    }
+
+    @include iPadLandscape {
+        width: 50%;
+        left: 34%;
+        bottom: 45%;
+    }
+
+    @include iPadPortrait {
+        width: 80%;
+        bottom: 45%;
+        left: 15%;
+    }
+
+    @include iPhoneXPortrait {
+        bottom: 37%;
+    }
+}
+
+
+
+#fixed-block-1 {
+
+    width: 15%;
+    height: 10%;
+    top: 59%;
+    left: 10%;
+}
+
+#fixed-block-2 {
+
+    width: 19%;
+    height: 10%;
+    top: 62%;
+    left: 27%;
+}
+
+#fixed-block-3 {
+
+    width: 20%;
+    height: 10%;
+    top: 71%;
+    left: 55%;
+}
+
+
+#random-block-area {
+    width: 90%;
+    height: 20%;
+    // top: 0%
+    left: 0;
+    right: 0;
+    bottom: 8%;
+
+
+    @include iphoneLandscape {
+        width: 70%;
+        bottom: 0%;
+        height: 8%;
+    }
+
+    @include iPhoneXLandscape {
+        width: 65%;
+        height: 7%;
+    }
+
+
+    @include iPadLandscape {
+        width: 69%;
+        bottom: 8%;
+    }
+
+    @include iPadPortrait {
+        width: 69%;
+        bottom: 8%;
+    }
+}
+
+
+/*======== power up game =========*/
+#anvil {
+    width: 30%;
+    height: 10%;
+    top: 2%;
+    right: 5%;
+
+    &-final {
+        width: 30%;
+        height: 10%;
+        top: 69%;
+        left: 32%;
+        // right: 0;
+
+
+        @include iphoneLandscape {
+            width: 14%;
+            left: 45%;
+            top: 64%;
+        }
+
+        @include iPadLandscape {
+            width: 20%;
+        }
+
+        @include iPadPortrait {
+            width: 28%;
+            top: 65%;
+        }
+    }
+}
+
+
+#crack {
+    width: 90%;
+    height: 10%;
+    left: 14%;
+    bottom: 12%;
+
+    @include iphoneLandscape {
+        width: 40%;
+        left: 36%;
+        bottom: 13%;
+    }
+
+    @include iPadPortrait {
+        bottom: 14%;
+        left: 11.5%;
+    }
+
+    @include iPhoneXLandscape {
+        width: 45%;
+        bottom: 10%;
+        left: 34.5%;
+    }
+}
+
+#powerup-container {
+    width: 72%;
+    height: 50%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    @include iphoneLandscape {
+        width: 80%;
+        top: auto;
+        height: 90%;
+    }
+
+    @include iPhoneXPortrait {
+        width: 100%;
+        height: 61%;
+        top: auto;
+        bottom: 18%;
+    }
+}
+
+#powerup-container-spawn {
+    width: 50%;
+    height: 20%;
+    top: 50%;
+    left: 0;
+    right: 0;
+
+
+    @include iphoneLandscape {
+        width: 30%;
+    }
+}
+
+
+
+
+#powerup-counter {
+    top: 1%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 15%;
+
+    @include iphoneLandscape {
+        width: 30%;
+
+    }
+
+
+    @include iPadLandscape {
+        width: 40%;
+    }
+
+    @include iPadPortrait {
+        width: 60%;
+    }
+
+
+
+    &-text {
+        width: 16%;
+        height: 3%;
+        top: 77.5%;
+        left: 0%;
+        right: 6.5%;
+    }
+
+    &-fill {
+        top: 3.8%;
+        width: 72%;
+        height: 3.5%;
+        left: 0;
+        right: 14.1%;
+
+        @include iphoneLandscape {
+            width: 23%;
+            right: 2.6%;
+            top: 3.5%;
+        }
+
+        @include iPadPortrait {
+            // top: 71.3%;
+            width: 44%;
+            right: 8%;
+            top: 3.2%;
+        }
+
+        @include iPadLandscape {
+            width: 29.7%;
+            right: 5%;
+        }
+
+        @include iPhoneXLandscape {
+            width: 28;
+            top: 3.9%;
+
+            // top: 80.8%;
+        }
+
+        @include iPhoneXPortrait {
+
+            top: 3.5%;
+        }
+
+    }
+
+    &-icon {
+        width: 18%;
+        height: 10%;
+        top: 0.5%;
+        // left: 0%;
+        right: 45%;
+
+        @include iphoneLandscape {
+            width: 6%;
+            right: 48%;
+            // top: 72.5%;
+        }
+
+        @include iPadPortrait {
+            // top: 67%;
+            width: 12%;
+        }
+
+
+        @include iPadLandscape {
+            width: 8%;
+        }
+
+
+
+    }
+}
+
+#single-particle-container {
+    width: 5%;
+    height: 5%;
+
+}
+
+#particle-container {
+    width: 10%;
+    height: 10%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    @include iphoneLandscape {
+        width: 10%;
+        height: 10%;
+    }
+
+
+    @include iPadLandscape {
+        width: 8%;
+    }
+}
+
+#particle-container-goal {
+    height: 10%;
+    width: 100%;
+    bottom: 0;
+}
+
+
+#cta {
+    &-container {
+        width: 50%;
+        height: 5%;
+        right: 50%;
+        bottom: 8%;
+        transform: translate(50%, 50%);
+
+
+        @include iphoneLandscape {
+            width: 20%;
+            height: 10%;
+            right: 10%;
+        }
+
+        @include iPhoneXLandscape {
+            bottom: 10%;
+        }
+
+
+        @include iPadPortrait {
+            width: 45%;
+            bottom: 8%;
+        }
+    }
+
+    &-text {
+        width: 45%;
+        height: 8%;
+        right: 50%;
+        bottom: 9.5%;
+        transform: translate(50%, 50%);
+
+        @include iphoneLandscape {
+            width: 12%;
+            height: 9%;
+            right: 10%;
+        }
+
+        @include iPhoneXLandscape {
+            width: 13%;
+            height: 12%;
+            bottom: 11.5%;
+        }
+
+        @include iPadPortrait {
+            width: 31%;
+            // bottom: 8%;
+        }
+    }
+}
+
+#smoke {
+
+    width: 100%;
+    height: 40%;
+    bottom: 0
+}
+
+
+/*
+ * ==========================================================================================================
+ * PIEC Basic Elements - NO NEED TO TWEAK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
+
+
+
+#wrap {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    background-color: #061628;
+}
+
+#piec-wrap {
+    position: absolute;
+    margin: auto;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.layout-item {
+    position: absolute;
+    margin: auto;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.layout-item img {
+    width: 100%;
+}
+
+#game {
+    position: absolute;
+    margin: auto;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    z-index: 10;
+}
+
+#videoBg {
+    width: 100%;
+    height: 100%;
+    transform-origin: left top;
+    -webkit-transform-origin: left top;
+    overflow-x: hidden;
+    position: absolute;
+}
+
+/*
+ * ==========================================================================================================
+ */
+// @media all and (orientation: landscape) {}
+
+// @media all and (min-width: 768px) and (orientation: portrait) {}
+
+// @media all and (min-height: 768px) and (orientation: landscape) {}
+
+
+
+/* iphone X */
+
+// @media (min-aspect-ratio: 724/354) and (orientation: landscape) {}

@@ -364,7 +364,7 @@ a {
 }
 
 #powerup-container {
-    width: 72%;
+    width: 100%;
     height: 50%;
     top: 0;
     bottom: 0;
@@ -402,10 +402,10 @@ a {
 
 
 #powerup-counter {
-    top: 1%;
+    top: 2%;
     left: 0;
     right: 0;
-    width: 100%;
+    width: 60%;
     height: 15%;
 
     @include iphoneLandscape {
@@ -433,11 +433,11 @@ a {
     }
 
     &-fill {
-        top: 3.8%;
-        width: 72%;
-        height: 3.5%;
+        top: 3%;
+        width: 53%;
+        height: 8%;
         left: 0;
-        right: 14.1%;
+        right: 0;
 
         @include iphoneLandscape {
             width: 23%;
@@ -474,9 +474,9 @@ a {
     &-icon {
         width: 18%;
         height: 10%;
-        top: 0.5%;
-        // left: 0%;
-        right: 45%;
+        top: 8%;
+        left: 0%;
+        right: 0%;
 
         @include iphoneLandscape {
             width: 6%;
