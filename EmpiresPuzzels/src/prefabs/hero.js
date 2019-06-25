@@ -156,9 +156,11 @@ class Heroes extends Phaser.Group {
 
                     hero.canAttackIndicator = CustomPngSequencesRenderer.playPngSequence(this.game, 'can_attack_ani', this, hero);
 
+                    // hero.add(hero.canAttackIndicator);
+
                     ContainerUtil.fitInContainer(hero.canAttackIndicator, 'hero-' + hero.name, 0.5, 0.5);
 
-                    hero.canAttackIndicator.y -= hero.height * 0.07;
+                    hero.canAttackIndicator.y -= hero.height * 0.01;
 
 
 
@@ -226,6 +228,18 @@ class Heroes extends Phaser.Group {
 
     die() {
         console.log('hero die');
+    }
+
+    cancelAllIndicators() {
+
+        for (var i = 0; i < this.heroes.length; i++) {
+            console.log('hero cancel', this.heroes[i])
+            if (this.heroes[i].canAttackIndicator != null) {
+                console.log('hero cancel', i)
+                this.heroes[i].canAttackIndicator.destroy();
+                this.heroes[i].canAttackIndicator = null;
+            }
+        }
     }
 
     attack(hero) {

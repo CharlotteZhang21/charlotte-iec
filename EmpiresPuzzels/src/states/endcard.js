@@ -19,13 +19,13 @@ import * as Util from '../utils/util';
 import * as CustomPngSequencesRenderer from '../utils/custom-png-sequences-renderer.js';
 import * as Tweener from '../utils/tweener';
 
-;
 
 //======= custom
 import Board from '../prefabs/board';
 import Enemy from '../prefabs/enemy';
 import Heroes from '../prefabs/hero'
-
+import Camera from '../prefabs/camera';
+import DarkOverlay from '../prefabs/dark-overlay';
 
 
 class Endcard extends Phaser.State {
@@ -49,13 +49,31 @@ class Endcard extends Phaser.State {
 
         this.game.audioController = new AudioContoller(game);
 
+        this.camera = new Camera(this.game);
+
+        this.camera.setZoom(1.01);
+
+        this.game.global.camera = this.camera;
+
+        this.game.onLevelUp = new Phaser.Signal();
+
         this.miniGame = null;
+
+        this.complete = false;
+
+        this.firstInteraction = false;
 
         //========== BACKGROUND
 
         this.background = new Background(this.game);
 
-        this.game.add.existing(this.background);
+
+
+        if (PiecSettings.cameraZoom) {
+            this.camera.gameWorld.add(this.background);
+        } else {
+            this.game.add.existing(this.background);
+        }
 
         //========== END OF BACKGROUND
 
@@ -82,22 +100,78 @@ class Endcard extends Phaser.State {
 
         // this.game.audioController = new AudioController();
 
+
+        this.level = 0;
+
+        
+        
+        this.enemies = new Enemy(this.game, PiecSettings.levels[this.level]);
+
+        if (PiecSettings.cameraZoom) {
+            this.camera.gameWorld.add(this.enemies);
+        } else {
+            this.game.add.existing(this.enemies);
+        }
+
+        this.darkOverlay = new DarkOverlay(this.game);
+
+        if (PiecSettings.cameraZoom) {
+            this.camera.gameWorld.add(this.darkOverlay);
+        }else{
+            this.game.add.existing(this.darkOverlay);
+        }
+
+
+
+        this.board = new Board(this.game, { "container": 'board-container', "board": chosenBoard, "hand": handPositions, "chances": chances });
+
+        this.board.pause = true;
+
+        if (PiecSettings.cameraZoom) {
+            this.camera.gameWorld.add(this.board);
+        } else {
+            this.game.add.existing(this.board);
+        }
+
+
         this.game.input.onDown.add(function() {
+            // this.game.onComplete.dispatch();
+            if(!this.firstInteraction) {
+                this.board.onFirstMatch.dispatch();
+                
+            }
             this.game.time.events.add(500, function() {
                 this.game.audioController.enableAudio();
             }, this);
         }, this);
-
-        this.enemies = new Enemy(this.game, PiecSettings.enemies);
-
-        this.board = new Board(this.game, { "container": 'board-container', "board": chosenBoard, "hand": handPositions, "chances": chances });
-
 
         this.heroes = new Heroes(this.game, PiecSettings.heroAttributes);
 
         this.comboText = new CustomText(this.game, PiecSettings.comboText);
         this.comboText.value = 0;
         this.comboText.hide();
+
+        if (PiecSettings.cameraZoom) {
+            this.camera.gameWorld.add(this.heroes);
+        } else {
+            this.game.add.existing(this.heroes);
+        }
+
+        if (PiecSettings.cameraZoom) {
+            this.game.time.events.add(1000, function() {
+                this.camera.zoomTo(1.5, 1000, Phaser.Easing.Quadratic.Out).onComplete.add(function() {
+                    this.board.pause = false;
+                    this.darkOverlay.show();
+                    // this.board.createPrompt();
+                    this.board.createHand();
+                }, this);
+            }, this)
+        } else {
+            this.board.createPrompt();
+            this.board.createHand();
+        }
+
+
 
         //========== CTA
 
@@ -121,31 +195,6 @@ class Endcard extends Phaser.State {
         //========== END OF CTA
 
 
-        //tutorial if not can delete
-        this.hand = new CustomSprite(this.game, {
-            src: 'hand',
-            container: "hand",
-            anchor: {
-                x: 0.5,
-                y: 0.5
-            }
-        });
-
-
-        this.hand.hide();
-
-        Tweener.fadeIn(this.hand, 800, 300, Phaser.Easing.Linear.None, true).onComplete.add(function(e) {
-            Tweener.tap(this.hand, 10, 0, 800, Phaser.Easing.Quadratic.InOut).onComplete.add(function() {
-                Tweener.fadeOut(this.hand, 1000, 300, Phaser.Easing.Linear.None, true);
-            }, this);
-        }, this);
-
-
-        // this.tutorialText = new CustomText(this.game, PiecSettings.tutorialText);
-        // Tweener.scaleIn(this.tutorialText, 800, 300, Phaser.Easing.Quadratic.InOut).onComplete.add(function(e){
-        //     Tweener.scaleOut(this.tutorialText, 1000, 300, Phaser.Easing.Quadratic.InOut);
-        // }, this);
-
 
         //logo example
 
@@ -166,13 +215,81 @@ class Endcard extends Phaser.State {
             this.onComplete();
         }, this);
 
+
+
         this.handleSignals();
     }
 
     handleSignals() {
 
+
+        this.game.onLevelUp.add(function(canDestroy){
+            this.level++;
+            if(canDestroy){
+                // this.enemies.destroy();
+            }
+            this.board.pause = true;
+
+            
+            if(this.level >= PiecSettings.levels.length){
+                this.animateVictory();    
+            }else {
+
+                
+                if(this.levelFinishText == undefined){
+                
+                    this.levelFinishBg = new CustomSprite(this.game, {
+                        src: 'levelUpbg',
+                        container: 'levelFinish-bg',
+                        anchor: {
+                            x: 0.5, 
+                            y: 0.5
+                        }
+                    })
+
+                    this.levelFinishBg.show();
+
+                    PiecSettings.levelFinishText.text = 'wave ' + this.level + "/" + PiecSettings.levels.length;
+
+                    this.levelFinishText = new CustomText(this.game, PiecSettings.levelFinishText);
+
+                }else {
+                    this.levelFinishText.text = 'wave ' + this.level + "/" + PiecSettings.levels.length;
+                    this.levelFinishBg.show();
+                    this.levelFinishText.show();
+                    
+                }
+                
+                this.game.time.events.add(1000, function(){
+                    this.levelFinishText.hide();
+                    this.levelFinishBg.hide();
+                    this.enemies.destroy();
+                    this.enemies = new Enemy(this.game, PiecSettings.levels[this.level]);
+                    this.board.pause = false;
+                }, this);
+                
+            }
+            
+            
+
+
+            
+
+        }, this);
+
         //==== candy match
         this.board.onMatch.add(function(candy, enemyIndex, harm = 0, attackCombo) {
+
+            if (!this.firstInteraction) {
+                this.firstInteraction = true;
+
+                this.darkOverlay.hide();
+
+                this.camera.zoomTo(1.01, 300, Phaser.Easing.Quadratic.Out);
+
+                this.board.fadeBackTheRest();
+            }
+
             var army = new Phaser.Sprite(this.game, 0, 0, candy.id + '_army');
             army.anchor.set(0.5);
             this.game.add.existing(army);
@@ -183,7 +300,9 @@ class Endcard extends Phaser.State {
             army.y = candy.worldPosition.y;
 
             var enemy = this.enemies.getEnemy(enemyIndex);
-
+            
+            if(enemy == null)
+                return;
 
             if (attackCombo > 1) {
 
@@ -213,11 +332,12 @@ class Endcard extends Phaser.State {
                 y: enemy.y - enemy.height / 2, // change to enemy's position Y
                 alpha: [1, 1, 0]
             }, 500, Phaser.Easing.Quadratic.InOut, true, 0).onComplete.add(function(e) {
-
+                if(this.enemies == null )
+                    return
                 this.enemies.changeHealth(enemyIndex, harm, attackCombo); // -10: should be harm;
 
                 if (this.heroes.getHero(candy.id) != null) {
-
+                    var particleDestroyed = 0;
                     for (var i = 0; i < 3; i++) {
                         var particle = new CustomSprite(this.game, {
                             src: 'energy-ball',
@@ -227,7 +347,7 @@ class Endcard extends Phaser.State {
                                 y: 0.5
                             }
                         });
-
+                        particleDestroyed++;
                         Tweener.fadeIn(particle, 0, 100, Phaser.Easing.Quadratic.InOut);
 
                         particle.x = enemy.x;
@@ -237,13 +357,16 @@ class Endcard extends Phaser.State {
                         particle.tint = PiecSettings.blockColors[candy.id];
 
                         Tweener.moveTo(particle, this.heroes.getPos(candy.id).x, this.heroes.getPos(candy.id).y, i * 100, 800, Phaser.Easing.Quadratic.InOut);
-                        Tweener.scaleOut(particle, i * 100, 800);
+                        Tweener.scaleOut(particle, i * 100, 800).onComplete.add(function() {
+                            particleDestroyed--;
+                            if (particleDestroyed == 0 && !this.complete) {
+                                this.heroes.changeEnergy(candy.id, 30);
+                            }
+                        }, this);
 
 
                     }
-                    this.game.time.events.add(800, function() {
-                        this.heroes.changeEnergy(candy.id, 30);
-                    }, this);
+
 
                 }
 
@@ -309,8 +432,6 @@ class Endcard extends Phaser.State {
 
 
 
-
-
         }, this);
 
         //==== end of enemy attack
@@ -346,7 +467,6 @@ class Endcard extends Phaser.State {
 
 
 
-                this.enemies.changeHealth(targetEnemy.name, -attack, 1);
 
                 // weaponEffect.angle = 30 * (hero.name + 1 - targetEnemy.name);
                 var point1 = {
@@ -368,6 +488,7 @@ class Endcard extends Phaser.State {
                     y: targetEnemy.y
                 }, 300, Phaser.Easing.Quadratic.InOut, true, i * 100).onComplete.add(function(e) {
                     Tweener.fadeOut(e, 0, 500);
+                    this.enemies.changeHealth(targetEnemy.name, -attack, 1);
                 }, this);
             }
 
@@ -385,13 +506,17 @@ class Endcard extends Phaser.State {
 
         ///===== END OF ANIMATIONS =====///
 
-        this.endcard();
 
+        if (!this.complete) {
+            this.complete = true;
+            this.endcard();
 
-        this.game.time.events.add(3000, function() {
-            console.log('onComplete');
-            parent.postMessage('complete', '*');
-        })
+            this.game.time.events.add(3000, function() {
+                console.log('onComplete');
+                parent.postMessage('complete', '*');
+            })
+        }
+
 
     }
 
@@ -400,13 +525,85 @@ class Endcard extends Phaser.State {
         this.game.time.events.add(500, function() {
             this.animateChars();
             this.animateBoard();
+            // this.animateVictory();
             // this.animateLogo();
             // this.animateCandies();
             // this.finalAnimationCta();
         }, this);
     }
-    
+
+    animateVictory() {
+        var victory = new CustomSprite(this.game, {
+            src: 'victory-board',
+            container: 'victory-bg',
+            anchor: {
+                x: 0.5,
+                y: 0.5
+            }
+        })
+
+        var swordL = new CustomSprite(this.game, {
+            src: 'sword',
+            container: 'victory-sword',
+            anchor: {
+                x: 0.5,
+                y: 0.5
+            }
+        })
+
+        swordL.blendMode = PIXI.blendModes.SCREEN;
+
+
+        swordL.scale.x = Util.scaleMatchByWidth(swordL, victory.width * 0.5);
+        swordL.scale.y = swordL.scale.x;
+
+
+        var swordR = new CustomSprite(this.game, {
+            src: 'sword',
+            container: 'victory-sword',
+            anchor: {
+                x: 0.5,
+                y: 0.5
+            }
+        })
+
+        swordR.blendMode = PIXI.blendModes.SCREEN;
+
+        swordR.scale.x = Util.scaleMatchByWidth(swordR, victory.width * 0.5);
+        swordR.scale.y = swordR.scale.x;
+
+        swordL.show();
+
+        swordL.x = victory.x - victory.width / 5;
+
+        swordL.angle = Math.PI * 172;
+
+        swordR.show();
+
+        swordR.x = victory.x + victory.width / 5;
+
+        swordR.angle = -Math.PI * 172;
+
+        this.game.world.bringToTop(victory);
+
+        this.game.add.tween(swordL).to({
+            angle: (+Math.PI * 15)
+        }, 800, Phaser.Easing.Quadratic.InOut, true, 0);
+
+        this.game.add.tween(swordR).to({
+            angle: (-Math.PI * 15)
+        }, 800, Phaser.Easing.Quadratic.InOut, true, 0);
+
+
+        var victoryText = new CustomText(this.game, PiecSettings.victoryText);
+        victoryText.hide();
+
+        Tweener.scaleIn(victory, 400, 500, Phaser.Easing.Back.InOut);
+        Tweener.scaleIn(victoryText, 600, 500, Phaser.Easing.Back.InOut);
+    }
+
     animateChars() {
+        this.heroes.cancelAllIndicators();
         var initialY = this.heroes.y;
         this.game.add.tween(this.heroes).to({
             alpha: 0,

@@ -130,6 +130,8 @@ class Board extends Phaser.Group {
         var finalY = candy2.y;
         var initialScale = this.hand.scale.x;
 
+        console.log(initialY);
+
         this.hand.x = initialX;
         this.hand.y = initialY;
 

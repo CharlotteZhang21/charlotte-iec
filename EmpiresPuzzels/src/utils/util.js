@@ -46,6 +46,22 @@ export function clone(obj) {
     return newObj;
 }
 
+//== example:
+//== scaleMatchByWidth(candy, targetCandy.width * 0.5);
+export function scaleMatchByWidth(originalObj, targetSize){
+    return targetSize / (originalObj.width / originalObj.scale.x);
+    
+}
+
+
+//== example:
+//== scaleMatchByHeight(candy, targetCandy.height * 0.5);
+export function scaleMatchByHeight(originalObj, targetSize){
+    return originalObj.scale.y = targetSize / (originalObj.height / originalObj.scale.y);
+    
+    
+}
+
 export function remove(array, item) {
 
     var index = array.indexOf(item);

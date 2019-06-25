@@ -23,6 +23,10 @@ class Board extends Phaser.Group {
         this.initCandies(args.board);
 
 
+        //customised for E&P
+        // this.firstMatch = false;
+
+
         this.game.input.onDown.add(this.candySelect, this);
         this.game.input.onUp.add(this.candyDeselect, this);
 
@@ -30,15 +34,18 @@ class Board extends Phaser.Group {
 
         this.resize();
 
-        if (PiecSettings.helperFeature !== undefined && PiecSettings.helperFeature == true)
-            this.randomHelper();
+        //moved for E & P
+        // if (PiecSettings.helperFeature !== undefined && PiecSettings.helperFeature == true)
+        //     this.randomHelper();
 
         this.createMessage();
 
-        this.createHand();
+        // this.createHand();
 
-        if (PiecSettings.showPrompt !== undefined && PiecSettings.showPrompt)
-            this.createPrompt();
+
+        // if (PiecSettings.showPrompt !== undefined && PiecSettings.showPrompt){
+        // this.createPrompt();
+        // }
 
 
         // ====== custom for Empires and puzzles
@@ -46,9 +53,11 @@ class Board extends Phaser.Group {
     }
 
     createPrompt() {
-
+        if (PiecSettings.showPrompt == undefined && !PiecSettings.showPrompt) {
+            return;
+        }
         this.prompt = new CustomText(this.game, {
-            "text": "Match the",
+            "text": "Match and",
             "container": "prompt",
             "anchor": PiecSettings.prompt.anchor,
             "style": PiecSettings.prompt.style,
@@ -59,29 +68,33 @@ class Board extends Phaser.Group {
 
         var finalScale = this.prompt.scale.x;
 
-        this.prompt.angleTween = this.game.add.tween(this.prompt).to({
-            angle: -2,
-        }, 500, Phaser.Easing.Quadratic.InOut, true, 0).yoyo(true).loop(2);
+        // this.prompt.angleTween = this.game.add.tween(this.prompt).to({
+        //     angle: -2,
+        // }, 500, Phaser.Easing.Quadratic.InOut, true, 0).yoyo(true).loop(2);
 
-        this.prompt.scaleTween = this.game.add.tween(this.prompt.scale).to({
-            x: finalScale * 1.1,
-            y: finalScale * 1.1
-        }, 500, Phaser.Easing.Quadratic.InOut, true, 0).yoyo(true).loop(2);
+        // this.prompt.scaleTween = this.game.add.tween(this.prompt.scale).to({
+        //     x: finalScale * 1.1,
+        //     y: finalScale * 1.1
+        // }, 500, Phaser.Easing.Quadratic.InOut, true, 0).yoyo(true).loop(2);
+
+        Tweener.slideInUp(this.prompt, 0, 500, Phaser.Easing.Quadratic.InOut);
 
         this.game.time.events.add(2000, function() {
-            this.game.tweens.remove(this.prompt.angleTween);
-            this.game.tweens.remove(this.prompt.scaleTween);
-            this.game.add.tween(this.prompt).to({
-                alpha: 0,
-            }, 100, Phaser.Easing.Quadratic.InOut, true, 100);
-            this.game.add.tween(this.prompt.scale).to({
-                x: 0.01,
-                y: 0.01
-            }, 200, Phaser.Easing.Quadratic.InOut, true, 0);
+            // this.game.tweens.remove(this.prompt.angleTween);
+            // this.game.tweens.remove(this.prompt.scaleTween);
+            // this.game.add.tween(this.prompt).to({
+            //     alpha: 0,
+            // }, 100, Phaser.Easing.Quadratic.InOut, true, 100);
+            // this.game.add.tween(this.prompt.scale).to({
+            //     x: 0.01,
+            //     y: 0.01
+            // }, 200, Phaser.Easing.Quadratic.InOut, true, 0);
+
+            // Tweener.fadeOut(this.prompt, 0, 500, Phaser.Easing.Quadratic.InOut);
         }, this);
 
         this.prompt2 = new CustomText(this.game, {
-            "text": "candies",
+            "text": "Attack!",
             "container": "prompt2",
             "anchor": PiecSettings.prompt.anchor,
             "style": PiecSettings.prompt.style,
@@ -92,29 +105,34 @@ class Board extends Phaser.Group {
 
         var finalScale = this.prompt2.scale.x;
 
-        this.prompt2.angleTween = this.game.add.tween(this.prompt2).to({
-            angle: -2,
-        }, 500, Phaser.Easing.Quadratic.InOut, true, 0).yoyo(true).loop(2);
+        // this.prompt2.angleTween = this.game.add.tween(this.prompt2).to({
+        //     angle: -2,
+        // }, 500, Phaser.Easing.Quadratic.InOut, true, 0).yoyo(true).loop(2);
 
-        this.prompt2.scaleTween = this.game.add.tween(this.prompt2.scale).to({
-            x: finalScale * 1.1,
-            y: finalScale * 1.1
-        }, 500, Phaser.Easing.Quadratic.InOut, true, 0).yoyo(true).loop(2);
+        // this.prompt2.scaleTween = this.game.add.tween(this.prompt2.scale).to({
+        //     x: finalScale * 1.1,
+        //     y: finalScale * 1.1
+        // }, 500, Phaser.Easing.Quadratic.InOut, true, 0).yoyo(true).loop(2);
+
+        Tweener.slideInUp(this.prompt2, 0, 500, Phaser.Easing.Quadratic.InOut);
 
         this.game.time.events.add(2000, function() {
-            this.game.tweens.remove(this.prompt2.angleTween);
-            this.game.tweens.remove(this.prompt2.scaleTween);
-            this.game.add.tween(this.prompt2).to({
-                alpha: 0,
-            }, 100, Phaser.Easing.Quadratic.InOut, true, 100);
-            this.game.add.tween(this.prompt2.scale).to({
-                x: 0.01,
-                y: 0.01
-            }, 200, Phaser.Easing.Quadratic.InOut, true, 0);
+            // this.game.tweens.remove(this.prompt2.angleTween);
+            // this.game.tweens.remove(this.prompt2.scaleTween);
+            // this.game.add.tween(this.prompt2).to({
+            //     alpha: 0,
+            // }, 100, Phaser.Easing.Quadratic.InOut, true, 100);
+            // this.game.add.tween(this.prompt2.scale).to({
+            //     x: 0.01,
+            //     y: 0.01
+            // }, 200, Phaser.Easing.Quadratic.InOut, true, 0);
+            // Tweener.fadeOut(this.prompt2, 0, 500, Phaser.Easing.Quadratic.InOut);
         }, this);
     }
 
     createHand() {
+
+
         this.hand = new Phaser.Sprite(this.game, 0, 0, 'hand');
 
         this.add(this.hand);
@@ -125,11 +143,15 @@ class Board extends Phaser.Group {
         var candy1 = this.candyAt(this.args.hand[0][0], this.args.hand[0][1]);
         var candy2 = this.candyAt(this.args.hand[1][0], this.args.hand[1][1]);
 
+        this.fadeTheRest(candy1, candy2);
+
         var initialX = candy1.x;
         var initialY = candy1.y;
         var finalX = candy2.x;
         var finalY = candy2.y;
         var initialScale = this.hand.scale.x;
+
+        // console.log(initialY);
 
         this.hand.x = initialX;
         this.hand.y = initialY;
@@ -169,7 +191,50 @@ class Board extends Phaser.Group {
         }, this);
     }
 
+    fadeTheRest(candy1, candy2) {
+        for (var i = 0; i < this.args.board.length; i++) {
+            for (var j = 0; j < this.args.board[0].length; j++) {
+                if (this.args.board[i][j] != 0 && this.candyAt(j, i) != -1) {
+                    if ((i == candy1.row && j == candy1.col) || (i == candy2.row && j == candy2.col)) {
+                        continue;
+                    }
+
+                    this.candyAt(j, i).tint = 0x666666;
+                    // this.game.add.tween(this.candyAt(j, i)).to({
+                    //     // alpha: 0.5
+                    //     tint: 0x666666,
+                    // }, 100, Phaser.Easing.Linear.None, true, 0);
+                    // this.candyAt(j, i).alpha = 0.2;
+                }
+
+                // this.candyAt(this.args.hand[i][], this.args.hand[0][1]
+            }
+        }
+
+    }
+
+    fadeBackTheRest() {
+        for (var i = 0; i < this.args.board.length; i++) {
+            for (var j = 0; j < this.args.board[0].length; j++) {
+                if (this.args.board[i][j] != 0 && this.candyAt(j, i) != -1) {
+                    // if ((i == candy1.row && j == candy1.col) || (i == candy2.row && j == candy2.col)) {
+                    //     continue;
+                    // }
+                    this.candyAt(j, i).tint = 0xffffff;
+                    // this.game.add.tween(this.candyAt(j, i)).to({
+                    //     tint: 0xffffff,
+                    // }, 100, Phaser.Easing.Linear.None, true, 0);
+                    // this.candyAt(j, i).alpha = 0.2;
+                }
+
+                // this.candyAt(this.args.hand[i][], this.args.hand[0][1]
+            }
+        }
+    }
+
     cancelHand() {
+        if (!this.hand)
+            return;
         if (this.hand.positionTween !== undefined) {
             this.game.tweens.remove(this.hand.positionTween);
             this.handAnimationCancelled = true;
@@ -227,27 +292,30 @@ class Board extends Phaser.Group {
 
         //==== customised for empires and puzzles 
         this.onMatch = new Phaser.Signal();
+
         //==== end empires and puzzles
 
         this.onRespawnFinished = new Phaser.Signal();
+
+        this.onFirstMatch = new Phaser.Signal();
 
 
     }
 
     randomHelper() {
-        this.game.time.events.loop(Phaser.Timer.SECOND * 2, function() {
+        this.game.time.events.loop(Phaser.Timer.SECOND * 4, function() {
 
             if (this.canPick && !this.pause) {
 
                 var candy = this.getRandomCandy();
-                if (candy != null && candy != -1 && !candy.fixed && candy.type != "colorbomb" && candy.type != "_paw")
+                if (candy != null && candy != -1 && !candy.fixed && candy.type != "colorbomb" && candy.type != "_paw" && candy.type != "_match4" && candy.type != "_match5")
                     this.upgradeCandy(candy);
             }
         }, this);
     }
 
     upgradeCandy(candy) {
-        var randomUpgrade = Math.floor(Math.random() * 5) + 2;
+        var randomUpgrade = Math.floor(Math.random() * 3) + 2;
         // randomUpgrade = Math.random() > .9 ? 5 : randomUpgrade;
 
         this.randomUpgrade = [];
@@ -311,6 +379,26 @@ class Board extends Phaser.Group {
                 }
             }
         }
+
+
+        this.onFirstMatch.add(function() {
+            this.cancelHand();
+
+            var candy1 = this.candyAt(this.args.hand[0][0], this.args.hand[0][1]);
+            var candy2 = this.candyAt(this.args.hand[1][0], this.args.hand[1][1]);
+            
+            this.swapCandies(candy1, candy2);
+
+
+            if (PiecSettings.helperFeature !== undefined && PiecSettings.helperFeature == true)
+                this.randomHelper();
+
+            if (this.prompt != null && this.prompt.alpha != 0) {
+                Tweener.fadeOut(this.prompt, 0, 500, Phaser.Easing.Quadratic.InOut);
+                Tweener.fadeOut(this.prompt2, 0, 500, Phaser.Easing.Quadratic.InOut);
+            }
+
+        }, this);
 
         this.onRespawnFinished.add(function() {
 
@@ -443,7 +531,7 @@ class Board extends Phaser.Group {
 
 
         //tween in
-        if(tween){
+        if (tween) {
 
             var appearDelay = 300 + 100 * Math.floor(Math.abs((this.args.board[0].length - 1) / 2 - candy.col));
             var candyFinalY = candy.y;
@@ -452,9 +540,9 @@ class Board extends Phaser.Group {
 
             this.game.add.tween(candy).to({
                 y: [candyFinalY, candyFinalY - candy.height * 0.1, candyFinalY]
-            }, 300, Phaser.Easing.Quadratic.In, true, appearDelay).onComplete.add(function(){
+            }, 300, Phaser.Easing.Quadratic.In, true, appearDelay).onComplete.add(function() {
                 this.generated--;
-                if(this.generated <= 0){
+                if (this.generated <= 0) {
                     this.canPick = true;
                 }
             }, this);
@@ -552,10 +640,12 @@ class Board extends Phaser.Group {
 
 
     candySelect(e) {
+        if (this.pause)
+            return;
 
+        var x = e.clientX * window.devicePixelRatio * this.game.global.camera.scale.x;
+        var y = e.clientY * window.devicePixelRatio * this.game.global.camera.scale.y;
 
-        var x = e.clientX * window.devicePixelRatio;
-        var y = e.clientY * window.devicePixelRatio;
 
         // this.animateParticlesOnTouch(x, y);
         this.cancelHand();
@@ -697,6 +787,7 @@ class Board extends Phaser.Group {
 
                 }
             } else {
+
                 if (this.isColorbombMatch() || this.isSpecialCandyMatch() && !this.pause) {
 
                     this.handleMatches();
@@ -774,7 +865,7 @@ class Board extends Phaser.Group {
                 if (destroyItself)
                     this.removeMap[candy.row][candy.col] = 1;
 
-                
+
                 //get nearby candies
                 var topCandy = this.candyAt(candy.col, candy.row - 1);
                 if (topCandy != -1 && topCandy.type != '_match4') {
@@ -1159,7 +1250,7 @@ class Board extends Phaser.Group {
 
     applyColorBombCombo(colorbombCandy, originalCandy = null) {
 
-        
+
         if (originalCandy == null) {
             originalCandy = this.getRandomCandy();
             if (originalCandy == -1)
@@ -1172,7 +1263,7 @@ class Board extends Phaser.Group {
                 for (var j = 0; j < this.args.board[0].length; j++) {
                     var candy = this.candyAt(j, i);
                     if (candy != -1 && candy.id == originalCandy.id) {
-                        
+
                         this.removeMap[i][j] = 1.1;
                         candy.rayTo = [];
                         candy.rayTo.x = colorbombCandy.x;
@@ -1197,7 +1288,7 @@ class Board extends Phaser.Group {
                             this.removeMap[i][j] = 6.1;
                     }
                 }
-                
+
             }
         } else {
             for (var i = 0; i < this.args.board.length; i++) {
@@ -1587,6 +1678,7 @@ class Board extends Phaser.Group {
 
     destroyCandies() {
 
+
         //====special for genies & gem
         //============================ 
 
@@ -1652,30 +1744,30 @@ class Board extends Phaser.Group {
                             this.autoTriggerCandies.push(candy);
                     } else {
                         destroyed++;
+
+
                         destroyTween.onComplete.add(function(candyObj) {
                             candyObj.destroy();
                             destroyed--;
-                            
+
                             if (destroyed == 0 && !this.pause) {
                                 this.attackCombo++;
-                                console.log("attackCombo", this.attackCombo);
                                 this.makeCandiesFall();
                                 this.respawnCandies();
                             }
 
                             var enemyNum = 0;
-                            
-                            if (candyObj.col < (this.args.board[0].length / 3)){
+
+                            if (candyObj.col < (this.args.board[0].length / 3)) {
                                 enemyNum = 2;
 
-                            }
-                            else if (candyObj.col < (this.args.board[0].length / 3 * 2)) {
+                            } else if (candyObj.col < (this.args.board[0].length / 3 * 2)) {
                                 enemyNum = 0;
                             } else {
                                 enemyNum = 1;
                             }
-                            console.log('enemyNum', enemyNum);
-                            
+
+
                             //triggered in endcard
                             this.onMatch.dispatch(candyObj, enemyNum, -PiecSettings.danmageAttributes[candyObj.id], this.attackCombo);
 
@@ -2038,7 +2130,7 @@ class Board extends Phaser.Group {
                 ray.alpha = 1;
             }, this);
 
-            
+
             this.game.add.tween(ray.scale).to({
                 x: [1, -1, 1],
                 y: finalLength / ray.height,
@@ -2841,10 +2933,12 @@ class Board extends Phaser.Group {
     }
 
     getRowFromYCoord(y) {
+
         return Math.floor((y - this.y) / this.getGlobalTileSize());
     }
 
     getColFromXCoord(x) {
+
         return Math.floor((x - this.x) / this.getGlobalTileSize());
     }
 

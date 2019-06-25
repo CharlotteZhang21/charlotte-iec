@@ -38,6 +38,7 @@ export function playPngSequence(game, sequenceKey, layer, callback) {
     // if (containerName != null)
     //     ContainerUtil.animToDom(sprite, containerName);
     sprite.animations.add("animation");
+    sprite.callback = callback;
     // sprite.anchor.set(0,0);
     sprite.alpha = 0;
     //Reverse if necessary
@@ -47,13 +48,14 @@ export function playPngSequence(game, sequenceKey, layer, callback) {
         sprite.animations.currentAnim.isReversed = true;
     }
     
-    if(callback){
+    
         var signal = AnimationsUtil.initSignal();   
         signal.add(function(sprite){
-            
-            callback(layer, sprite);
+            if(sprite.callback){        
+                sprite.callback(layer, sprite);
+            }
         }, this); 
-    }
+    
     
     //Play animation
     AnimationsUtil.playAnimation(game, sprite, pngSequence.delay, pngSequence.fps, pngSequence.loopReverse, pngSequence.loops);
