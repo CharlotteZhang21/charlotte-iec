@@ -233,7 +233,7 @@ function initCarousel() {
     previewCarousel.on('fullscreenChange', function(isFullscreen) {
         if (isFullscreen) {
             // console.log('hide');
-            // parent.postMessage('hideCloseButton','*');
+            parent.postMessage('hideCloseButton','*');
 
         } else {
             if ($(window).scrollTop() < infoContentTop) {
@@ -243,7 +243,7 @@ function initCarousel() {
             // repositionInfoContent();
             console.log($(window).scrollTop());
             console.log($('#info-content').offset().top);
-            // parent.postMessage('revealCloseButton', '*');
+            parent.postMessage('revealCloseButton', '*');
         }
     });
 }

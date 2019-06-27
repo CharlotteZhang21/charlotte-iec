@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0, user-scalable=no" />
+    <title>Vungle Endcard</title>
+    <!-- build:css main.css -->
+    <link rel="stylesheet" href="main.css">
+    <!-- /build -->
+    <style>
+    /* Generic font for autolocalised texts! */
+    @font-face {
+        font-family: 'Noto Sans';
+        src: url('NotoSans-ExtraBold.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    </style>
+    <!-- logo strike start -->
+    <style>
+    </style>
+    <!-- logo strike end -->
+</head>
+
+<body ontouchstart="ontouchstart" class="preload">
+    <!-- IEC Creative starts here-->
+
+
+    <div id="wrap">
+        <!-- <p id="scrollHeight">h0</p> -->
+
+            <button id="mute-toggle" class="hide">
+                <img id="iconMuted"  src="mute.svg">
+                <img id="iconUnmuted" style="display: none;" src="unmute.svg">
+            </button>
+        <div class="item video-area">
+            <video preload playsinline muted autoplay id='videoBg'></video>
+            <img id="bg-static-img" />
+        </div>
+
+        <div id="scrollIndicator" class="hide">
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        
+            <div id="info-content" class="info-content videoPlayerFadeContent">
+                <!--==== APP ICON ====-->
+                <div class="info-app-icon">
+                    <img id="app-icon" src="app-icon.jpg">
+                </div>
+                <!--==== END APP ICON ====-->
+                <!--==== APP NAMES ====-->
+                <div class="info-app-metadata primary">
+                    <h1 id="app-name"></h1>
+                    <div id="app-stars">
+                        <!-- <div>
+                            <span class="star vungicon-star-full"></span>
+                            <span class="star vungicon-star-full"></span>
+                            <span class="star vungicon-star-full"></span>
+                            <span class="star vungicon-star-full"></span>
+                            <span class="star vungicon-star-half"></span>
+                        </div> -->
+                        <!-- <span id="review-counts" class="counts">1,512</span> -->
+                    </div>
+                    <p id="app-callout"></p>
+                    <div id="ESRB">
+                    </div>
+
+                
+                </div>
+                <!--==== END APP NAMES ====-->
+                <!--==== CTA ====-->
+                <div class="info-app-cta">
+                    <p>Free+</p>
+                    <button id="vungle-cta" class="cta" onClick="parent.postMessage('download', '*')">Get</button>
+                </div>
+                <!--==== END CTA ====-->
+            </div>
+
+            <div id="infor-content-fixed" class="infor-content-fixed top">
+                
+            </div>
+        <!-- info WRAPPER -->
+        <div id="info-wrap">
+
+            <!-- Flickity HTML end -->
+            <div class="info-app-description">
+                <h1>Description</h1>
+                <p id="info-app-description-content">
+                </p>
+            </div>
+            <!-- Flickity HTML init -->
+            <div id='main-carousel' class="info-app-gallery"></div>
+        </div>
+        <!-- End of info WRAPPER -->
+        <div class="vungle-footer">
+            <span class="footer vungicon-windows">
+            </span>
+        </div>
+    </div>
+    <!-- IEC Creative ends here -->
+    <script src="jquery.min.js"></script>
+    <script src="flickity.pkgd.js"></script>
+    <script src="flickity-fullscreen.js"></script>
+    <script src="settings.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
