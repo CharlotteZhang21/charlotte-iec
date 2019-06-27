@@ -62,7 +62,7 @@ class Endcard extends Phaser.State {
         this.initCloud(Math.floor(1 + 2 * Math.random()));
 
         //========== THREE CHARACTERS
-        // this.initCharacters();
+        this.initCharacters();
 
         //========== END THREE CHARACTERS
 
@@ -77,23 +77,23 @@ class Endcard extends Phaser.State {
 
             // this.miniGame.createTutorial();
 
-            // for (var i = 0; i < 2 + 2 * Math.random(); i++) {
-            //     var mark = new Phaser.Sprite(this.game, 0, 0, 'surprise');
-            //     mark.scale.x = ContainerUtil.getContainerWidth('mark') * 0.1 * (0.1 + Math.random()) / (mark.width / mark.scale.x);
-            //     mark.scale.y = mark.scale.x;
-            //     mark.x = ContainerUtil.getRandomXWithinContainer('mark');
-            //     mark.y = ContainerUtil.getRandomYWithinContainer('mark');
+            for (var i = 0; i < 2 + 2 * Math.random(); i++) {
+                var mark = new Phaser.Sprite(this.game, 0, 0, 'surprise');
+                mark.scale.x = ContainerUtil.getContainerWidth('mark') * 0.1 * (0.1 + Math.random()) / (mark.width / mark.scale.x);
+                mark.scale.y = mark.scale.x;
+                mark.x = ContainerUtil.getRandomXWithinContainer('mark');
+                mark.y = ContainerUtil.getRandomYWithinContainer('mark');
 
-            //     mark.alpha = 0;
+                mark.alpha = 0;
 
-            //     this.game.add.existing(mark);
+                this.game.add.existing(mark);
 
-            //     Tweener.fadeIn(mark, i * 100 + 100 * Math.random(), 300 + 300 * Math.random(), Phaser.Easing.Linear.None);
+                Tweener.fadeIn(mark, i * 100 + 100 * Math.random(), 300 + 300 * Math.random(), Phaser.Easing.Linear.None);
 
-            //     Tweener.jiggleAngle(mark, 10 + 20 * (0.5 - Math.random()), 500, 0, 0.5, 0.5, 1).onComplete.add(function(e) {
-            //         e.destroy();
-            //     }, this);
-            // }
+                Tweener.jiggleAngle(mark, 10 + 20 * (0.5 - Math.random()), 500, 0, 0.5, 0.5, 1).onComplete.add(function(e) {
+                    e.destroy();
+                }, this);
+            }
 
             this.initMiniGame();
             this.miniGame.enableInteraction();
@@ -149,14 +149,14 @@ class Endcard extends Phaser.State {
 
         this.cta.show();
 
-        // this.charactersFinal = new CustomSprite(this.game, {
-        //     src: 'characters-final',
-        //     container: 'characters-final',
-        //     anchor: {
-        //         x: 0.5,
-        //         y: 0.5
-        //     }
-        // })
+        this.charactersFinal = new CustomSprite(this.game, {
+            src: 'characters-final',
+            container: 'characters-final',
+            anchor: {
+                x: 0.5,
+                y: 0.5
+            }
+        })
 
         // this.charactersFinal.show();
 
@@ -348,42 +348,37 @@ class Endcard extends Phaser.State {
 
                     this.game.time.events.add(1000, function() {
                         // animate each character
-                        // this.game.add.tween(this.bruno).to({
-                        //     y: [this.bruno.y - this.bruno.height * 0.2, this.bruno.y]
-                        // }, 300, Phaser.Easing.Linear.Out, true, 0).onComplete.add(function(e) {
-                        //     e.alpha = 0;
-                        // }, this);
+                        this.game.add.tween(this.bruno).to({
+                            y: [this.bruno.y - this.bruno.height * 0.2, this.bruno.y]
+                        }, 300, Phaser.Easing.Linear.Out, true, 0).onComplete.add(function(e) {
+                            e.alpha = 0;
+                        }, this);
 
 
-                        // this.game.add.tween(this.wally).to({
-                        //     y: [this.wally.y - this.wally.height * 0.2, this.wally.y]
-                        // }, 300, Phaser.Easing.Linear.Out, true, 0).onComplete.add(function(e) {
-                        //     e.alpha = 0;
-                        // }, this);
+                        this.game.add.tween(this.wally).to({
+                            y: [this.wally.y - this.wally.height * 0.2, this.wally.y]
+                        }, 300, Phaser.Easing.Linear.Out, true, 0).onComplete.add(function(e) {
+                            e.alpha = 0;
+                        }, this);
 
 
-                        // this.game.add.tween(this.cooper).to({
-                        //     y: [this.cooper.y - this.cooper.height * 0.2, this.cooper.y]
-                        // }, 300, Phaser.Easing.Linear.Out, true, 0).onComplete.add(function(e) {
-                        //     e.alpha = 0;
+                        this.game.add.tween(this.cooper).to({
+                            y: [this.cooper.y - this.cooper.height * 0.2, this.cooper.y]
+                        }, 300, Phaser.Easing.Linear.Out, true, 0).onComplete.add(function(e) {
+                            e.alpha = 0;
 
 
 
-                        // }, this);
+                        }, this);
 
                         Tweener.fadeIn(this.crack, 300, 100, Phaser.Easing.Linear.None);
                         
-                        // this.game.time.events.add(100, function(){
-                        //     this.charactersFinal.show();
-                        // }, this);
+                        this.game.time.events.add(100, function(){
+                            this.charactersFinal.show();
+                        }, this);
                         
 
-                        // this.game.time.events.add(100, function(){
-                            Tweener.fadeIn(this.logo, 200, 100, Phaser.Easing.Linear.None);
-
-                        // }, this);
-
-                        // Tweener.slideInDown(this.logo, 500, 800, Phaser.Easing.Quadratic.InOut);
+                        Tweener.slideInDown(this.logo, 500, 800, Phaser.Easing.Quadratic.InOut);
 
 
                         this.blocks.explodeAll();
