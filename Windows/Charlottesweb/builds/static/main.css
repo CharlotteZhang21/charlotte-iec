@@ -24,6 +24,7 @@
     transform: rotate(45deg) scale(1);
     top: 60%; } }
 
+/* Landscape */
 /*! Flickity v2.2.0
 https://flickity.metafizzy.co
 ---------------------------------------------- */
@@ -451,6 +452,9 @@ button {
   @media (max-width: 540px) {
     #wrap {
       overflow-y: hidden; } }
+  @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+    #wrap {
+      overflow: hidden; } }
 
 .layout-item {
   position: absolute;
@@ -478,6 +482,10 @@ button {
   background: #000; }
   #videoBg.hide {
     display: none; }
+  @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+    #videoBg {
+      position: absolute;
+      z-index: -1; } }
 
 #bg-static-img {
   display: block;
@@ -504,6 +512,18 @@ button {
     color: #0067b8;
     font-weight: 600;
     padding: 0 5px; }
+    @media (max-width: 540px) {
+      #ESRB p {
+        display: none; } }
+  @media (max-width: 540px) {
+    #ESRB {
+      margin-top: 10%; } }
+  @media (max-width: 768px) {
+    #ESRB {
+      float: left; } }
+  @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+    #ESRB {
+      display: none; } }
 
 .info-content {
   width: 80%;
@@ -518,7 +538,8 @@ button {
   transition: margin 333ms ease-in-out, transform 333ms ease-in-out;
   transition: width 0.1s ease-in-out;
   background-color: #fff;
-  max-width: 1600px; }
+  max-width: 1600px;
+  transition: height 1s ease-in-out; }
   @media (min-width: 768px) {
     .info-content {
       margin-top: -120px;
@@ -538,6 +559,20 @@ button {
       grid-template-columns: min-content minmax(0, 1fr) 256px;
       -ms-grid-rows: auto auto auto 1fr auto auto;
       grid-template-rows: auto auto auto 1fr auto auto; } }
+  .info-content.fixedToBottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto; }
+  @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+    .info-content {
+      position: absolute;
+      right: 0;
+      margin: 0;
+      top: 0;
+      height: 100%;
+      width: 30%; } }
 
 .info-app-icon {
   -ms-grid-row: 1;
@@ -554,17 +589,21 @@ button {
   @media (min-width: 768px) {
     .info-app-icon {
       -ms-grid-row: 2;
-      -ms-grid-row-span: 3;
+      -ms-grid-row-span: 2;
       grid-row-start: 2;
-      grid-row-end: span 3;
+      grid-row-end: span 4;
       padding: 24px; } }
   @media (min-width: 1084px) {
     .info-app-icon {
+      grid-row-end: span 2;
       grid-row-start: 2; } }
+  @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+    .info-app-icon {
+      display: none; } }
   .info-app-icon img {
     margin-right: auto;
     margin-left: auto;
-    width: 25%;
+    width: 40%;
     height: 100%;
     margin-top: -120px;
     display: flex;
@@ -572,9 +611,10 @@ button {
     align-items: center; }
     @media (min-width: 768px) {
       .info-app-icon img {
-        width: auto;
-        height: 100%;
-        margin-top: 0; } }
+        width: 155px;
+        height: 235px;
+        margin: auto;
+        object-fit: cover; } }
 
 .info-app-metadata {
   position: relative;
@@ -601,22 +641,21 @@ button {
     font-weight: 600; }
   .info-app-metadata p {
     display: block;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
     line-height: 1.5em;
     font-size: 1em; }
     @media (min-width: 1084px) {
       .info-app-metadata p {
+        margin-block-start: 1em;
+        margin-block-end: 1em;
         font-size: 1.3em; } }
-
-.info-app-call-out {
-  display: block;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px; }
+    @media (max-width: 540px) {
+      .info-app-metadata p {
+        font-size: 1.2em; } }
+    @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+      .info-app-metadata p {
+        display: none; } }
 
 .info-app-cta {
   -ms-grid-row: 5;
@@ -629,17 +668,24 @@ button {
   .info-app-cta p {
     font-size: 1.3em;
     font-weight: 600; }
+  @media (max-width: 768px) {
+    .info-app-cta {
+      grid-row-start: 4;
+      -grid-row-start: 4;
+      text-align: right; }
+      .info-app-cta p {
+        font-size: 1em; } }
   @media (min-width: 768px) {
     .info-app-cta {
       text-align: left;
-      -ms-grid-row: 4;
-      -ms-grid-row-span: 2;
+      -ms-grid-row-span: 1;
       -ms-grid-column: 2;
-      grid-row-start: 4;
+      grid-row-start: 5;
+      -ms-grid-row: 5;
       grid-row-end: span 2;
       grid-column-start: 2;
       margin-top: 0;
-      padding: 24px; } }
+      padding: 0 24px 24px 24px; } }
   @media (min-width: 1084px) {
     .info-app-cta {
       -ms-grid-row: 2;
@@ -652,6 +698,9 @@ button {
       grid-row-end: span 3;
       padding: 24px;
       margin-top: 5px; } }
+  @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+    .info-app-cta {
+      text-align: center; } }
 
 .info-app-gallery {
   margin: 24px auto;
@@ -690,6 +739,19 @@ button {
   @media (min-width: 1084px) {
     .info-app-gallery {
       height: 350px; } }
+  @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+    .info-app-gallery {
+      position: absolute;
+      left: 0;
+      margin: 0;
+      top: 0;
+      height: 100%;
+      width: 70%;
+      background: #000;
+      z-index: 9; }
+      .info-app-gallery img {
+        width: 90%;
+        height: auto; } }
 
 .info-app-description h1 {
   font-size: 24px;
@@ -710,6 +772,10 @@ button {
 @media (max-width: 540px) {
   .info-app-description {
     display: none; } }
+
+@media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+  .info-app-description {
+    opacity: 0; } }
 
 #app-stars {
   padding: 10px 0;
@@ -746,11 +812,17 @@ button {
   margin-left: -35px; }
   .flickity-prev-next-button.previous:hover {
     cursor: pointer; }
+  @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+    .flickity-prev-next-button.previous {
+      margin-left: 0px; } }
 
 .flickity-prev-next-button.next {
   margin-right: -35px; }
   .flickity-prev-next-button.next:hover {
     cursor: pointer; }
+  @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+    .flickity-prev-next-button.next {
+      margin-right: 0px; } }
 
 .flickity-prev-next-button .arrow {
   fill: #000; }
@@ -775,6 +847,9 @@ button {
   #mute-toggle.hide {
     opacity: 0;
     pointer-events: 0; }
+  @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+    #mute-toggle {
+      display: none; } }
 
 #scrollIndicator {
   bottom: 18px;
@@ -783,15 +858,16 @@ button {
   right: 0;
   left: 0;
   z-index: 10;
-  opacity: 0.7;
-  width: 55px;
-  height: 55px;
-  border-radius: 60px;
+  opacity: 0.4;
+  cursor: pointer;
+  width: 45px;
+  height: 45px;
+  border-radius: 45px;
   background: #000;
   transition: opacity 0.5s ease-in-out; }
   #scrollIndicator .dot {
-    width: 5px;
-    height: 5px;
+    width: 4px;
+    height: 4px;
     position: absolute;
     margin: auto;
     left: 0;
@@ -811,6 +887,9 @@ button {
     -webkit-animation: fadeInDown 1s ease-out 0.5s infinite;
     animation: fadeInDown 1s ease-out 0.5s infinite; }
   @media (max-width: 540px) {
+    #scrollIndicator {
+      display: none; } }
+  @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
     #scrollIndicator {
       display: none; } }
 

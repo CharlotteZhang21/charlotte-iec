@@ -55,6 +55,8 @@ class VideoController {
 
             this.video.load();
 
+            
+
             var _this = this;
 
             this.isReady(function() {
@@ -63,11 +65,11 @@ class VideoController {
                 _this.video.currentTime = 0;
                 _this.video.endTime = 0;
                 _this.video.play();
-                if(args.simple == undefined || !args.simple)
+                if (args.simple == undefined || !args.simple)
                     _this.initVideoArgs(args);
-                else{
+                else {
                     _this.video.simple = args.simple;
-                    if(args.loop != undefined && args.loop) {
+                    if (args.loop != undefined && args.loop) {
 
                         _this.video.loop = true;
 
@@ -75,7 +77,7 @@ class VideoController {
                     }
                 }
             });
-            
+
         } else {
             this.initVideoArgs(args);
             this.video.play();
@@ -94,19 +96,19 @@ class VideoController {
                 this.video.currentTime = this.video.initialTime;
                 this.video.play();
 
-                if(this.onLoop!=null)
+                if (this.onLoop != null)
                     this.onLoop.dispatch();
             } else {
                 if (!this.video.paused) {
                     this.video.pause();
                 }
-                if(this.onComplete!=null)
+                if (this.onComplete != null)
                     this.onComplete.dispatch();
             }
         }
         if (!this.video.paused && this.videoEnded()) {
             this.video.pause();
-            if(this.onComplete!=null)
+            if (this.onComplete != null)
                 this.onComplete.dispatch();
         }
     }
@@ -172,24 +174,24 @@ class VideoController {
 
     unmute() {
 
-        if(this.video.simple){
+        if (this.video.simple) {
             this.video.muted = false;
-        }else{
-            this.muted = false;    
+        } else {
+            this.muted = false;
         }
         console.log(this.video);
-        
+
     }
 
     mute() {
 
-        if(this.video.simple){
+        if (this.video.simple) {
             this.video.muted = true;
-        }else{
-            this.muted = true;    
+        } else {
+            this.muted = true;
         }
         console.log(this.video);
-        
+
     }
 
     pause() {
